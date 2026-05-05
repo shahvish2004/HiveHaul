@@ -669,6 +669,29 @@ label.flabel{font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:u
   </div>
 </div>
 </div>
+<div class="panel-provider" style="display:none; padding:20px;">
+  <h2>Provider Dashboard</h2>
+
+  <p><strong>Pickup Address:</strong> <span id="p_pickup"></span></p>
+  <p><strong>Delivery Address:</strong> <span id="p_delivery"></span></p>
+
+  <h3>Pickup Photos (Required)</h3>
+  <input type="file" id="pickupPhotos" multiple accept="image/*">
+
+  <h3>Delivery Photos (Required)</h3>
+  <input type="file" id="deliveryPhotos" multiple accept="image/*">
+
+  <h3>Completion Notes</h3>
+  <textarea id="completionNotes"></textarea>
+
+  <h3>Balance</h3>
+  <select id="balanceStatus">
+    <option value="paid">Paid</option>
+    <option value="pending">Pending</option>
+  </select>
+
+  <button onclick="completeJob()">Mark Completed</button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -1130,6 +1153,43 @@ function initHiveHaulSingleFileViews(){
   }
 }
 window.addEventListener('DOMContentLoaded', initHiveHaulSingleFileViews);
+</script>
+<script>
+const PROVIDER_PASSWORD = "HiveProvider2026";
+
+if (params.get("provider") === "1") {
+  const entered = prompt("Enter Provider Password:");
+
+  if (entered !== PROVIDER_PASSWORD) {
+    alert("Access denied");
+    window.location.href = "/";
+  } else {
+    document.getElementById("clientOnly").style.display = "none";
+    document.querySelector(".panel-provider").style.display = "block";
+  }
+}
+</script>
+<script>
+async function completeJob() {
+  const notes = document.getElementById("completionNotes").value;
+  const balance = document.getElementById("balanceStatus").value;
+
+  const { error } = await supabase
+    .from("hivehaul_requests")
+    .update({
+      provider_status: "completed",
+      completion_notes: notes,
+      balance_status: balance,
+      completed_at: new Date()
+    })
+    .eq("id", CURRENT_JOB_ID);
+
+  if (error) {
+    alert("Error: " + error.message);
+  } else {
+    alert("Job marked completed");
+  }
+}
 </script>
 </body>
 </html>
