@@ -1,4 +1,4 @@
 {
-  "buildCommand": "cd v2 && npm run build && cp -r .next ../.next",
-  "outputDirectory": ".next"
+  "buildCommand": "cd v2 && npm run build",
+  "outputDirectory": "v2/.next"
 }
