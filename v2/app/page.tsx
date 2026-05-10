@@ -1,42 +1,43 @@
-'use client'
-
-import { useState } from 'react'
-import ClientIntakeForm from '@/components/ClientIntakeForm'
+import Link from 'next/link'
 
 export default function Home() {
-  const [submitted, setSubmitted] = useState(false)
-
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-50">
-      <div className="container-max py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-2">
-            HiveHaul™
-          </h1>
-          <p className="text-slate-600">Service Agreement & Job Intake Form</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-500 to-purple-600 flex items-center justify-center px-4 py-8">
+      <div className="max-w-md w-full text-center space-y-8">
+        {/* Logo/Branding */}
+        <div className="space-y-3">
+          <h1 className="text-5xl font-bold text-white">HiveHaul™</h1>
+          <p className="text-blue-100 text-lg">Transport & Service Operations</p>
         </div>
 
-        {/* Main Content */}
-        {!submitted ? (
-          <ClientIntakeForm onSuccess={() => setSubmitted(true)} />
-        ) : (
-          <div className="card bg-green-50 border border-green-200">
-            <h2 className="text-xl font-bold text-green-800 mb-2">
-              ✓ Job Submitted Successfully
-            </h2>
-            <p className="text-green-700 mb-4">
-              Your service request has been received and assigned a job ID. Our team will review it shortly and contact you to confirm details and provide a quote.
-            </p>
-            <button
-              onClick={() => setSubmitted(false)}
-              className="btn btn-primary"
-            >
-              Submit Another Job
-            </button>
-          </div>
-        )}
+        {/* Main CTA */}
+        <div className="space-y-4">
+          <p className="text-blue-50 text-lg">
+            Welcome to HiveHaul. What would you like to do?
+          </p>
+
+          {/* Client Button */}
+          <Link
+            href="/client/intake"
+            className="block bg-white hover:bg-blue-50 text-blue-600 hover:text-blue-700 font-bold py-4 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl"
+          >
+            📋 Submit a Service Request
+          </Link>
+
+          {/* Manager Button */}
+          <Link
+            href="/manager/jobs"
+            className="block bg-blue-50 hover:bg-white text-blue-600 hover:text-blue-700 font-bold py-4 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl"
+          >
+            🎯 Manage Jobs (Manager)
+          </Link>
+        </div>
+
+        {/* Footer */}
+        <div className="text-blue-100 text-sm pt-8 border-t border-blue-400">
+          <p>Phase 1 - Lightweight Transport Operations Platform</p>
+        </div>
       </div>
-    </main>
+    </div>
   )
 }
