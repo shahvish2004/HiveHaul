@@ -1,7 +1,6 @@
 {
   "version": 2,
-  "cleanUrls": true,
-  "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
+  "buildCommand": "cd v2 && npm run build",
+  "outputDirectory": "v2/.next",
+  "rootDirectory": "v2"
 }
