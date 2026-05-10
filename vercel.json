@@ -1,6 +1,7 @@
 {
-  "version": 2,
   "buildCommand": "cd v2 && npm run build",
   "outputDirectory": "v2/.next",
-  "rootDirectory": "v2"
+  "rewrites": [
+    { "source": "/:path*", "destination": "/:path*" }
+  ]
 }
