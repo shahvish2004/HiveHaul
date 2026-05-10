@@ -1,0 +1,5 @@
+.vercel
+.env.local
+.env
+.next
+next-env.d.ts
