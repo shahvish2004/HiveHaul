@@ -1,0 +1,12 @@
+{
+  "name": "hivehaul",
+  "version": "1.0.0",
+  "description": "HiveHaul - Transport & Service Operations Platform",
+  "private": true,
+  "scripts": {
+    "dev": "cd v2 && npm run dev",
+    "build": "cd v2 && npm run build",
+    "start": "cd v2 && npm run start",
+    "lint": "cd v2 && npm run lint"
+  }
+}
