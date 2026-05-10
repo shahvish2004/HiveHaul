@@ -1157,7 +1157,9 @@ window.addEventListener('DOMContentLoaded', initHiveHaulSingleFileViews);
 <script>
 const PROVIDER_PASSWORD = "HiveProvider2026";
 
-if (params.get("provider") === "1") {
+const _providerParams = new URLSearchParams(window.location.search);
+
+if (_providerParams.get("provider") === "1") {
   const entered = prompt("Enter Provider Password:");
 
   if (entered !== PROVIDER_PASSWORD) {
