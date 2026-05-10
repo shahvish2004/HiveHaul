@@ -1,4 +1,4 @@
 {
   "buildCommand": "cd v2 && npm run build",
-  "outputDirectory": "v2/.next"
+  "outputDirectory": "v2"
 }
