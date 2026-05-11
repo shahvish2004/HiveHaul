@@ -50,9 +50,11 @@ export async function GET(request: NextRequest) {
     const jobs = await getJobs()
     return NextResponse.json(jobs)
   } catch (error) {
-    console.error('Error fetching jobs:', error)
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    const errorDetail = error instanceof Error ? error : { error }
+    console.error('Error fetching jobs:', errorMessage, JSON.stringify(errorDetail))
     return NextResponse.json(
-      { error: 'Failed to fetch jobs' },
+      { error: 'Failed to fetch jobs', details: errorMessage },
       { status: 500 }
     )
   }
