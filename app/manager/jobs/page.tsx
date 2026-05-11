@@ -9,28 +9,30 @@ interface Job {
   client_email: string
   client_phone: string
   service_type: string
-  address: string
+  pickup_address: string
+  dropoff_address: string
+  notes: string | null
   status: string
   created_at: string
   updated_at: string
   completed_at: string | null
 }
 
-const STATUS_OPTIONS = ['new', 'assigned', 'in_progress', 'completed', 'cancelled']
+const STATUS_OPTIONS = ['New', 'Assigned', 'In Progress', 'Completed', 'Cancelled']
 const STATUS_LABELS: Record<string, string> = {
-  'new': 'New',
-  'assigned': 'Assigned',
-  'in_progress': 'In Progress',
-  'completed': 'Completed',
-  'cancelled': 'Cancelled',
+  'New': 'New',
+  'Assigned': 'Assigned',
+  'In Progress': 'In Progress',
+  'Completed': 'Completed',
+  'Cancelled': 'Cancelled',
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  'new': 'bg-blue-100 text-blue-800',
-  'assigned': 'bg-purple-100 text-purple-800',
-  'in_progress': 'bg-yellow-100 text-yellow-800',
-  'completed': 'bg-green-100 text-green-800',
-  'cancelled': 'bg-red-100 text-red-800',
+  'New': 'bg-blue-100 text-blue-800',
+  'Assigned': 'bg-purple-100 text-purple-800',
+  'In Progress': 'bg-yellow-100 text-yellow-800',
+  'Completed': 'bg-green-100 text-green-800',
+  'Cancelled': 'bg-red-100 text-red-800',
 }
 
 export default function ManagerJobsPage() {
@@ -230,12 +232,20 @@ export default function ManagerJobsPage() {
                     </span>
                   </div>
 
-                  {/* Address */}
+                  {/* Pickup Address */}
+                  <div>
+                    <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">
+                      Pickup
+                    </p>
+                    <p className="text-slate-800 text-sm">{job.pickup_address}</p>
+                  </div>
+
+                  {/* Dropoff Address */}
                   <div className="sm:col-span-2 lg:col-span-1">
                     <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">
-                      Address
+                      Dropoff
                     </p>
-                    <p className="text-slate-800 text-sm">{job.address}</p>
+                    <p className="text-slate-800 text-sm">{job.dropoff_address}</p>
                   </div>
                 </div>
 

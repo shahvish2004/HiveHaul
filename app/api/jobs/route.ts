@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createOrGetClient, createJob, getJobs } from '@/lib/supabase'
+import { createJob, getJobs, updateJobStatus } from '@/lib/supabase'
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,30 +9,29 @@ export async function POST(request: NextRequest) {
       client_name,
       client_email,
       client_phone,
-      title,
-      description,
+      service_type,
       pickup_address,
       dropoff_address,
+      notes,
     } = body
 
     // Validate required fields
-    if (!client_name || !client_email || !title || !pickup_address || !dropoff_address) {
+    if (!client_name || !client_email || !client_phone || !service_type || !pickup_address || !dropoff_address) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing required fields: client_name, client_email, client_phone, service_type, pickup_address, dropoff_address' },
         { status: 400 }
       )
     }
 
-    // Create or get client
-    const client = await createOrGetClient(client_name, client_email, client_phone)
-
-    // Create job
+    // Create job directly in jobs table with inline client info
     const job = await createJob({
-      client_id: client.id,
-      title,
-      description: description || undefined,
+      client_name,
+      client_email,
+      client_phone,
       pickup_address,
       dropoff_address,
+      service_type,
+      notes: notes || undefined,
     })
 
     return NextResponse.json(job, { status: 201 })
@@ -48,7 +47,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const jobs = await getJobs()
-    return NextResponse.json(jobs)
+    return NextResponse.json({ jobs })
   } catch (error) {
     let errorMessage = 'Unknown error'
     if (error instanceof Error) {
@@ -63,6 +62,30 @@ export async function GET(request: NextRequest) {
     }
     return NextResponse.json(
       { error: 'Failed to fetch jobs', details: errorMessage },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { jobId, status } = body
+
+    if (!jobId || !status) {
+      return NextResponse.json(
+        { error: 'Missing required fields: jobId, status' },
+        { status: 400 }
+      )
+    }
+
+    const updatedJob = await updateJobStatus(jobId, status)
+    return NextResponse.json(updatedJob)
+  } catch (error) {
+    console.error('Error updating job status:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Failed to update job status'
+    return NextResponse.json(
+      { error: errorMessage },
       { status: 500 }
     )
   }

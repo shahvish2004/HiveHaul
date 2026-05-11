@@ -9,37 +9,23 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Convenience functions for common operations
+// Phase 1: Jobs table only, client info inline
+// Approved statuses: New, Assigned, In Progress, Completed, Cancelled
 
-export async function createOrGetClient(name: string, email: string, phone?: string) {
-  // Try to get existing client by email
-  const { data: existing } = await supabase
-    .from('clients')
-    .select('*')
-    .eq('email', email.toLowerCase())
-    .single()
+const VALID_STATUSES = ['New', 'Assigned', 'In Progress', 'Completed', 'Cancelled']
 
-  if (existing) {
-    return existing
-  }
-
-  // Create new client
-  const { data, error } = await supabase
-    .from('clients')
-    .insert([{ name, email: email.toLowerCase(), phone }])
-    .select()
-    .single()
-
-  if (error) throw error
-  return data
+function validateStatus(status: string): boolean {
+  return VALID_STATUSES.includes(status)
 }
 
 export async function createJob(data: {
-  client_id: string
-  title: string
-  description?: string
-  pickup_address?: string
-  dropoff_address?: string
+  client_name: string
+  client_email: string
+  client_phone: string
+  pickup_address: string
+  dropoff_address: string
+  service_type: string
+  notes?: string
 }) {
   const { data: job, error } = await supabase
     .from('jobs')
@@ -54,7 +40,7 @@ export async function createJob(data: {
 export async function getJobs() {
   const { data, error } = await supabase
     .from('jobs')
-    .select('*, clients(*)')
+    .select('*')
     .order('created_at', { ascending: false })
 
   if (error) throw error
@@ -64,7 +50,7 @@ export async function getJobs() {
 export async function getJobById(id: string) {
   const { data, error } = await supabase
     .from('jobs')
-    .select('*, clients(*)')
+    .select('*')
     .eq('id', id)
     .single()
 
@@ -73,6 +59,10 @@ export async function getJobById(id: string) {
 }
 
 export async function updateJobStatus(id: string, status: string) {
+  if (!validateStatus(status)) {
+    throw new Error(`Invalid status. Allowed: ${VALID_STATUSES.join(', ')}`)
+  }
+
   const { data, error } = await supabase
     .from('jobs')
     .update({ status, updated_at: new Date().toISOString() })

@@ -8,7 +8,8 @@ interface FormData {
   client_email: string
   client_phone: string
   service_type: string
-  address: string
+  pickup_address: string
+  dropoff_address: string
   notes: string
 }
 
@@ -19,7 +20,8 @@ export default function IntakePage() {
     client_email: '',
     client_phone: '',
     service_type: '',
-    address: '',
+    pickup_address: '',
+    dropoff_address: '',
     notes: '',
   })
 
@@ -165,18 +167,34 @@ export default function IntakePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="address" className="block text-sm font-medium text-slate-700 mb-1">
-                    Address <span className="text-red-500">*</span>
+                  <label htmlFor="pickup_address" className="block text-sm font-medium text-slate-700 mb-1">
+                    Pickup Address <span className="text-red-500">*</span>
                   </label>
                   <input
-                    id="address"
+                    id="pickup_address"
                     type="text"
-                    name="address"
-                    value={formData.address}
+                    name="pickup_address"
+                    value={formData.pickup_address}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                     placeholder="123 Main Street, City, State"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="dropoff_address" className="block text-sm font-medium text-slate-700 mb-1">
+                    Dropoff Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="dropoff_address"
+                    type="text"
+                    name="dropoff_address"
+                    value={formData.dropoff_address}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                    placeholder="456 Oak Avenue, City, State"
                   />
                 </div>
 
