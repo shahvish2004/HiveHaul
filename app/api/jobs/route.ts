@@ -50,9 +50,17 @@ export async function GET(request: NextRequest) {
     const jobs = await getJobs()
     return NextResponse.json(jobs)
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error)
-    const errorDetail = error instanceof Error ? error : { error }
-    console.error('Error fetching jobs:', errorMessage, JSON.stringify(errorDetail))
+    let errorMessage = 'Unknown error'
+    if (error instanceof Error) {
+      errorMessage = error.message
+      console.error('Error fetching jobs:', error.message, error.stack)
+    } else if (typeof error === 'object' && error !== null) {
+      errorMessage = JSON.stringify(error)
+      console.error('Error fetching jobs:', JSON.stringify(error, null, 2))
+    } else {
+      errorMessage = String(error)
+      console.error('Error fetching jobs:', String(error))
+    }
     return NextResponse.json(
       { error: 'Failed to fetch jobs', details: errorMessage },
       { status: 500 }
