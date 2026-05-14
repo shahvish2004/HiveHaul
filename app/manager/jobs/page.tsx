@@ -35,6 +35,43 @@ const STATUS_COLORS: Record<string, string> = {
   'Cancelled': 'bg-red-100 text-red-800',
 }
 
+interface ExtendedInfo {
+  pickup_date?: string
+  pickup_time?: string
+  item_description?: string
+  approximate_size?: string
+  approximate_weight?: string
+  pickup_building_type?: string
+  pickup_building_type_custom?: string
+  dropoff_building_type?: string
+  dropoff_building_type_custom?: string
+  pickup_access?: string
+  dropoff_access?: string
+  assistance_pickup?: string
+  assistance_dropoff?: string
+  terms_accepted?: boolean
+  [key: string]: any
+}
+
+function parseExtendedInfo(notes: string | null): ExtendedInfo | null {
+  if (!notes) return null
+  try {
+    const match = notes.match(/Extended Info: ({.*})/s)
+    if (match) {
+      return JSON.parse(match[1])
+    }
+  } catch (e) {
+    // If parsing fails, return null
+  }
+  return null
+}
+
+function displayValue(key: string, value: any): string {
+  if (value === undefined || value === null) return 'N/A'
+  if (typeof value === 'boolean') return value ? 'Yes' : 'No'
+  return String(value)
+}
+
 export default function ManagerJobsPage() {
   const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
@@ -248,6 +285,94 @@ export default function ManagerJobsPage() {
                     <p className="text-slate-800 text-sm">{job.dropoff_address}</p>
                   </div>
                 </div>
+
+                {/* Extended Details from Notes */}
+                {(() => {
+                  const extendedInfo = parseExtendedInfo(job.notes)
+                  if (!extendedInfo) return null
+
+                  return (
+                    <div className="border-t pt-4 mb-4">
+                      <p className="text-sm font-medium text-slate-700 mb-3">Service Details</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                        {extendedInfo.pickup_date && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Pickup Date</p>
+                            <p className="text-slate-800">{extendedInfo.pickup_date}</p>
+                          </div>
+                        )}
+                        {extendedInfo.pickup_time && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Pickup Time</p>
+                            <p className="text-slate-800">{extendedInfo.pickup_time}</p>
+                          </div>
+                        )}
+                        {extendedInfo.item_description && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Item Description</p>
+                            <p className="text-slate-800">{extendedInfo.item_description}</p>
+                          </div>
+                        )}
+                        {extendedInfo.approximate_size && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Size/Dimensions</p>
+                            <p className="text-slate-800">{extendedInfo.approximate_size}</p>
+                          </div>
+                        )}
+                        {extendedInfo.approximate_weight && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Weight</p>
+                            <p className="text-slate-800">{extendedInfo.approximate_weight}</p>
+                          </div>
+                        )}
+                        {extendedInfo.pickup_building_type && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Pickup Location</p>
+                            <p className="text-slate-800">
+                              {extendedInfo.pickup_building_type === 'other'
+                                ? `Other${extendedInfo.pickup_building_type_custom ? `: ${extendedInfo.pickup_building_type_custom}` : ''}`
+                                : extendedInfo.pickup_building_type}
+                            </p>
+                          </div>
+                        )}
+                        {extendedInfo.dropoff_building_type && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Dropoff Location</p>
+                            <p className="text-slate-800">
+                              {extendedInfo.dropoff_building_type === 'other'
+                                ? `Other${extendedInfo.dropoff_building_type_custom ? `: ${extendedInfo.dropoff_building_type_custom}` : ''}`
+                                : extendedInfo.dropoff_building_type}
+                            </p>
+                          </div>
+                        )}
+                        {extendedInfo.pickup_access && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Pickup Access</p>
+                            <p className="text-slate-800">{extendedInfo.pickup_access}</p>
+                          </div>
+                        )}
+                        {extendedInfo.dropoff_access && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Dropoff Access</p>
+                            <p className="text-slate-800">{extendedInfo.dropoff_access}</p>
+                          </div>
+                        )}
+                        {extendedInfo.assistance_pickup && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Pickup Assistance</p>
+                            <p className="text-slate-800">{extendedInfo.assistance_pickup}</p>
+                          </div>
+                        )}
+                        {extendedInfo.assistance_dropoff && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Dropoff Assistance</p>
+                            <p className="text-slate-800">{extendedInfo.assistance_dropoff}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })()}
 
                 {/* Status Update Controls */}
                 <div className="border-t pt-4">

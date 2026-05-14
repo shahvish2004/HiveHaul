@@ -17,6 +17,8 @@ interface FormData {
   approximate_weight: string
   pickup_building_type: string
   dropoff_building_type: string
+  pickup_building_type_custom?: string
+  dropoff_building_type_custom?: string
   pickup_access: string
   dropoff_access: string
   assistance_pickup: string
@@ -41,6 +43,8 @@ export default function IntakePage() {
     approximate_weight: '',
     pickup_building_type: '',
     dropoff_building_type: '',
+    pickup_building_type_custom: '',
+    dropoff_building_type_custom: '',
     pickup_access: '',
     dropoff_access: '',
     assistance_pickup: '',
@@ -336,6 +340,16 @@ export default function IntakePage() {
                       <option value="storage unit">Storage Unit</option>
                       <option value="other">Other</option>
                     </select>
+                    {formData.pickup_building_type === 'other' && (
+                      <input
+                        type="text"
+                        name="pickup_building_type_custom"
+                        value={formData.pickup_building_type_custom || ''}
+                        onChange={handleChange}
+                        placeholder="Please specify"
+                        className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      />
+                    )}
                   </div>
                   <div>
                     <label htmlFor="dropoff_building_type" className="block text-sm font-medium text-slate-700 mb-2">
@@ -357,6 +371,16 @@ export default function IntakePage() {
                       <option value="storage unit">Storage Unit</option>
                       <option value="other">Other</option>
                     </select>
+                    {formData.dropoff_building_type === 'other' && (
+                      <input
+                        type="text"
+                        name="dropoff_building_type_custom"
+                        value={formData.dropoff_building_type_custom || ''}
+                        onChange={handleChange}
+                        placeholder="Please specify"
+                        className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      />
+                    )}
                   </div>
                 </div>
 
