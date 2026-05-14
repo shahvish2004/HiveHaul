@@ -1,7 +1,7 @@
 import type { Job } from '@/lib/types'
 
 interface JobTableProps {
-  jobs: (Job & { client: any })[]
+  jobs: Job[]
 }
 
 function formatDate(dateString: string) {
@@ -58,19 +58,19 @@ export default function JobTable({ jobs }: JobTableProps) {
               className="border-b border-slate-200 hover:bg-slate-50 transition-colors"
             >
               <td className="px-4 py-3 text-sm font-mono text-slate-600">
-                {job.id.slice(0, 8)}...
+                {job.job_number}
               </td>
               <td className="px-4 py-3">
                 <div>
                   <p className="font-medium text-slate-800 text-sm">
-                    {job.client?.name || 'Unknown'}
+                    {job.client_name}
                   </p>
-                  <p className="text-xs text-slate-500">{job.client?.email}</p>
+                  <p className="text-xs text-slate-500">{job.client_email}</p>
                 </div>
               </td>
               <td className="px-4 py-3">
                 <div>
-                  <p className="font-medium text-slate-800 text-sm">{job.title}</p>
+                  <p className="font-medium text-slate-800 text-sm">{job.service_type}</p>
                   {job.pickup_address && (
                     <p className="text-xs text-slate-500 truncate">
                       {job.pickup_address}
