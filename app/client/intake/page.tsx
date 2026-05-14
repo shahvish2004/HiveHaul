@@ -10,6 +10,9 @@ interface FormData {
   service_type: string
   pickup_address: string
   dropoff_address: string
+  pickup_date: string
+  pickup_time: string
+  item_description: string
   notes: string
 }
 
@@ -22,6 +25,9 @@ export default function IntakePage() {
     service_type: '',
     pickup_address: '',
     dropoff_address: '',
+    pickup_date: '',
+    pickup_time: '',
+    item_description: '',
     notes: '',
   })
 
@@ -198,9 +204,56 @@ export default function IntakePage() {
                   />
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="pickup_date" className="block text-sm font-medium text-slate-700 mb-2">
+                      Pickup Date <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="pickup_date"
+                      type="date"
+                      name="pickup_date"
+                      value={formData.pickup_date}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="pickup_time" className="block text-sm font-medium text-slate-700 mb-2">
+                      Preferred Time <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="pickup_time"
+                      type="time"
+                      name="pickup_time"
+                      value={formData.pickup_time}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="item_description" className="block text-sm font-medium text-slate-700 mb-2">
+                    What are you transporting? <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="item_description"
+                    type="text"
+                    name="item_description"
+                    value={formData.item_description}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    required
+                    placeholder="e.g., Office furniture, equipment, boxes, etc."
+                  />
+                </div>
+
                 <div>
                   <label htmlFor="notes" className="block text-sm font-medium text-slate-700 mb-2">
-                    Notes (optional)
+                    Additional Details (optional)
                   </label>
                   <textarea
                     id="notes"

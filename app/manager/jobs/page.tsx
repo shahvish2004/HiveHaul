@@ -54,7 +54,7 @@ export default function ManagerJobsPage() {
       const response = await fetch('/api/jobs')
       if (!response.ok) throw new Error('Failed to fetch jobs')
       const data = await response.json()
-      setJobs(data.jobs || [])
+      setJobs(Array.isArray(data) ? data : [])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
