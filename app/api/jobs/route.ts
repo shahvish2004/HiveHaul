@@ -52,8 +52,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Store all extended fields in JSON (including date/time/description if columns don't exist)
-    const booking_details = {
+    // Store extended fields in notes since booking_details column may not exist yet
+    const extended_info = {
       pickup_date,
       pickup_time,
       item_description,
@@ -68,6 +68,9 @@ export async function POST(request: NextRequest) {
       terms_accepted,
     }
 
+    // Combine notes with extended info
+    const combined_notes = notes ? `${notes}\n\nExtended Info: ${JSON.stringify(extended_info)}` : `Extended Info: ${JSON.stringify(extended_info)}`
+
     // Create job directly in jobs table with inline client info
     const job = await createJob({
       client_name,
@@ -76,8 +79,7 @@ export async function POST(request: NextRequest) {
       pickup_address,
       dropoff_address,
       service_type,
-      notes: notes || undefined,
-      booking_details,
+      notes: combined_notes,
     })
 
     return NextResponse.json(job, { status: 201 })
