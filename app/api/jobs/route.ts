@@ -12,13 +12,16 @@ export async function POST(request: NextRequest) {
       service_type,
       pickup_address,
       dropoff_address,
+      pickup_date,
+      pickup_time,
+      item_description,
       notes,
     } = body
 
     // Validate required fields
-    if (!client_name || !client_email || !client_phone || !service_type || !pickup_address || !dropoff_address) {
+    if (!client_name || !client_email || !client_phone || !service_type || !pickup_address || !dropoff_address || !pickup_date || !pickup_time || !item_description) {
       return NextResponse.json(
-        { error: 'Missing required fields: client_name, client_email, client_phone, service_type, pickup_address, dropoff_address' },
+        { error: 'Missing required fields: client_name, client_email, client_phone, service_type, pickup_address, dropoff_address, pickup_date, pickup_time, item_description' },
         { status: 400 }
       )
     }
@@ -31,6 +34,9 @@ export async function POST(request: NextRequest) {
       pickup_address,
       dropoff_address,
       service_type,
+      pickup_date,
+      pickup_time,
+      item_description,
       notes: notes || undefined,
     })
 

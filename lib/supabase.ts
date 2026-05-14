@@ -25,6 +25,9 @@ export async function createJob(data: {
   pickup_address: string
   dropoff_address: string
   service_type: string
+  pickup_date?: string
+  pickup_time?: string
+  item_description?: string
   notes?: string
 }) {
   const { data: job, error } = await supabase
