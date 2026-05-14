@@ -13,7 +13,16 @@ interface FormData {
   pickup_date: string
   pickup_time: string
   item_description: string
+  approximate_size: string
+  approximate_weight: string
+  pickup_building_type: string
+  dropoff_building_type: string
+  pickup_access: string
+  dropoff_access: string
+  assistance_pickup: string
+  assistance_dropoff: string
   notes: string
+  terms_accepted: boolean
 }
 
 export default function IntakePage() {
@@ -28,7 +37,16 @@ export default function IntakePage() {
     pickup_date: '',
     pickup_time: '',
     item_description: '',
+    approximate_size: '',
+    approximate_weight: '',
+    pickup_building_type: '',
+    dropoff_building_type: '',
+    pickup_access: '',
+    dropoff_access: '',
+    assistance_pickup: '',
+    assistance_dropoff: '',
     notes: '',
+    terms_accepted: false,
   })
 
   const [loading, setLoading] = useState(false)
@@ -37,8 +55,12 @@ export default function IntakePage() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const { name, value, type } = e.target as any
+    if (type === 'checkbox') {
+      setFormData((prev) => ({ ...prev, [name]: (e.target as HTMLInputElement).checked }))
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }))
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -251,6 +273,175 @@ export default function IntakePage() {
                   />
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="approximate_size" className="block text-sm font-medium text-slate-700 mb-2">
+                      Approximate Size/Dimensions <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="approximate_size"
+                      type="text"
+                      name="approximate_size"
+                      value={formData.approximate_size}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required
+                      placeholder="e.g., 6ft x 3ft x 2ft or 5 boxes"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="approximate_weight" className="block text-sm font-medium text-slate-700 mb-2">
+                      Approximate Weight <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="approximate_weight"
+                      type="text"
+                      name="approximate_weight"
+                      value={formData.approximate_weight}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required
+                      placeholder="e.g., 200 lbs or moderate"
+                    />
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            {/* Location Details Section */}
+            <fieldset>
+              <legend className="text-lg sm:text-xl font-semibold text-slate-800 mb-4">
+                Location & Access Details
+              </legend>
+
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="pickup_building_type" className="block text-sm font-medium text-slate-700 mb-2">
+                      Pickup Location Type <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="pickup_building_type"
+                      name="pickup_building_type"
+                      value={formData.pickup_building_type}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required
+                    >
+                      <option value="">Select type</option>
+                      <option value="house">House</option>
+                      <option value="condo/apartment">Condo/Apartment</option>
+                      <option value="retail/store">Retail/Store</option>
+                      <option value="commercial">Commercial</option>
+                      <option value="storage unit">Storage Unit</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="dropoff_building_type" className="block text-sm font-medium text-slate-700 mb-2">
+                      Dropoff Location Type <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="dropoff_building_type"
+                      name="dropoff_building_type"
+                      value={formData.dropoff_building_type}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required
+                    >
+                      <option value="">Select type</option>
+                      <option value="house">House</option>
+                      <option value="condo/apartment">Condo/Apartment</option>
+                      <option value="retail/store">Retail/Store</option>
+                      <option value="commercial">Commercial</option>
+                      <option value="storage unit">Storage Unit</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="pickup_access" className="block text-sm font-medium text-slate-700 mb-2">
+                      Pickup Access <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="pickup_access"
+                      name="pickup_access"
+                      value={formData.pickup_access}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required
+                    >
+                      <option value="">Select access type</option>
+                      <option value="curbside">Curbside</option>
+                      <option value="driveway/garage">Driveway/Garage</option>
+                      <option value="elevator">Elevator</option>
+                      <option value="stairs">Stairs</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="dropoff_access" className="block text-sm font-medium text-slate-700 mb-2">
+                      Dropoff Access <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="dropoff_access"
+                      name="dropoff_access"
+                      value={formData.dropoff_access}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required
+                    >
+                      <option value="">Select access type</option>
+                      <option value="curbside">Curbside</option>
+                      <option value="driveway/garage">Driveway/Garage</option>
+                      <option value="elevator">Elevator</option>
+                      <option value="stairs">Stairs</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="assistance_pickup" className="block text-sm font-medium text-slate-700 mb-2">
+                      Assistance Needed at Pickup <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="assistance_pickup"
+                      name="assistance_pickup"
+                      value={formData.assistance_pickup}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required
+                    >
+                      <option value="">Select assistance level</option>
+                      <option value="none">None</option>
+                      <option value="light">Light (pointing/guidance)</option>
+                      <option value="medium">Medium (partial lifting)</option>
+                      <option value="heavy">Heavy (full assistance)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="assistance_dropoff" className="block text-sm font-medium text-slate-700 mb-2">
+                      Assistance Needed at Dropoff <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="assistance_dropoff"
+                      name="assistance_dropoff"
+                      value={formData.assistance_dropoff}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required
+                    >
+                      <option value="">Select assistance level</option>
+                      <option value="none">None</option>
+                      <option value="light">Light (pointing/guidance)</option>
+                      <option value="medium">Medium (partial lifting)</option>
+                      <option value="heavy">Heavy (full assistance)</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div>
                   <label htmlFor="notes" className="block text-sm font-medium text-slate-700 mb-2">
                     Additional Details (optional)
@@ -265,6 +456,25 @@ export default function IntakePage() {
                     placeholder="Any additional details about your service request..."
                   />
                 </div>
+              </div>
+            </fieldset>
+
+            {/* Terms Section */}
+            <fieldset>
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="terms_accepted"
+                    checked={formData.terms_accepted}
+                    onChange={handleChange}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <span className="text-sm text-slate-700">
+                    I confirm that the pricing provided is subject to review and labour is not guaranteed until confirmed by HiveHaul™. <span className="text-red-500">*</span>
+                  </span>
+                </label>
               </div>
             </fieldset>
 

@@ -29,6 +29,7 @@ export async function createJob(data: {
   pickup_time?: string
   item_description?: string
   notes?: string
+  booking_details?: Record<string, any>
 }) {
   const { data: job, error } = await supabase
     .from('jobs')

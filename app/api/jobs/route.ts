@@ -15,15 +15,57 @@ export async function POST(request: NextRequest) {
       pickup_date,
       pickup_time,
       item_description,
+      approximate_size,
+      approximate_weight,
+      pickup_building_type,
+      dropoff_building_type,
+      pickup_access,
+      dropoff_access,
+      assistance_pickup,
+      assistance_dropoff,
       notes,
+      terms_accepted,
     } = body
 
     // Validate required fields
-    if (!client_name || !client_email || !client_phone || !service_type || !pickup_address || !dropoff_address || !pickup_date || !pickup_time || !item_description) {
+    const requiredFields = [
+      'client_name', 'client_email', 'client_phone', 'service_type',
+      'pickup_address', 'dropoff_address', 'pickup_date', 'pickup_time',
+      'item_description', 'approximate_size', 'approximate_weight',
+      'pickup_building_type', 'dropoff_building_type', 'pickup_access',
+      'dropoff_access', 'assistance_pickup', 'assistance_dropoff'
+    ]
+
+    for (const field of requiredFields) {
+      if (!body[field]) {
+        return NextResponse.json(
+          { error: `Missing required field: ${field}` },
+          { status: 400 }
+        )
+      }
+    }
+
+    if (!terms_accepted) {
       return NextResponse.json(
-        { error: 'Missing required fields: client_name, client_email, client_phone, service_type, pickup_address, dropoff_address, pickup_date, pickup_time, item_description' },
+        { error: 'You must accept the terms and conditions' },
         { status: 400 }
       )
+    }
+
+    // Store all extended fields in JSON (including date/time/description if columns don't exist)
+    const booking_details = {
+      pickup_date,
+      pickup_time,
+      item_description,
+      approximate_size,
+      approximate_weight,
+      pickup_building_type,
+      dropoff_building_type,
+      pickup_access,
+      dropoff_access,
+      assistance_pickup,
+      assistance_dropoff,
+      terms_accepted,
     }
 
     // Create job directly in jobs table with inline client info
@@ -34,17 +76,16 @@ export async function POST(request: NextRequest) {
       pickup_address,
       dropoff_address,
       service_type,
-      pickup_date,
-      pickup_time,
-      item_description,
       notes: notes || undefined,
+      booking_details,
     })
 
     return NextResponse.json(job, { status: 201 })
   } catch (error) {
     console.error('Error creating job:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create job'
     return NextResponse.json(
-      { error: 'Failed to create job' },
+      { error: errorMessage },
       { status: 500 }
     )
   }
