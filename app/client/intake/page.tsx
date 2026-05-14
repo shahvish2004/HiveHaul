@@ -62,35 +62,35 @@ export default function IntakePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 py-8 px-4 sm:px-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 py-6 px-4 sm:py-8 sm:px-6">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-2">
+          <h1 className="text-4xl sm:text-5xl font-bold text-slate-800 mb-2">
             HiveHaul™
           </h1>
-          <p className="text-slate-600">Quick Service Request</p>
+          <p className="text-slate-600 text-base sm:text-lg">Quick Service Request</p>
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8">
+        <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8 space-y-6">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-              <p className="font-semibold">Error</p>
-              <p>{error}</p>
+            <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+              <p className="font-semibold text-sm sm:text-base">Error</p>
+              <p className="text-sm sm:text-base">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Client Information Section */}
             <fieldset>
-              <legend className="text-lg font-semibold text-slate-800 mb-4">
+              <legend className="text-lg sm:text-xl font-semibold text-slate-800 mb-4">
                 Your Information
               </legend>
 
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="client_name" className="block text-sm font-medium text-slate-700 mb-1">
+                  <label htmlFor="client_name" className="block text-sm font-medium text-slate-700 mb-2">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -99,14 +99,14 @@ export default function IntakePage() {
                     name="client_name"
                     value={formData.client_name}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                     required
                     placeholder="John Doe"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="client_email" className="block text-sm font-medium text-slate-700 mb-1">
+                  <label htmlFor="client_email" className="block text-sm font-medium text-slate-700 mb-2">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -115,14 +115,14 @@ export default function IntakePage() {
                     name="client_email"
                     value={formData.client_email}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                     required
                     placeholder="john@example.com"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="client_phone" className="block text-sm font-medium text-slate-700 mb-1">
+                  <label htmlFor="client_phone" className="block text-sm font-medium text-slate-700 mb-2">
                     Phone Number
                   </label>
                   <input
@@ -131,7 +131,7 @@ export default function IntakePage() {
                     name="client_phone"
                     value={formData.client_phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                     placeholder="(555) 123-4567"
                   />
                 </div>
@@ -140,13 +140,13 @@ export default function IntakePage() {
 
             {/* Service Details Section */}
             <fieldset>
-              <legend className="text-lg font-semibold text-slate-800 mb-4">
+              <legend className="text-lg sm:text-xl font-semibold text-slate-800 mb-4">
                 Service Details
               </legend>
 
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="service_type" className="block text-sm font-medium text-slate-700 mb-1">
+                  <label htmlFor="service_type" className="block text-sm font-medium text-slate-700 mb-2">
                     Service Type <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -154,7 +154,7 @@ export default function IntakePage() {
                     name="service_type"
                     value={formData.service_type}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                     required
                   >
                     <option value="">Select a service type</option>
@@ -167,7 +167,7 @@ export default function IntakePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="pickup_address" className="block text-sm font-medium text-slate-700 mb-1">
+                  <label htmlFor="pickup_address" className="block text-sm font-medium text-slate-700 mb-2">
                     Pickup Address <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -176,14 +176,14 @@ export default function IntakePage() {
                     name="pickup_address"
                     value={formData.pickup_address}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                     required
                     placeholder="123 Main Street, City, State"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="dropoff_address" className="block text-sm font-medium text-slate-700 mb-1">
+                  <label htmlFor="dropoff_address" className="block text-sm font-medium text-slate-700 mb-2">
                     Dropoff Address <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -192,22 +192,22 @@ export default function IntakePage() {
                     name="dropoff_address"
                     value={formData.dropoff_address}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                     required
                     placeholder="456 Oak Avenue, City, State"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="notes" className="block text-sm font-medium text-slate-700 mb-1">
-                    Notes
+                  <label htmlFor="notes" className="block text-sm font-medium text-slate-700 mb-2">
+                    Notes (optional)
                   </label>
                   <textarea
                     id="notes"
                     name="notes"
                     value={formData.notes}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-base"
                     rows={4}
                     placeholder="Any additional details about your service request..."
                   />
@@ -219,13 +219,13 @@ export default function IntakePage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 disabled:cursor-not-allowed text-white font-bold py-4 px-4 rounded-lg transition-all text-base sm:text-lg touch-target-lg"
             >
-              {loading ? 'Submitting...' : 'Submit Service Request'}
+              {loading ? '⏳ Submitting...' : '✓ Submit Service Request'}
             </button>
 
-            <p className="text-xs text-slate-500 text-center">
-              * Required fields. We'll review your request and contact you shortly.
+            <p className="text-xs sm:text-sm text-slate-500 text-center">
+              * Required fields. We'll contact you shortly to confirm your request.
             </p>
           </form>
         </div>

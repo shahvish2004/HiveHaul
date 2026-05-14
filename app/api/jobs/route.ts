@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const jobs = await getJobs()
-    return NextResponse.json({ jobs })
+    return NextResponse.json(jobs)
   } catch (error) {
     let errorMessage = 'Unknown error'
     if (error instanceof Error) {
