@@ -27,6 +27,12 @@ interface FormData {
   assistance_dropoff: string
   notes: string
   terms_accepted: boolean
+  confirm_item_details_accurate: boolean
+  understand_pricing_may_change: boolean
+  confirm_no_prohibited_items: boolean
+  understand_hivehaul_approval_required: boolean
+  understand_deposit_may_be_required: boolean
+  agree_to_terms_and_service: boolean
 }
 
 export default function IntakePage() {
@@ -55,6 +61,12 @@ export default function IntakePage() {
     assistance_dropoff: '',
     notes: '',
     terms_accepted: false,
+    confirm_item_details_accurate: false,
+    understand_pricing_may_change: false,
+    confirm_no_prohibited_items: false,
+    understand_hivehaul_approval_required: false,
+    understand_deposit_may_be_required: false,
+    agree_to_terms_and_service: false,
   })
 
   const [loading, setLoading] = useState(false)
@@ -525,6 +537,86 @@ export default function IntakePage() {
                   <span className="text-sm text-slate-700">
                     I confirm that the pricing provided is subject to review and labour is not guaranteed until confirmed by HiveHaul™. <span className="text-red-500">*</span>
                   </span>
+                </label>
+              </div>
+            </fieldset>
+
+            {/* Operational Waiver Checklist */}
+            <fieldset>
+              <legend className="text-lg sm:text-xl font-semibold text-slate-800 mb-4">
+                Important Confirmations <span className="text-red-500">*</span>
+              </legend>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-3">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="confirm_item_details_accurate"
+                    checked={formData.confirm_item_details_accurate}
+                    onChange={handleChange}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <span className="text-sm text-slate-700">I confirm item details provided are accurate</span>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="understand_pricing_may_change"
+                    checked={formData.understand_pricing_may_change}
+                    onChange={handleChange}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <span className="text-sm text-slate-700">I understand pricing may change if details differ from actual conditions</span>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="confirm_no_prohibited_items"
+                    checked={formData.confirm_no_prohibited_items}
+                    onChange={handleChange}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <span className="text-sm text-slate-700">I confirm no prohibited or hazardous materials are included</span>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="understand_hivehaul_approval_required"
+                    checked={formData.understand_hivehaul_approval_required}
+                    onChange={handleChange}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <span className="text-sm text-slate-700">I understand HiveHaul approval is required before booking is confirmed</span>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="understand_deposit_may_be_required"
+                    checked={formData.understand_deposit_may_be_required}
+                    onChange={handleChange}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <span className="text-sm text-slate-700">I understand a booking deposit may be required</span>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="agree_to_terms_and_service"
+                    checked={formData.agree_to_terms_and_service}
+                    onChange={handleChange}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <span className="text-sm text-slate-700">I agree to HiveHaul service terms</span>
                 </label>
               </div>
             </fieldset>

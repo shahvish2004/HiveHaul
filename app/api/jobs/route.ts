@@ -29,6 +29,12 @@ export async function POST(request: NextRequest) {
       assistance_dropoff,
       notes,
       terms_accepted,
+      confirm_item_details_accurate,
+      understand_pricing_may_change,
+      confirm_no_prohibited_items,
+      understand_hivehaul_approval_required,
+      understand_deposit_may_be_required,
+      agree_to_terms_and_service,
     } = body
 
     // Validate required fields
@@ -56,6 +62,25 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Validate all waiver confirmations are checked
+    const requiredCheckboxes = [
+      'confirm_item_details_accurate',
+      'understand_pricing_may_change',
+      'confirm_no_prohibited_items',
+      'understand_hivehaul_approval_required',
+      'understand_deposit_may_be_required',
+      'agree_to_terms_and_service'
+    ]
+
+    for (const checkbox of requiredCheckboxes) {
+      if (!body[checkbox]) {
+        return NextResponse.json(
+          { error: 'You must confirm all required items' },
+          { status: 400 }
+        )
+      }
+    }
+
     // Store extended fields in notes since booking_details column may not exist yet
     const extended_info = {
       pickup_date,
@@ -74,6 +99,12 @@ export async function POST(request: NextRequest) {
       assistance_pickup,
       assistance_dropoff,
       terms_accepted,
+      confirm_item_details_accurate,
+      understand_pricing_may_change,
+      confirm_no_prohibited_items,
+      understand_hivehaul_approval_required,
+      understand_deposit_may_be_required,
+      agree_to_terms_and_service,
     }
 
     // Combine notes with extended info
