@@ -51,6 +51,14 @@ interface ExtendedInfo {
   dropoff_access_custom?: string
   assistance_pickup?: string
   assistance_dropoff?: string
+  pickup_floor?: string
+  pickup_elevator_available?: string
+  pickup_stairs?: string
+  pickup_unit_suite?: string
+  dropoff_floor?: string
+  dropoff_elevator_available?: string
+  dropoff_stairs?: string
+  dropoff_unit_suite?: string
   terms_accepted?: boolean
   [key: string]: any
 }
@@ -377,6 +385,58 @@ export default function ManagerJobsPage() {
                           <div>
                             <p className="text-xs text-slate-500 uppercase mb-1">Dropoff Assistance</p>
                             <p className="text-slate-800">{extendedInfo.assistance_dropoff}</p>
+                          </div>
+                        )}
+                        {extendedInfo.pickup_floor && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Pickup Floor</p>
+                            <p className="text-slate-800">{extendedInfo.pickup_floor}</p>
+                          </div>
+                        )}
+                        {extendedInfo.pickup_elevator_available && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Pickup Elevator</p>
+                            <p className="text-slate-800">{extendedInfo.pickup_elevator_available}</p>
+                          </div>
+                        )}
+                        {extendedInfo.pickup_stairs && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Pickup Stairs</p>
+                            <p className={extendedInfo.pickup_stairs.includes('Yes') ? 'text-amber-600 font-bold' : 'text-slate-800'}>
+                              {extendedInfo.pickup_stairs.includes('Yes') ? '⚠ ' : ''}{extendedInfo.pickup_stairs}
+                            </p>
+                          </div>
+                        )}
+                        {extendedInfo.pickup_unit_suite && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Pickup Unit/Suite</p>
+                            <p className="text-slate-800">{extendedInfo.pickup_unit_suite}</p>
+                          </div>
+                        )}
+                        {extendedInfo.dropoff_floor && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Dropoff Floor</p>
+                            <p className="text-slate-800">{extendedInfo.dropoff_floor}</p>
+                          </div>
+                        )}
+                        {extendedInfo.dropoff_elevator_available && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Dropoff Elevator</p>
+                            <p className="text-slate-800">{extendedInfo.dropoff_elevator_available}</p>
+                          </div>
+                        )}
+                        {extendedInfo.dropoff_stairs && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Dropoff Stairs</p>
+                            <p className={extendedInfo.dropoff_stairs.includes('Yes') ? 'text-amber-600 font-bold' : 'text-slate-800'}>
+                              {extendedInfo.dropoff_stairs.includes('Yes') ? '⚠ ' : ''}{extendedInfo.dropoff_stairs}
+                            </p>
+                          </div>
+                        )}
+                        {extendedInfo.dropoff_unit_suite && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Dropoff Unit/Suite</p>
+                            <p className="text-slate-800">{extendedInfo.dropoff_unit_suite}</p>
                           </div>
                         )}
                       </div>

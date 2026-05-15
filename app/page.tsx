@@ -19,9 +19,16 @@ export default function Home() {
       <div className="max-w-lg w-full text-center space-y-8 relative z-10">
         {/* Logo/Branding */}
         <div className="space-y-3 pt-4">
-          <h1 className="text-5xl sm:text-6xl font-bold" style={{ color: '#FFFFFF' }}>
-            HiveHaul™
-          </h1>
+          <Link href="/" className="inline-block mx-auto">
+            <img
+              src="/hivehaul-logo.png"
+              alt="HiveHaul"
+              className="max-w-xs sm:max-w-sm md:max-w-xl object-contain hover:opacity-90 transition-opacity"
+              style={{
+                maxWidth: 'min(90vw, 320px)',
+              }}
+            />
+          </Link>
           <p className="text-lg sm:text-xl" style={{ color: '#CBD5E1' }}>
             Local Pickup & Delivery Services
           </p>
