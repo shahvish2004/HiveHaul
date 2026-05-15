@@ -21,6 +21,8 @@ interface FormData {
   dropoff_building_type_custom?: string
   pickup_access: string
   dropoff_access: string
+  pickup_access_custom?: string
+  dropoff_access_custom?: string
   assistance_pickup: string
   assistance_dropoff: string
   notes: string
@@ -47,6 +49,8 @@ export default function IntakePage() {
     dropoff_building_type_custom: '',
     pickup_access: '',
     dropoff_access: '',
+    pickup_access_custom: '',
+    dropoff_access_custom: '',
     assistance_pickup: '',
     assistance_dropoff: '',
     notes: '',
@@ -194,6 +198,7 @@ export default function IntakePage() {
                     <option value="Furniture Moving">Furniture Moving</option>
                     <option value="Equipment Transport">Equipment Transport</option>
                     <option value="Delivery Service">Delivery Service</option>
+                    <option value="Waste Disposal / Junk Removal">Waste Disposal / Junk Removal</option>
                     <option value="Other">Other</option>
                   </select>
                 </div>
@@ -346,7 +351,7 @@ export default function IntakePage() {
                         name="pickup_building_type_custom"
                         value={formData.pickup_building_type_custom || ''}
                         onChange={handleChange}
-                        placeholder="Please specify"
+                        placeholder="Please describe pickup location type"
                         className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                       />
                     )}
@@ -377,7 +382,7 @@ export default function IntakePage() {
                         name="dropoff_building_type_custom"
                         value={formData.dropoff_building_type_custom || ''}
                         onChange={handleChange}
-                        placeholder="Please specify"
+                        placeholder="Please describe dropoff location type"
                         className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                       />
                     )}
@@ -402,7 +407,18 @@ export default function IntakePage() {
                       <option value="driveway/garage">Driveway/Garage</option>
                       <option value="elevator">Elevator</option>
                       <option value="stairs">Stairs</option>
+                      <option value="other">Other</option>
                     </select>
+                    {formData.pickup_access === 'other' && (
+                      <input
+                        type="text"
+                        name="pickup_access_custom"
+                        value={formData.pickup_access_custom || ''}
+                        onChange={handleChange}
+                        placeholder="Please describe pickup access"
+                        className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      />
+                    )}
                   </div>
                   <div>
                     <label htmlFor="dropoff_access" className="block text-sm font-medium text-slate-700 mb-2">
@@ -421,7 +437,18 @@ export default function IntakePage() {
                       <option value="driveway/garage">Driveway/Garage</option>
                       <option value="elevator">Elevator</option>
                       <option value="stairs">Stairs</option>
+                      <option value="other">Other</option>
                     </select>
+                    {formData.dropoff_access === 'other' && (
+                      <input
+                        type="text"
+                        name="dropoff_access_custom"
+                        value={formData.dropoff_access_custom || ''}
+                        onChange={handleChange}
+                        placeholder="Please describe dropoff access"
+                        className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      />
+                    )}
                   </div>
                 </div>
 

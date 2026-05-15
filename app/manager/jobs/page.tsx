@@ -46,7 +46,9 @@ interface ExtendedInfo {
   dropoff_building_type?: string
   dropoff_building_type_custom?: string
   pickup_access?: string
+  pickup_access_custom?: string
   dropoff_access?: string
+  dropoff_access_custom?: string
   assistance_pickup?: string
   assistance_dropoff?: string
   terms_accepted?: boolean
@@ -348,13 +350,21 @@ export default function ManagerJobsPage() {
                         {extendedInfo.pickup_access && (
                           <div>
                             <p className="text-xs text-slate-500 uppercase mb-1">Pickup Access</p>
-                            <p className="text-slate-800">{extendedInfo.pickup_access}</p>
+                            <p className="text-slate-800">
+                              {extendedInfo.pickup_access === 'other'
+                                ? `Other${extendedInfo.pickup_access_custom ? `: ${extendedInfo.pickup_access_custom}` : ''}`
+                                : extendedInfo.pickup_access}
+                            </p>
                           </div>
                         )}
                         {extendedInfo.dropoff_access && (
                           <div>
                             <p className="text-xs text-slate-500 uppercase mb-1">Dropoff Access</p>
-                            <p className="text-slate-800">{extendedInfo.dropoff_access}</p>
+                            <p className="text-slate-800">
+                              {extendedInfo.dropoff_access === 'other'
+                                ? `Other${extendedInfo.dropoff_access_custom ? `: ${extendedInfo.dropoff_access_custom}` : ''}`
+                                : extendedInfo.dropoff_access}
+                            </p>
                           </div>
                         )}
                         {extendedInfo.assistance_pickup && (
