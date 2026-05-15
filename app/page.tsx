@@ -58,12 +58,6 @@ export default function Home() {
               backgroundColor: '#FFC400',
               color: '#05080D',
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#F5B700'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#FFC400'
-            }}
           >
             Request Pickup or Delivery
           </Link>
