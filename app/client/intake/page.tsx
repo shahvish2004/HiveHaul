@@ -1018,7 +1018,7 @@ export default function IntakePage() {
                           <li>HiveHaul does not provide storage inside the vehicle cabin. Items must be suitable for transport in the cargo/truck area unless approved by HiveHaul.</li>
                           <li>Booking may require a deposit before scheduling</li>
                           <li>Customer is responsible for providing accurate information</li>
-                          <li>HiveHaul reserves the right to decline requests</li>
+                          <li>HiveHaul reserves the right to refuse, decline, postpone, or cancel service where safety concerns, prohibited items, inaccurate information, legal requirements, or policy violations are identified</li>
                         </ul>
                       </div>
 
@@ -1044,7 +1044,7 @@ export default function IntakePage() {
                           <li>By submitting a request, the customer confirms that all cargo information provided is accurate and complete.</li>
                           <li>HiveHaul relies on customer-provided information and does not assume responsibility for undeclared, misrepresented, prohibited, or unlawful contents.</li>
                           <li>Providing false, misleading, or incomplete cargo information may result in immediate cancellation of service and loss of applicable booking deposits.</li>
-                          <li>HiveHaul reserves the right to refuse service, cancel transport, or cooperate with authorities where required by law.</li>
+                          <li>HiveHaul reserves the right to refuse, decline, postpone, or cancel service where safety concerns, prohibited items, inaccurate information, legal requirements, or policy violations are identified. HiveHaul may cooperate with authorities where required by law.</li>
                         </ul>
                       </div>
 
@@ -1053,9 +1053,9 @@ export default function IntakePage() {
                         <ul className="space-y-2 list-disc list-inside">
                           <li>Customers are responsible for accurately declaring the contents of all cargo before transport.</li>
                           <li>HiveHaul does not transport prohibited, illegal, or restricted items including but not limited to: illegal drugs or narcotics, undeclared controlled substances, firearms, ammunition, explosives, hazardous materials, dangerous goods, stolen property, or prohibited or unlawful items.</li>
-                          <li>If cargo, packaging, or circumstances reasonably appear inconsistent with the submitted request details, HiveHaul reserves the right to request additional information, decline transport, or cancel service.</li>
+                          <li>If cargo, packaging, or circumstances reasonably appear inconsistent with the submitted request details, HiveHaul reserves the right to request additional information, refuse, decline, postpone, or cancel service.</li>
                           <li>Failure to accurately declare transported items may result in cancellation of service without refund of applicable booking deposits.</li>
-                          <li>If prohibited or unlawful items are discovered or suspected, HiveHaul reserves the right to refuse transport and may contact appropriate authorities when required.</li>
+                          <li>HiveHaul reserves the right to refuse, decline, postpone, or cancel service where safety concerns, prohibited items, inaccurate information, legal requirements, or policy violations are identified. HiveHaul may cooperate with authorities where required by law.</li>
                           <li>The customer remains solely responsible for the legality and declaration of transported contents.</li>
                         </ul>
                       </div>
