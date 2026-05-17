@@ -32,10 +32,14 @@ interface FormData {
   pickup_elevator_available?: string
   pickup_stairs?: string
   pickup_unit_suite?: string
+  pickup_buzz_code?: string
+  pickup_entry_instructions?: string
   dropoff_floor?: string
   dropoff_elevator_available?: string
   dropoff_stairs?: string
   dropoff_unit_suite?: string
+  dropoff_buzz_code?: string
+  dropoff_entry_instructions?: string
   notes: string
   terms_accepted: boolean
   confirm_item_details_accurate: boolean
@@ -47,6 +51,35 @@ interface FormData {
   confirm_cargo_declared_accurately: boolean
   understand_cargo_responsibility: boolean
   confirm_cargo_details_truthful: boolean
+}
+
+const INSIDE_BUILDING_ACCESS = [
+  'front door',
+  'side entrance',
+  'backyard/rear',
+  'front entrance',
+  'elevator',
+  'stairs',
+  'mall entrance',
+  'underground access',
+  'other'
+]
+
+const OUTSIDE_ONLY_ACCESS = [
+  'curbside',
+  'driveway/garage',
+  'driveway / garage',
+  'loading dock',
+  'shipping/receiving area',
+  'rear entrance'
+]
+
+const requiresFloorLevel = (accessPoint: string): boolean => {
+  return INSIDE_BUILDING_ACCESS.includes(accessPoint.toLowerCase())
+}
+
+const requiresBuildingAccessDetails = (accessPoint: string): boolean => {
+  return INSIDE_BUILDING_ACCESS.includes(accessPoint.toLowerCase())
 }
 
 export default function IntakePage() {
@@ -80,10 +113,14 @@ export default function IntakePage() {
     pickup_elevator_available: '',
     pickup_stairs: '',
     pickup_unit_suite: '',
+    pickup_buzz_code: '',
+    pickup_entry_instructions: '',
     dropoff_floor: '',
     dropoff_elevator_available: '',
     dropoff_stairs: '',
     dropoff_unit_suite: '',
+    dropoff_buzz_code: '',
+    dropoff_entry_instructions: '',
     notes: '',
     terms_accepted: false,
     confirm_item_details_accurate: false,
@@ -104,7 +141,11 @@ export default function IntakePage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target as any
-    if (type === 'checkbox') {
+
+    if (name === 'pickup_access' || name === 'dropoff_access') {
+      const location = name === 'pickup_access' ? 'pickup' : 'dropoff'
+      handleAccessChange(location, value)
+    } else if (type === 'checkbox') {
       setFormData((prev) => ({ ...prev, [name]: (e.target as HTMLInputElement).checked }))
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }))
@@ -113,6 +154,21 @@ export default function IntakePage() {
 
   const updateFormData = (key: string, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const handleAccessChange = (location: 'pickup' | 'dropoff', newAccess: string) => {
+    updateFormData(`${location}_access`, newAccess)
+
+    if (OUTSIDE_ONLY_ACCESS.includes(newAccess.toLowerCase())) {
+      updateFormData(`${location}_floor`, '')
+      updateFormData(`${location}_elevator_available`, '')
+      updateFormData(`${location}_stairs`, '')
+      if (location === 'pickup') {
+        updateFormData('pickup_house_access_level', '')
+      } else {
+        updateFormData('dropoff_house_access_level', '')
+      }
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -438,7 +494,7 @@ export default function IntakePage() {
                   </div>
                 </div>
 
-                {formData.pickup_building_type === 'house' && (
+                {formData.pickup_building_type === 'house' && requiresFloorLevel(formData.pickup_access) && (
                   <div>
                     <label htmlFor="pickup_house_access_level" className="block text-sm font-medium text-slate-700 mb-2">
                       Pickup House Level <span className="text-red-500">*</span>
@@ -449,7 +505,7 @@ export default function IntakePage() {
                       value={formData.pickup_house_access_level || ''}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required={formData.pickup_building_type === 'house'}
+                      required={formData.pickup_building_type === 'house' && requiresFloorLevel(formData.pickup_access)}
                     >
                       <option value="">Select level</option>
                       <option value="Curbside">Curbside</option>
@@ -462,7 +518,7 @@ export default function IntakePage() {
                   </div>
                 )}
 
-                {formData.dropoff_building_type === 'house' && (
+                {formData.dropoff_building_type === 'house' && requiresFloorLevel(formData.dropoff_access) && (
                   <div>
                     <label htmlFor="dropoff_house_access_level" className="block text-sm font-medium text-slate-700 mb-2">
                       Dropoff House Level <span className="text-red-500">*</span>
@@ -473,7 +529,7 @@ export default function IntakePage() {
                       value={formData.dropoff_house_access_level || ''}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required={formData.dropoff_building_type === 'house'}
+                      required={formData.dropoff_building_type === 'house' && requiresFloorLevel(formData.dropoff_access)}
                     >
                       <option value="">Select level</option>
                       <option value="Curbside">Curbside</option>
@@ -486,7 +542,7 @@ export default function IntakePage() {
                   </div>
                 )}
 
-                {['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && (
+                {['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access) && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4">
                     <h3 className="font-semibold text-slate-800">Pickup Location Details</h3>
 
@@ -501,7 +557,7 @@ export default function IntakePage() {
                           value={formData.pickup_floor}
                           onChange={handleChange}
                           className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type)}
+                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access)}
                         >
                           <option value="">Select floor</option>
                           <option value="Ground floor">Ground floor</option>
@@ -523,7 +579,7 @@ export default function IntakePage() {
                           value={formData.pickup_elevator_available}
                           onChange={handleChange}
                           className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type)}
+                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access)}
                         >
                           <option value="">Select</option>
                           <option value="Yes">Yes</option>
@@ -543,7 +599,7 @@ export default function IntakePage() {
                           value={formData.pickup_stairs}
                           onChange={handleChange}
                           className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type)}
+                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access)}
                         >
                           <option value="">Select</option>
                           <option value="No">No</option>
@@ -578,7 +634,45 @@ export default function IntakePage() {
                   </div>
                 )}
 
-                {['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && (
+                {requiresBuildingAccessDetails(formData.pickup_access) && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4">
+                    <h3 className="font-semibold text-slate-800">Pickup Building Access Details</h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="sm:col-span-2">
+                        <label htmlFor="pickup_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
+                          Buzz / Entry Code
+                        </label>
+                        <input
+                          type="text"
+                          id="pickup_buzz_code"
+                          name="pickup_buzz_code"
+                          value={formData.pickup_buzz_code || ''}
+                          onChange={handleChange}
+                          placeholder="Door code 4321 | Buzz 1208"
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label htmlFor="pickup_entry_instructions" className="block text-sm font-medium text-slate-700 mb-2">
+                          Additional Entry Instructions
+                        </label>
+                        <textarea
+                          id="pickup_entry_instructions"
+                          name="pickup_entry_instructions"
+                          value={formData.pickup_entry_instructions || ''}
+                          onChange={handleChange}
+                          placeholder="Use south entrance, call on arrival, security desk on level 1, etc."
+                          rows={3}
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access) && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4">
                     <h3 className="font-semibold text-slate-800">Dropoff Location Details</h3>
 
@@ -593,7 +687,7 @@ export default function IntakePage() {
                           value={formData.dropoff_floor}
                           onChange={handleChange}
                           className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type)}
+                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access)}
                         >
                           <option value="">Select floor</option>
                           <option value="Ground floor">Ground floor</option>
@@ -615,7 +709,7 @@ export default function IntakePage() {
                           value={formData.dropoff_elevator_available}
                           onChange={handleChange}
                           className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type)}
+                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access)}
                         >
                           <option value="">Select</option>
                           <option value="Yes">Yes</option>
@@ -635,7 +729,7 @@ export default function IntakePage() {
                           value={formData.dropoff_stairs}
                           onChange={handleChange}
                           className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type)}
+                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access)}
                         >
                           <option value="">Select</option>
                           <option value="No">No</option>
@@ -667,6 +761,44 @@ export default function IntakePage() {
                         ⚠ Stairs or higher floors may affect final pricing.
                       </div>
                     )}
+                  </div>
+                )}
+
+                {requiresBuildingAccessDetails(formData.dropoff_access) && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4">
+                    <h3 className="font-semibold text-slate-800">Dropoff Building Access Details</h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="sm:col-span-2">
+                        <label htmlFor="dropoff_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
+                          Buzz / Entry Code
+                        </label>
+                        <input
+                          type="text"
+                          id="dropoff_buzz_code"
+                          name="dropoff_buzz_code"
+                          value={formData.dropoff_buzz_code || ''}
+                          onChange={handleChange}
+                          placeholder="Door code 4321 | Buzz 1208"
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label htmlFor="dropoff_entry_instructions" className="block text-sm font-medium text-slate-700 mb-2">
+                          Additional Entry Instructions
+                        </label>
+                        <textarea
+                          id="dropoff_entry_instructions"
+                          name="dropoff_entry_instructions"
+                          value={formData.dropoff_entry_instructions || ''}
+                          onChange={handleChange}
+                          placeholder="Use south entrance, call on arrival, security desk on level 1, etc."
+                          rows={3}
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                        />
+                      </div>
+                    </div>
                   </div>
                 )}
 
