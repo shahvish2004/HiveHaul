@@ -20,6 +20,8 @@ interface FormData {
   dropoff_building_type: string
   pickup_building_type_custom?: string
   dropoff_building_type_custom?: string
+  pickup_house_access_level?: string
+  dropoff_house_access_level?: string
   pickup_access: string
   dropoff_access: string
   pickup_access_custom?: string
@@ -42,6 +44,9 @@ interface FormData {
   understand_hivehaul_approval_required: boolean
   understand_deposit_may_be_required: boolean
   agree_to_terms_and_service: boolean
+  confirm_cargo_declared_accurately: boolean
+  understand_cargo_responsibility: boolean
+  confirm_cargo_details_truthful: boolean
 }
 
 export default function IntakePage() {
@@ -63,6 +68,8 @@ export default function IntakePage() {
     dropoff_building_type: '',
     pickup_building_type_custom: '',
     dropoff_building_type_custom: '',
+    pickup_house_access_level: '',
+    dropoff_house_access_level: '',
     pickup_access: '',
     dropoff_access: '',
     pickup_access_custom: '',
@@ -85,6 +92,9 @@ export default function IntakePage() {
     understand_hivehaul_approval_required: false,
     understand_deposit_may_be_required: false,
     agree_to_terms_and_service: false,
+    confirm_cargo_declared_accurately: false,
+    understand_cargo_responsibility: false,
+    confirm_cargo_details_truthful: false,
   })
 
   const [loading, setLoading] = useState(false)
@@ -99,6 +109,10 @@ export default function IntakePage() {
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }))
     }
+  }
+
+  const updateFormData = (key: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [key]: value }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -322,7 +336,7 @@ export default function IntakePage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="approximate_size" className="block text-sm font-medium text-slate-700 mb-2">
-                      Approximate Size/Dimensions <span className="text-red-500">*</span>
+                      Approximate Size/Dimensions
                     </label>
                     <input
                       id="approximate_size"
@@ -331,13 +345,12 @@ export default function IntakePage() {
                       value={formData.approximate_size}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required
                       placeholder="e.g., 6ft x 3ft x 2ft or 5 boxes"
                     />
                   </div>
                   <div>
                     <label htmlFor="approximate_weight" className="block text-sm font-medium text-slate-700 mb-2">
-                      Approximate Weight <span className="text-red-500">*</span>
+                      Approximate Weight
                     </label>
                     <input
                       id="approximate_weight"
@@ -346,7 +359,6 @@ export default function IntakePage() {
                       value={formData.approximate_weight}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required
                       placeholder="e.g., 200 lbs or moderate"
                     />
                   </div>
@@ -425,6 +437,54 @@ export default function IntakePage() {
                     )}
                   </div>
                 </div>
+
+                {formData.pickup_building_type === 'house' && (
+                  <div>
+                    <label htmlFor="pickup_house_access_level" className="block text-sm font-medium text-slate-700 mb-2">
+                      Pickup House Level <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="pickup_house_access_level"
+                      name="pickup_house_access_level"
+                      value={formData.pickup_house_access_level || ''}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required={formData.pickup_building_type === 'house'}
+                    >
+                      <option value="">Select level</option>
+                      <option value="Curbside">Curbside</option>
+                      <option value="Main floor">Main floor</option>
+                      <option value="Basement">Basement</option>
+                      <option value="Upper floor">Upper floor</option>
+                      <option value="Multiple levels">Multiple levels</option>
+                      <option value="Not sure">Not sure</option>
+                    </select>
+                  </div>
+                )}
+
+                {formData.dropoff_building_type === 'house' && (
+                  <div>
+                    <label htmlFor="dropoff_house_access_level" className="block text-sm font-medium text-slate-700 mb-2">
+                      Dropoff House Level <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="dropoff_house_access_level"
+                      name="dropoff_house_access_level"
+                      value={formData.dropoff_house_access_level || ''}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                      required={formData.dropoff_building_type === 'house'}
+                    >
+                      <option value="">Select level</option>
+                      <option value="Curbside">Curbside</option>
+                      <option value="Main floor">Main floor</option>
+                      <option value="Basement">Basement</option>
+                      <option value="Upper floor">Upper floor</option>
+                      <option value="Multiple levels">Multiple levels</option>
+                      <option value="Not sure">Not sure</option>
+                    </select>
+                  </div>
+                )}
 
                 {['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4">
@@ -613,7 +673,12 @@ export default function IntakePage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="pickup_access" className="block text-sm font-medium text-slate-700 mb-2">
-                      Pickup Access <span className="text-red-500">*</span>
+                      {formData.pickup_building_type === 'house' ? 'Pickup Loading Point' :
+                       formData.pickup_building_type === 'condo/apartment' ? 'Condo/Apartment Access' :
+                       formData.pickup_building_type === 'retail/store' ? 'Pickup Store Loading Point' :
+                       formData.pickup_building_type === 'commercial' ? 'Pickup Commercial Access' :
+                       formData.pickup_building_type === 'storage unit' ? 'Storage Unit Access' :
+                       'Property Access'} <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="pickup_access"
@@ -623,12 +688,51 @@ export default function IntakePage() {
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                       required
                     >
-                      <option value="">Select access type</option>
-                      <option value="curbside">Curbside</option>
-                      <option value="driveway/garage">Driveway/Garage</option>
-                      <option value="elevator">Elevator</option>
-                      <option value="stairs">Stairs</option>
-                      <option value="other">Other</option>
+                      {formData.pickup_building_type === 'house' ? (
+                        <>
+                          <option value="">Select loading point</option>
+                          <option value="curbside">Curbside</option>
+                          <option value="driveway/garage">Driveway / Garage</option>
+                          <option value="front door">Front door</option>
+                          <option value="side entrance">Side entrance</option>
+                          <option value="backyard/rear">Backyard / Rear access</option>
+                          <option value="other">Other</option>
+                        </>
+                      ) : formData.pickup_building_type === 'retail/store' ? (
+                        <>
+                          <option value="">Select loading point</option>
+                          <option value="front entrance">Front entrance</option>
+                          <option value="rear entrance">Rear entrance</option>
+                          <option value="loading dock">Loading dock</option>
+                          <option value="mall entrance">Mall entrance</option>
+                          <option value="curbside">Curbside</option>
+                          <option value="shipping/receiving area">Shipping/Receiving area</option>
+                          <option value="side entrance">Side entrance</option>
+                          <option value="other">Other</option>
+                        </>
+                      ) : formData.pickup_building_type === 'commercial' ? (
+                        <>
+                          <option value="">Select access point</option>
+                          <option value="front entrance">Front entrance</option>
+                          <option value="rear entrance">Rear entrance</option>
+                          <option value="loading dock">Loading dock</option>
+                          <option value="shipping/receiving area">Shipping/Receiving area</option>
+                          <option value="elevator">Elevator</option>
+                          <option value="side entrance">Side entrance</option>
+                          <option value="underground access">Underground access</option>
+                          <option value="curbside">Curbside</option>
+                          <option value="other">Other</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="">Select access type</option>
+                          <option value="curbside">Curbside</option>
+                          <option value="driveway/garage">Driveway/Garage</option>
+                          <option value="elevator">Elevator</option>
+                          <option value="stairs">Stairs</option>
+                          <option value="other">Other</option>
+                        </>
+                      )}
                     </select>
                     {formData.pickup_access === 'other' && (
                       <input
@@ -636,14 +740,24 @@ export default function IntakePage() {
                         name="pickup_access_custom"
                         value={formData.pickup_access_custom || ''}
                         onChange={handleChange}
-                        placeholder="Please describe pickup access"
+                        placeholder={`Please describe ${
+                          formData.pickup_building_type === 'house' ? 'loading point' :
+                          formData.pickup_building_type === 'retail/store' ? 'loading point' :
+                          formData.pickup_building_type === 'commercial' ? 'access point' :
+                          'access'
+                        }`}
                         className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                       />
                     )}
                   </div>
                   <div>
                     <label htmlFor="dropoff_access" className="block text-sm font-medium text-slate-700 mb-2">
-                      Dropoff Access <span className="text-red-500">*</span>
+                      {formData.dropoff_building_type === 'house' ? 'Dropoff Unloading Point' :
+                       formData.dropoff_building_type === 'condo/apartment' ? 'Condo/Apartment Access' :
+                       formData.dropoff_building_type === 'retail/store' ? 'Dropoff Store Unloading Point' :
+                       formData.dropoff_building_type === 'commercial' ? 'Dropoff Commercial Access' :
+                       formData.dropoff_building_type === 'storage unit' ? 'Storage Unit Access' :
+                       'Property Access'} <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="dropoff_access"
@@ -653,12 +767,51 @@ export default function IntakePage() {
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                       required
                     >
-                      <option value="">Select access type</option>
-                      <option value="curbside">Curbside</option>
-                      <option value="driveway/garage">Driveway/Garage</option>
-                      <option value="elevator">Elevator</option>
-                      <option value="stairs">Stairs</option>
-                      <option value="other">Other</option>
+                      {formData.dropoff_building_type === 'house' ? (
+                        <>
+                          <option value="">Select unloading point</option>
+                          <option value="curbside">Curbside</option>
+                          <option value="driveway/garage">Driveway / Garage</option>
+                          <option value="front door">Front door</option>
+                          <option value="side entrance">Side entrance</option>
+                          <option value="backyard/rear">Backyard / Rear access</option>
+                          <option value="other">Other</option>
+                        </>
+                      ) : formData.dropoff_building_type === 'retail/store' ? (
+                        <>
+                          <option value="">Select unloading point</option>
+                          <option value="front entrance">Front entrance</option>
+                          <option value="rear entrance">Rear entrance</option>
+                          <option value="loading dock">Loading dock</option>
+                          <option value="mall entrance">Mall entrance</option>
+                          <option value="curbside">Curbside</option>
+                          <option value="shipping/receiving area">Shipping/Receiving area</option>
+                          <option value="side entrance">Side entrance</option>
+                          <option value="other">Other</option>
+                        </>
+                      ) : formData.dropoff_building_type === 'commercial' ? (
+                        <>
+                          <option value="">Select access point</option>
+                          <option value="front entrance">Front entrance</option>
+                          <option value="rear entrance">Rear entrance</option>
+                          <option value="loading dock">Loading dock</option>
+                          <option value="shipping/receiving area">Shipping/Receiving area</option>
+                          <option value="elevator">Elevator</option>
+                          <option value="side entrance">Side entrance</option>
+                          <option value="underground access">Underground access</option>
+                          <option value="curbside">Curbside</option>
+                          <option value="other">Other</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="">Select access type</option>
+                          <option value="curbside">Curbside</option>
+                          <option value="driveway/garage">Driveway/Garage</option>
+                          <option value="elevator">Elevator</option>
+                          <option value="stairs">Stairs</option>
+                          <option value="other">Other</option>
+                        </>
+                      )}
                     </select>
                     {formData.dropoff_access === 'other' && (
                       <input
@@ -666,7 +819,12 @@ export default function IntakePage() {
                         name="dropoff_access_custom"
                         value={formData.dropoff_access_custom || ''}
                         onChange={handleChange}
-                        placeholder="Please describe dropoff access"
+                        placeholder={`Please describe ${
+                          formData.dropoff_building_type === 'house' ? 'unloading point' :
+                          formData.dropoff_building_type === 'retail/store' ? 'unloading point' :
+                          formData.dropoff_building_type === 'commercial' ? 'access point' :
+                          'access'
+                        }`}
                         className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                       />
                     )}
@@ -816,6 +974,18 @@ export default function IntakePage() {
                   <span className="text-sm text-slate-700">I understand a booking deposit may be required</span>
                 </label>
 
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="confirm_cargo_details_truthful"
+                    checked={formData.confirm_cargo_details_truthful}
+                    onChange={handleChange}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <span className="text-sm text-slate-700">I confirm that all cargo details and declarations provided are accurate and truthful</span>
+                </label>
+
               </div>
             </fieldset>
 
@@ -836,17 +1006,59 @@ export default function IntakePage() {
                   </button>
 
                   {conditionsExpanded && (
-                    <div className="border-t border-slate-200 p-4 bg-white space-y-3 text-sm text-slate-700">
-                      <ul className="space-y-2 list-disc list-inside">
-                        <li>Service requests are reviewed before confirmation</li>
-                        <li>Pricing may change if item details, access conditions, stairs, floors, weight, or labour needs differ from information provided</li>
-                        <li>Certain items may require additional fees or cannot be transported</li>
-                        <li>Firearms, explosives, hazardous materials, illegal substances, and prohibited items are not permitted</li>
-                        <li>Stairs, higher floors, long walking distances, and limited access may affect final pricing</li>
-                        <li>Booking may require a deposit before scheduling</li>
-                        <li>Customer is responsible for providing accurate information</li>
-                        <li>HiveHaul reserves the right to decline requests</li>
-                      </ul>
+                    <div className="border-t border-slate-200 p-4 bg-white space-y-4 text-sm text-slate-700">
+                      <div>
+                        <h4 className="font-semibold text-slate-800 mb-2">Service Terms</h4>
+                        <ul className="space-y-2 list-disc list-inside">
+                          <li>Service requests are reviewed before confirmation</li>
+                          <li>Pricing may change if item details, access conditions, stairs, floors, weight, or labour needs differ from information provided</li>
+                          <li>Certain items may require additional fees or cannot be transported</li>
+                          <li>Firearms, ammunition, explosives, hazardous materials, illegal substances, drugs, controlled substances, and dangerous goods are not permitted. Common household items like small lighters or normal consumer goods are acceptable, but restricted, illegal, or dangerous materials cannot be transported.</li>
+                          <li>Stairs, higher floors, long walking distances, and limited access may affect final pricing</li>
+                          <li>HiveHaul does not provide storage inside the vehicle cabin. Items must be suitable for transport in the cargo/truck area unless approved by HiveHaul.</li>
+                          <li>Booking may require a deposit before scheduling</li>
+                          <li>Customer is responsible for providing accurate information</li>
+                          <li>HiveHaul reserves the right to decline requests</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-slate-800 mb-2">Cancellation Policy</h4>
+                        <ul className="space-y-2 list-disc list-inside">
+                          <li><strong>More than 24 hours before scheduled service:</strong> No cancellation fee</li>
+                          <li><strong>Less than 24 hours before scheduled service:</strong> Booking deposit may be partially or fully non-refundable</li>
+                          <li><strong>Same-day cancellation or customer no-show:</strong> May be subject to cancellation charges and loss of deposit</li>
+                          <li><strong>If HiveHaul has already started travel, routing, pickup, or reserved time:</strong> Additional charges may apply</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-slate-800 mb-2">Rescheduling</h4>
+                        <p>Rescheduling is subject to availability and may affect pricing or timing.</p>
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-slate-800 mb-2">Transport & Safety Policy</h4>
+                        <ul className="space-y-2 list-disc list-inside">
+                          <li>Customers are solely responsible for the accuracy, legality, ownership, and declaration of transported items.</li>
+                          <li>By submitting a request, the customer confirms that all cargo information provided is accurate and complete.</li>
+                          <li>HiveHaul relies on customer-provided information and does not assume responsibility for undeclared, misrepresented, prohibited, or unlawful contents.</li>
+                          <li>Providing false, misleading, or incomplete cargo information may result in immediate cancellation of service and loss of applicable booking deposits.</li>
+                          <li>HiveHaul reserves the right to refuse service, cancel transport, or cooperate with authorities where required by law.</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-slate-800 mb-2">Cargo Declaration & Restricted Items Policy</h4>
+                        <ul className="space-y-2 list-disc list-inside">
+                          <li>Customers are responsible for accurately declaring the contents of all cargo before transport.</li>
+                          <li>HiveHaul does not transport prohibited, illegal, or restricted items including but not limited to: illegal drugs or narcotics, undeclared controlled substances, firearms, ammunition, explosives, hazardous materials, dangerous goods, stolen property, or prohibited or unlawful items.</li>
+                          <li>If cargo, packaging, or circumstances reasonably appear inconsistent with the submitted request details, HiveHaul reserves the right to request additional information, decline transport, or cancel service.</li>
+                          <li>Failure to accurately declare transported items may result in cancellation of service without refund of applicable booking deposits.</li>
+                          <li>If prohibited or unlawful items are discovered or suspected, HiveHaul reserves the right to refuse transport and may contact appropriate authorities when required.</li>
+                          <li>The customer remains solely responsible for the legality and declaration of transported contents.</li>
+                        </ul>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -862,9 +1074,45 @@ export default function IntakePage() {
                     required
                   />
                   <span className="text-sm text-slate-700">
-                    I have read and agree to the HiveHaul Service Conditions <span className="text-red-500">*</span>
+                    I have read and agree to the HiveHaul Booking & Cancellation Policy <span className="text-red-500">*</span>
                   </span>
                 </label>
+              </div>
+            </fieldset>
+
+            {/* Cargo Declaration Checkboxes */}
+            <fieldset>
+              <legend className="text-lg sm:text-xl font-semibold text-slate-800 mb-4">
+                Cargo Declaration <span className="text-red-500">*</span>
+              </legend>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="confirm_cargo_declared_accurately"
+                    checked={formData.confirm_cargo_declared_accurately}
+                    onChange={handleChange}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <span className="text-sm text-slate-700">I confirm that I have accurately declared the contents of my cargo and understand HiveHaul restrictions.</span>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="understand_cargo_responsibility"
+                    checked={formData.understand_cargo_responsibility}
+                    onChange={handleChange}
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    required
+                  />
+                  <span className="text-sm text-slate-700">I understand that I remain responsible for the contents and declared value of transported cargo.</span>
+                </label>
+
+                <p className="text-xs text-slate-600 mt-3 pt-3 border-t border-blue-200">
+                  Customers are responsible for declaring valuable, fragile, restricted, or unusual items before transport.
+                </p>
               </div>
             </fieldset>
 
