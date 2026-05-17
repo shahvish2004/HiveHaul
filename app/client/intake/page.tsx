@@ -46,6 +46,7 @@ interface FormData {
 
 export default function IntakePage() {
   const router = useRouter()
+  const [conditionsExpanded, setConditionsExpanded] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     client_name: '',
     client_email: '',
@@ -815,16 +816,54 @@ export default function IntakePage() {
                   <span className="text-sm text-slate-700">I understand a booking deposit may be required</span>
                 </label>
 
-                <label className="flex items-start gap-3 cursor-pointer">
+              </div>
+            </fieldset>
+
+            {/* HiveHaul Service Conditions */}
+            <fieldset>
+              <div className="space-y-4">
+                {/* Collapsible Conditions Panel */}
+                <div className="bg-slate-50 border border-slate-200 rounded-lg overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setConditionsExpanded(!conditionsExpanded)}
+                    className="w-full flex items-center justify-between p-4 hover:bg-slate-100 transition-colors"
+                  >
+                    <span className="font-semibold text-slate-800 text-left">HiveHaul Service Conditions</span>
+                    <span className={`text-slate-600 text-xl transition-transform ${conditionsExpanded ? 'rotate-180' : ''}`}>
+                      ▼
+                    </span>
+                  </button>
+
+                  {conditionsExpanded && (
+                    <div className="border-t border-slate-200 p-4 bg-white space-y-3 text-sm text-slate-700">
+                      <ul className="space-y-2 list-disc list-inside">
+                        <li>Service requests are reviewed before confirmation</li>
+                        <li>Pricing may change if item details, access conditions, stairs, floors, weight, or labour needs differ from information provided</li>
+                        <li>Certain items may require additional fees or cannot be transported</li>
+                        <li>Firearms, explosives, hazardous materials, illegal substances, and prohibited items are not permitted</li>
+                        <li>Stairs, higher floors, long walking distances, and limited access may affect final pricing</li>
+                        <li>Booking may require a deposit before scheduling</li>
+                        <li>Customer is responsible for providing accurate information</li>
+                        <li>HiveHaul reserves the right to decline requests</li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+
+                {/* Final Agreement Checkbox */}
+                <label className="flex items-start gap-3 cursor-pointer bg-slate-50 border border-slate-200 rounded-lg p-4">
                   <input
                     type="checkbox"
                     name="agree_to_terms_and_service"
                     checked={formData.agree_to_terms_and_service}
                     onChange={handleChange}
-                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    className="mt-1 h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
                     required
                   />
-                  <span className="text-sm text-slate-700">I agree to HiveHaul service terms</span>
+                  <span className="text-sm text-slate-700">
+                    I have read and agree to the HiveHaul Service Conditions <span className="text-red-500">*</span>
+                  </span>
                 </label>
               </div>
             </fieldset>
