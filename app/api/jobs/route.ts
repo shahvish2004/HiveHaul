@@ -21,6 +21,8 @@ export async function POST(request: NextRequest) {
       dropoff_building_type,
       pickup_building_type_custom,
       dropoff_building_type_custom,
+      pickup_house_access_level,
+      dropoff_house_access_level,
       pickup_access,
       dropoff_access,
       pickup_access_custom,
@@ -43,13 +45,16 @@ export async function POST(request: NextRequest) {
       understand_hivehaul_approval_required,
       understand_deposit_may_be_required,
       agree_to_terms_and_service,
+      confirm_cargo_declared_accurately,
+      understand_cargo_responsibility,
+      confirm_cargo_details_truthful,
     } = body
 
     // Validate required fields
     const requiredFields = [
       'client_name', 'client_email', 'client_phone', 'service_type',
       'pickup_address', 'dropoff_address', 'pickup_date', 'pickup_time',
-      'item_description', 'approximate_size', 'approximate_weight',
+      'item_description',
       'pickup_building_type', 'dropoff_building_type', 'pickup_access',
       'dropoff_access', 'assistance_pickup', 'assistance_dropoff'
     ]
@@ -77,7 +82,10 @@ export async function POST(request: NextRequest) {
       'confirm_no_prohibited_items',
       'understand_hivehaul_approval_required',
       'understand_deposit_may_be_required',
-      'agree_to_terms_and_service'
+      'agree_to_terms_and_service',
+      'confirm_cargo_declared_accurately',
+      'understand_cargo_responsibility',
+      'confirm_cargo_details_truthful'
     ]
 
     for (const checkbox of requiredCheckboxes) {
@@ -98,8 +106,10 @@ export async function POST(request: NextRequest) {
       approximate_weight,
       pickup_building_type,
       pickup_building_type_custom: pickup_building_type === 'other' ? pickup_building_type_custom : undefined,
+      pickup_house_access_level,
       dropoff_building_type,
       dropoff_building_type_custom: dropoff_building_type === 'other' ? dropoff_building_type_custom : undefined,
+      dropoff_house_access_level,
       pickup_access,
       pickup_access_custom: pickup_access === 'other' ? pickup_access_custom : undefined,
       dropoff_access,
@@ -121,6 +131,9 @@ export async function POST(request: NextRequest) {
       understand_hivehaul_approval_required,
       understand_deposit_may_be_required,
       agree_to_terms_and_service,
+      confirm_cargo_declared_accurately,
+      understand_cargo_responsibility,
+      confirm_cargo_details_truthful,
     }
 
     // Combine notes with extended info

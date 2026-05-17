@@ -18,10 +18,10 @@ function ConfirmationContent() {
           {/* Success Message */}
           <div>
             <h1 className="text-3xl font-bold text-green-600 mb-2">
-              Request Confirmed
+              Request Submitted
             </h1>
             <p className="text-slate-600">
-              Your service request has been successfully submitted and assigned a job number.
+              Your request has been received. HiveHaul will review the details and contact you with pricing, availability, and next steps. Booking is not confirmed until approved by HiveHaul and any required deposit is received.
             </p>
           </div>
 

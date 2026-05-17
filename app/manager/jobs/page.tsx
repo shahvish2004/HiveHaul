@@ -43,8 +43,10 @@ interface ExtendedInfo {
   approximate_weight?: string
   pickup_building_type?: string
   pickup_building_type_custom?: string
+  pickup_house_access_level?: string
   dropoff_building_type?: string
   dropoff_building_type_custom?: string
+  dropoff_house_access_level?: string
   pickup_access?: string
   pickup_access_custom?: string
   dropoff_access?: string
@@ -353,6 +355,18 @@ export default function ManagerJobsPage() {
                                 ? `Other${extendedInfo.dropoff_building_type_custom ? `: ${extendedInfo.dropoff_building_type_custom}` : ''}`
                                 : extendedInfo.dropoff_building_type}
                             </p>
+                          </div>
+                        )}
+                        {extendedInfo.pickup_house_access_level && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Pickup House Access Level</p>
+                            <p className="text-slate-800">{extendedInfo.pickup_house_access_level}</p>
+                          </div>
+                        )}
+                        {extendedInfo.dropoff_house_access_level && (
+                          <div>
+                            <p className="text-xs text-slate-500 uppercase mb-1">Dropoff House Access Level</p>
+                            <p className="text-slate-800">{extendedInfo.dropoff_house_access_level}</p>
                           </div>
                         )}
                         {extendedInfo.pickup_access && (
