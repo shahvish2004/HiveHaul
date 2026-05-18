@@ -163,6 +163,9 @@ export default function IntakePage() {
       updateFormData(`${location}_floor`, '')
       updateFormData(`${location}_elevator_available`, '')
       updateFormData(`${location}_stairs`, '')
+      updateFormData(`${location}_unit_suite`, '')
+      updateFormData(`${location}_buzz_code`, '')
+      updateFormData(`${location}_entry_instructions`, '')
       if (location === 'pickup') {
         updateFormData('pickup_house_access_level', '')
       } else {
