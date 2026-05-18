@@ -4,7 +4,7 @@ import { updateJobWithNotes, getJobById } from '@/lib/supabase'
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { jobId, action, reason, depositAmount, depositInstructions } = body
+    const { jobId, action, reason, depositAmount, depositInstructions, cancellationReason } = body
 
     if (!jobId || !action) {
       return NextResponse.json(
@@ -71,6 +71,9 @@ export async function PUT(request: NextRequest) {
       case 'cancel':
         newStatus = 'Cancelled'
         notesUpdate.cancelled_timestamp = new Date().toISOString()
+        if (cancellationReason) {
+          notesUpdate.cancellation_reason = cancellationReason
+        }
         break
 
       case 'add_notes':

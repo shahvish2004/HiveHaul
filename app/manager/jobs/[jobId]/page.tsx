@@ -69,6 +69,9 @@ export default function JobDetailPage() {
   const [showNotesModal, setShowNotesModal] = useState(false)
   const [internalNotes, setInternalNotes] = useState('')
 
+  const [showCancelModal, setShowCancelModal] = useState(false)
+  const [cancellationReason, setCancellationReason] = useState('')
+
   useEffect(() => {
     const fetchJob = async () => {
       try {
@@ -113,6 +116,7 @@ export default function JobDetailPage() {
       setShowDeclineModal(false)
       setShowDepositModal(false)
       setShowNotesModal(false)
+      setShowCancelModal(false)
       setError('')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to perform action')
@@ -230,6 +234,18 @@ export default function JobDetailPage() {
 
             {(() => {
               const extendedInfo = parseExtendedInfo(job.notes)
+
+              // Show cancellation reason if job is cancelled
+              if (job.status === 'Cancelled' && extendedInfo?.cancellation_reason) {
+                return (
+                  <div className="card mb-6 bg-slate-100 border-l-4 border-slate-600">
+                    <h2 className="text-lg font-semibold text-slate-800 mb-3">Cancellation Reason</h2>
+                    <p className="text-slate-700">{extendedInfo.cancellation_reason}</p>
+                  </div>
+                )
+              }
+
+              // Show manager flags if present
               if (extendedInfo?.manager_flags && extendedInfo.manager_flags.length > 0) {
                 return (
                   <div className="card mb-6 bg-amber-50 border-l-4 border-amber-500">
@@ -349,7 +365,7 @@ export default function JobDetailPage() {
 
                 {availableActions.includes('cancel') && (
                   <button
-                    onClick={() => performAction('cancel')}
+                    onClick={() => setShowCancelModal(true)}
                     disabled={actionLoading}
                     className="w-full px-3 py-2 bg-slate-400 text-white rounded text-sm font-medium hover:bg-slate-500 disabled:bg-slate-400"
                   >
@@ -511,6 +527,50 @@ export default function JobDetailPage() {
                   className="flex-1 px-3 py-2 bg-slate-500 text-white rounded-lg hover:bg-slate-600 disabled:bg-slate-400"
                 >
                   Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Cancellation Modal */}
+        {showCancelModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+              <h3 className="text-lg font-bold text-slate-800 mb-4">Cancel Job</h3>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Reason for Cancellation (Optional)
+                </label>
+                <textarea
+                  value={cancellationReason}
+                  onChange={(e) => setCancellationReason(e.target.value)}
+                  placeholder="Add any notes about why this job is being cancelled..."
+                  rows={4}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
+                />
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowCancelModal(false)}
+                  className="flex-1 px-3 py-2 bg-slate-200 text-slate-800 rounded-lg hover:bg-slate-300"
+                >
+                  Keep Job
+                </button>
+                <button
+                  onClick={() => {
+                    const payload: Record<string, any> = {}
+                    if (cancellationReason) {
+                      payload.cancellationReason = cancellationReason
+                    }
+                    performAction('cancel', payload)
+                  }}
+                  disabled={actionLoading}
+                  className="flex-1 px-3 py-2 bg-slate-400 text-white rounded-lg hover:bg-slate-500 disabled:bg-slate-300"
+                >
+                  Cancel Job
                 </button>
               </div>
             </div>

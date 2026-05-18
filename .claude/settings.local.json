@@ -53,7 +53,12 @@
       "Bash(findstr :3000)",
       "Bash(findstr :3001)",
       "Bash(curl -X POST http://localhost:3000/api/jobs -H 'Content-Type: application/json' -d '{ *)",
-      "Bash(curl -s http://localhost:3000/manager/jobs)"
+      "Bash(curl -s http://localhost:3000/manager/jobs)",
+      "Bash(curl -s -X POST http://localhost:3000/api/jobs -H 'Content-Type: application/json' -d '{ *)",
+      "mcp__f4ab1464-0b45-436f-8971-8f6bafc88b8d__get_deployment",
+      "Bash(curl -s \"https://api.vercel.com/v13/deployments/dpl_56zB7pphjsk9QLZhh8khL9kh7AXm?teamId=team_RmGlfm8vLP7VIxwcb6HPmbfp\")",
+      "Bash(curl -s -X POST https://www.hivehaul.ca/api/jobs -H 'Content-Type: application/json' -d '{ *)",
+      "mcp__Claude_in_Chrome__switch_browser"
     ]
   }
 }
