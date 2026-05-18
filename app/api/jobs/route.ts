@@ -27,6 +27,10 @@ export async function POST(request: NextRequest) {
       dropoff_access,
       pickup_access_custom,
       dropoff_access_custom,
+      pickup_buzz_code,
+      pickup_entry_instructions,
+      dropoff_buzz_code,
+      dropoff_entry_instructions,
       assistance_pickup,
       assistance_dropoff,
       pickup_floor,
@@ -97,6 +101,33 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Check if access details are pending confirmation
+    const needsAccessDetailsConfirmation = (type: string, access: string, buzzCode: string, entryInstructions: string) => {
+      const requiresDetails = ['condo/apartment', 'commercial'].includes(type?.toLowerCase())
+      const isCurbside = access?.toLowerCase() === 'curbside'
+      const hasDetails = Boolean(buzzCode?.trim() || entryInstructions?.trim())
+      return requiresDetails && !isCurbside && !hasDetails
+    }
+
+    const pickupAccessPending = needsAccessDetailsConfirmation(
+      pickup_building_type,
+      pickup_access,
+      pickup_buzz_code,
+      pickup_entry_instructions
+    )
+
+    const dropoffAccessPending = needsAccessDetailsConfirmation(
+      dropoff_building_type,
+      dropoff_access,
+      dropoff_buzz_code,
+      dropoff_entry_instructions
+    )
+
+    const managerFlags = []
+    if (pickupAccessPending || dropoffAccessPending) {
+      managerFlags.push('Access details pending confirmation')
+    }
+
     // Store extended fields in notes since booking_details column may not exist yet
     const extended_info = {
       pickup_date,
@@ -107,9 +138,13 @@ export async function POST(request: NextRequest) {
       pickup_building_type,
       pickup_building_type_custom: pickup_building_type === 'other' ? pickup_building_type_custom : undefined,
       pickup_house_access_level,
+      pickup_buzz_code: pickup_buzz_code || undefined,
+      pickup_entry_instructions: pickup_entry_instructions || undefined,
       dropoff_building_type,
       dropoff_building_type_custom: dropoff_building_type === 'other' ? dropoff_building_type_custom : undefined,
       dropoff_house_access_level,
+      dropoff_buzz_code: dropoff_buzz_code || undefined,
+      dropoff_entry_instructions: dropoff_entry_instructions || undefined,
       pickup_access,
       pickup_access_custom: pickup_access === 'other' ? pickup_access_custom : undefined,
       dropoff_access,
@@ -134,6 +169,7 @@ export async function POST(request: NextRequest) {
       confirm_cargo_declared_accurately,
       understand_cargo_responsibility,
       confirm_cargo_details_truthful,
+      manager_flags: managerFlags.length > 0 ? managerFlags : undefined,
     }
 
     // Combine notes with extended info

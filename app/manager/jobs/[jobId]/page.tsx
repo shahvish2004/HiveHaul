@@ -4,6 +4,24 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import type { Job } from '@/lib/types'
 
+interface ExtendedInfo {
+  [key: string]: any
+  manager_flags?: string[]
+}
+
+function parseExtendedInfo(notes: string | null): ExtendedInfo | null {
+  if (!notes) return null
+  try {
+    const match = notes.match(/Extended Info: ({.*})/s)
+    if (match) {
+      return JSON.parse(match[1])
+    }
+  } catch (e) {
+    // If parsing fails, return null
+  }
+  return null
+}
+
 const DECLINE_REASONS = [
   'Outside service area',
   'Item not suitable',
@@ -209,6 +227,26 @@ export default function JobDetailPage() {
                 </div>
               </div>
             </div>
+
+            {(() => {
+              const extendedInfo = parseExtendedInfo(job.notes)
+              if (extendedInfo?.manager_flags && extendedInfo.manager_flags.length > 0) {
+                return (
+                  <div className="card mb-6 bg-amber-50 border-l-4 border-amber-500">
+                    <h2 className="text-lg font-semibold text-amber-900 mb-3">Manager Flags</h2>
+                    <div className="space-y-2">
+                      {extendedInfo.manager_flags.map((flag: string) => (
+                        <div key={flag} className="flex items-start gap-2">
+                          <span className="text-amber-600 text-lg">⚠</span>
+                          <p className="text-amber-800 font-medium">{flag}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              }
+              return null
+            })()}
 
             {job.notes && (
               <div className="card">

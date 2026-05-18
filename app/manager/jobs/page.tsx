@@ -84,6 +84,7 @@ interface ExtendedInfo {
   dropoff_stairs?: string
   dropoff_unit_suite?: string
   terms_accepted?: boolean
+  manager_flags?: string[]
   [key: string]: any
 }
 
@@ -294,13 +295,29 @@ export default function ManagerJobsPage() {
                     <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">
                       Current Status
                     </p>
-                    <span
-                      className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
-                        STATUS_COLORS[job.status] || 'bg-slate-100 text-slate-800'
-                      }`}
-                    >
-                      {STATUS_LABELS[job.status] || job.status}
-                    </span>
+                    <div className="flex flex-col gap-2">
+                      <span
+                        className={`inline-block px-3 py-1 rounded-full text-sm font-semibold w-fit ${
+                          STATUS_COLORS[job.status] || 'bg-slate-100 text-slate-800'
+                        }`}
+                      >
+                        {STATUS_LABELS[job.status] || job.status}
+                      </span>
+                      {(() => {
+                        const extendedInfo = parseExtendedInfo(job.notes)
+                        if (extendedInfo?.manager_flags && extendedInfo.manager_flags.length > 0) {
+                          return extendedInfo.manager_flags.map((flag: string) => (
+                            <span
+                              key={flag}
+                              className="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-amber-100 text-amber-800 w-fit"
+                            >
+                              ⚠ {flag}
+                            </span>
+                          ))
+                        }
+                        return null
+                      })()}
+                    </div>
                   </div>
 
                   {/* Pickup Address */}
