@@ -920,7 +920,7 @@ export default function IntakePage() {
                   </div>
                   <div>
                     <label htmlFor="dropoff_access" className="block text-sm font-medium text-slate-700 mb-2">
-                      Drop-off Point <span className="text-red-500">*</span>
+                      Unloading Point <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="dropoff_access"
