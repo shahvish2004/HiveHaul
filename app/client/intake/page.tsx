@@ -458,7 +458,7 @@ export default function IntakePage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="pickup_building_type" className="block text-sm font-medium text-slate-700 mb-2">
-                      Pickup Building / Property Type <span className="text-red-500">*</span>
+                      Pickup Property Type <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="pickup_building_type"
@@ -489,7 +489,7 @@ export default function IntakePage() {
                   </div>
                   <div>
                     <label htmlFor="dropoff_building_type" className="block text-sm font-medium text-slate-700 mb-2">
-                      Drop-off Building / Property Type <span className="text-red-500">*</span>
+                      Drop-off Property Type <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="dropoff_building_type"
@@ -837,12 +837,7 @@ export default function IntakePage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="pickup_access" className="block text-sm font-medium text-slate-700 mb-2">
-                      {formData.pickup_building_type === 'house' ? 'Pickup Loading Point' :
-                       formData.pickup_building_type === 'condo/apartment' ? 'Condo/Apartment Access' :
-                       formData.pickup_building_type === 'retail/store' ? 'Pickup Store Loading Point' :
-                       formData.pickup_building_type === 'commercial' ? 'Pickup Commercial Access' :
-                       formData.pickup_building_type === 'storage unit' ? 'Storage Unit Loading Point' :
-                       'Loading Point'} <span className="text-red-500">*</span>
+                      Loading Point <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="pickup_access"
@@ -925,12 +920,7 @@ export default function IntakePage() {
                   </div>
                   <div>
                     <label htmlFor="dropoff_access" className="block text-sm font-medium text-slate-700 mb-2">
-                      {formData.dropoff_building_type === 'house' ? 'Drop-off Unloading Point' :
-                       formData.dropoff_building_type === 'condo/apartment' ? 'Condo/Apartment Access' :
-                       formData.dropoff_building_type === 'retail/store' ? 'Drop-off Store Unloading Point' :
-                       formData.dropoff_building_type === 'commercial' ? 'Drop-off Commercial Access' :
-                       formData.dropoff_building_type === 'storage unit' ? 'Storage Unit Unloading Point' :
-                       'Drop-off Point'} <span className="text-red-500">*</span>
+                      Drop-off Point <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="dropoff_access"
