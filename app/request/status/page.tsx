@@ -155,6 +155,12 @@ export default function StatusPage() {
                     'Thank you for choosing HiveHaul.'}
                 </p>
               </div>
+
+              <div className="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                <p className="text-sm text-slate-700">
+                  For updates or questions about your request, HiveHaul may contact you using the phone number or email address provided on your service request.
+                </p>
+              </div>
             </div>
           )}
 

@@ -83,8 +83,8 @@ const requiresBuildingAccessDetails = (accessPoint: string): boolean => {
 }
 
 const shouldShowBuzzCode = (buildingType: string, accessPoint: string): boolean => {
-  // Show buzz code only for Condo/Apartment OR Commercial
-  const validBuildingTypes = ['condo/apartment', 'commercial']
+  // Show buzz code for Condo/Apartment, Commercial, or Storage Unit (non-curbside)
+  const validBuildingTypes = ['condo/apartment', 'commercial', 'storage unit']
   const isCurbside = accessPoint.toLowerCase() === 'curbside'
 
   return validBuildingTypes.includes(buildingType.toLowerCase()) && !isCurbside
@@ -458,7 +458,7 @@ export default function IntakePage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="pickup_building_type" className="block text-sm font-medium text-slate-700 mb-2">
-                      Pickup Location Type <span className="text-red-500">*</span>
+                      Pickup Building / Property Type <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="pickup_building_type"
@@ -489,7 +489,7 @@ export default function IntakePage() {
                   </div>
                   <div>
                     <label htmlFor="dropoff_building_type" className="block text-sm font-medium text-slate-700 mb-2">
-                      Dropoff Location Type <span className="text-red-500">*</span>
+                      Drop-off Building / Property Type <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="dropoff_building_type"
@@ -668,7 +668,7 @@ export default function IntakePage() {
                       {shouldShowBuzzCode(formData.pickup_building_type, formData.pickup_access) && (
                         <div className="sm:col-span-2">
                           <label htmlFor="pickup_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
-                            Buzz Code (optional)
+                            {formData.pickup_building_type === 'storage unit' ? 'Access / Gate Code (optional)' : 'Buzz Code (optional)'}
                           </label>
                           <input
                             type="text"
@@ -679,7 +679,7 @@ export default function IntakePage() {
                             placeholder="e.g., 4321 or Unit 1208"
                             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                           />
-                          <p className="text-xs text-slate-500 mt-1">Leave blank if not applicable or if you prefer to provide details later.</p>
+                          <p className="text-xs text-slate-500 mt-1">Leave blank if not applicable or if you prefer to provide access details later.</p>
                         </div>
                       )}
 
@@ -801,7 +801,7 @@ export default function IntakePage() {
                       {shouldShowBuzzCode(formData.dropoff_building_type, formData.dropoff_access) && (
                         <div className="sm:col-span-2">
                           <label htmlFor="dropoff_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
-                            Buzz Code (optional)
+                            {formData.dropoff_building_type === 'storage unit' ? 'Access / Gate Code (optional)' : 'Buzz Code (optional)'}
                           </label>
                           <input
                             type="text"
@@ -812,7 +812,7 @@ export default function IntakePage() {
                             placeholder="e.g., 4321 or Unit 1208"
                             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                           />
-                          <p className="text-xs text-slate-500 mt-1">Leave blank if not applicable or if you prefer to provide details later.</p>
+                          <p className="text-xs text-slate-500 mt-1">Leave blank if not applicable or if you prefer to provide access details later.</p>
                         </div>
                       )}
 
@@ -841,8 +841,8 @@ export default function IntakePage() {
                        formData.pickup_building_type === 'condo/apartment' ? 'Condo/Apartment Access' :
                        formData.pickup_building_type === 'retail/store' ? 'Pickup Store Loading Point' :
                        formData.pickup_building_type === 'commercial' ? 'Pickup Commercial Access' :
-                       formData.pickup_building_type === 'storage unit' ? 'Storage Unit Access' :
-                       'Property Access'} <span className="text-red-500">*</span>
+                       formData.pickup_building_type === 'storage unit' ? 'Storage Unit Loading Point' :
+                       'Loading Point'} <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="pickup_access"
@@ -887,6 +887,15 @@ export default function IntakePage() {
                           <option value="curbside">Curbside</option>
                           <option value="other">Other</option>
                         </>
+                      ) : formData.pickup_building_type === 'storage unit' ? (
+                        <>
+                          <option value="">Select loading point</option>
+                          <option value="curbside">Curbside</option>
+                          <option value="parking lot">Parking Lot</option>
+                          <option value="main entrance">Main Entrance</option>
+                          <option value="other entrance">Other Entrance</option>
+                          <option value="other">Other</option>
+                        </>
                       ) : (
                         <>
                           <option value="">Select access type</option>
@@ -916,12 +925,12 @@ export default function IntakePage() {
                   </div>
                   <div>
                     <label htmlFor="dropoff_access" className="block text-sm font-medium text-slate-700 mb-2">
-                      {formData.dropoff_building_type === 'house' ? 'Dropoff Unloading Point' :
+                      {formData.dropoff_building_type === 'house' ? 'Drop-off Unloading Point' :
                        formData.dropoff_building_type === 'condo/apartment' ? 'Condo/Apartment Access' :
-                       formData.dropoff_building_type === 'retail/store' ? 'Dropoff Store Unloading Point' :
-                       formData.dropoff_building_type === 'commercial' ? 'Dropoff Commercial Access' :
-                       formData.dropoff_building_type === 'storage unit' ? 'Storage Unit Access' :
-                       'Property Access'} <span className="text-red-500">*</span>
+                       formData.dropoff_building_type === 'retail/store' ? 'Drop-off Store Unloading Point' :
+                       formData.dropoff_building_type === 'commercial' ? 'Drop-off Commercial Access' :
+                       formData.dropoff_building_type === 'storage unit' ? 'Storage Unit Unloading Point' :
+                       'Drop-off Point'} <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="dropoff_access"
@@ -966,6 +975,15 @@ export default function IntakePage() {
                           <option value="curbside">Curbside</option>
                           <option value="other">Other</option>
                         </>
+                      ) : formData.dropoff_building_type === 'storage unit' ? (
+                        <>
+                          <option value="">Select unloading point</option>
+                          <option value="curbside">Curbside</option>
+                          <option value="parking lot">Parking Lot</option>
+                          <option value="main entrance">Main Entrance</option>
+                          <option value="other entrance">Other Entrance</option>
+                          <option value="other">Other</option>
+                        </>
                       ) : (
                         <>
                           <option value="">Select access type</option>
@@ -994,6 +1012,49 @@ export default function IntakePage() {
                     )}
                   </div>
                 </div>
+
+                {/* Fee expectation notices */}
+                {formData.pickup_access && (
+                  <div className="space-y-3">
+                    {formData.pickup_access.toLowerCase() === 'curbside' && (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                        <p className="text-sm text-green-700">Curbside pickup usually keeps your cost lower.</p>
+                      </div>
+                    )}
+                    {formData.pickup_access && formData.pickup_access.toLowerCase() !== 'curbside' && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                        <p className="text-sm text-blue-700">Extra handling time may affect the final quote depending on distance from vehicle, access, and item size.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {(formData.pickup_stairs === 'yes' || formData.pickup_stairs === 'yes — multiple' || formData.pickup_floor === 'Basement' || formData.pickup_floor === 'Underground') && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                    <p className="text-sm text-amber-700">Stairs or non-ground-level access may require additional labour/time and may affect the final quote.</p>
+                  </div>
+                )}
+
+                {formData.dropoff_access && (
+                  <div className="space-y-3">
+                    {formData.dropoff_access.toLowerCase() === 'curbside' && (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                        <p className="text-sm text-green-700">Curbside drop-off usually keeps your cost lower.</p>
+                      </div>
+                    )}
+                    {formData.dropoff_access && formData.dropoff_access.toLowerCase() !== 'curbside' && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                        <p className="text-sm text-blue-700">Extra handling time may affect the final quote depending on distance from vehicle, access, and item size.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {(formData.dropoff_stairs === 'yes' || formData.dropoff_stairs === 'yes — multiple' || formData.dropoff_floor === 'Basement' || formData.dropoff_floor === 'Underground') && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                    <p className="text-sm text-amber-700">Stairs or non-ground-level access may require additional labour/time and may affect the final quote.</p>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -1052,6 +1113,13 @@ export default function IntakePage() {
                 </div>
               </div>
             </fieldset>
+
+            {/* Communication Expectations */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-slate-700">
+                <strong>How we'll stay in touch:</strong> We'll use your phone number and email to communicate about your request, provide a quote, confirm deposit details, schedule your move, and send delivery updates. Currently, these communications are sent manually by our team.
+              </p>
+            </div>
 
             {/* Terms Section */}
             <fieldset>
