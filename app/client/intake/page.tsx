@@ -82,6 +82,14 @@ const requiresBuildingAccessDetails = (accessPoint: string): boolean => {
   return INSIDE_BUILDING_ACCESS.includes(accessPoint.toLowerCase())
 }
 
+const shouldShowBuzzCode = (buildingType: string, accessPoint: string): boolean => {
+  // Show buzz code only for Condo/Apartment OR Commercial
+  const validBuildingTypes = ['condo/apartment', 'commercial']
+  const isCurbside = accessPoint.toLowerCase() === 'curbside'
+
+  return validBuildingTypes.includes(buildingType.toLowerCase()) && !isCurbside
+}
+
 export default function IntakePage() {
   const router = useRouter()
   const [conditionsExpanded, setConditionsExpanded] = useState(false)
@@ -145,6 +153,9 @@ export default function IntakePage() {
     if (name === 'pickup_access' || name === 'dropoff_access') {
       const location = name === 'pickup_access' ? 'pickup' : 'dropoff'
       handleAccessChange(location, value)
+    } else if (name === 'pickup_building_type' || name === 'dropoff_building_type') {
+      const location = name === 'pickup_building_type' ? 'pickup' : 'dropoff'
+      handleBuildingTypeChange(location, value)
     } else if (type === 'checkbox') {
       setFormData((prev) => ({ ...prev, [name]: (e.target as HTMLInputElement).checked }))
     } else {
@@ -171,6 +182,18 @@ export default function IntakePage() {
       } else {
         updateFormData('dropoff_house_access_level', '')
       }
+    }
+  }
+
+  const handleBuildingTypeChange = (location: 'pickup' | 'dropoff', newBuildingType: string) => {
+    updateFormData(`${location}_building_type`, newBuildingType)
+
+    // Clear building access details when switching to House, Retail, or Curbside
+    const typesToClear = ['house', 'retail/store', 'retail', 'other']
+    if (typesToClear.includes(newBuildingType.toLowerCase())) {
+      updateFormData(`${location}_buzz_code`, '')
+      updateFormData(`${location}_unit_suite`, '')
+      updateFormData(`${location}_entry_instructions`, '')
     }
   }
 
@@ -642,20 +665,23 @@ export default function IntakePage() {
                     <h3 className="font-semibold text-slate-800">Pickup Building Access Details</h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="sm:col-span-2">
-                        <label htmlFor="pickup_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
-                          Buzz / Entry Code
-                        </label>
-                        <input
-                          type="text"
-                          id="pickup_buzz_code"
-                          name="pickup_buzz_code"
-                          value={formData.pickup_buzz_code || ''}
-                          onChange={handleChange}
-                          placeholder="Door code 4321 | Buzz 1208"
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                        />
-                      </div>
+                      {shouldShowBuzzCode(formData.pickup_building_type, formData.pickup_access) && (
+                        <div className="sm:col-span-2">
+                          <label htmlFor="pickup_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
+                            Buzz Code (optional)
+                          </label>
+                          <input
+                            type="text"
+                            id="pickup_buzz_code"
+                            name="pickup_buzz_code"
+                            value={formData.pickup_buzz_code || ''}
+                            onChange={handleChange}
+                            placeholder="e.g., 4321 or Unit 1208"
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                          />
+                          <p className="text-xs text-slate-500 mt-1">Leave blank if not applicable or if you prefer to provide details later.</p>
+                        </div>
+                      )}
 
                       <div className="sm:col-span-2">
                         <label htmlFor="pickup_entry_instructions" className="block text-sm font-medium text-slate-700 mb-2">
@@ -772,20 +798,23 @@ export default function IntakePage() {
                     <h3 className="font-semibold text-slate-800">Dropoff Building Access Details</h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="sm:col-span-2">
-                        <label htmlFor="dropoff_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
-                          Buzz / Entry Code
-                        </label>
-                        <input
-                          type="text"
-                          id="dropoff_buzz_code"
-                          name="dropoff_buzz_code"
-                          value={formData.dropoff_buzz_code || ''}
-                          onChange={handleChange}
-                          placeholder="Door code 4321 | Buzz 1208"
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                        />
-                      </div>
+                      {shouldShowBuzzCode(formData.dropoff_building_type, formData.dropoff_access) && (
+                        <div className="sm:col-span-2">
+                          <label htmlFor="dropoff_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
+                            Buzz Code (optional)
+                          </label>
+                          <input
+                            type="text"
+                            id="dropoff_buzz_code"
+                            name="dropoff_buzz_code"
+                            value={formData.dropoff_buzz_code || ''}
+                            onChange={handleChange}
+                            placeholder="e.g., 4321 or Unit 1208"
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                          />
+                          <p className="text-xs text-slate-500 mt-1">Leave blank if not applicable or if you prefer to provide details later.</p>
+                        </div>
+                      )}
 
                       <div className="sm:col-span-2">
                         <label htmlFor="dropoff_entry_instructions" className="block text-sm font-medium text-slate-700 mb-2">
