@@ -1,8 +1,17 @@
-// HiveHaul Phase 1 Database Types
-// Phase 1 scope: Lightweight job intake with standalone jobs table
-// No clients table, no providers, no invoices - just job tracking
+// HiveHaul Phase 1.5 Database Types
+// Phase 1.5 scope: Complete booking workflow with manager actions
 
-export type JobStatus = 'New' | 'Assigned' | 'In Progress' | 'Completed' | 'Cancelled';
+export type JobStatus =
+  | 'New'
+  | 'Under Review'
+  | 'Approved'
+  | 'Deposit Requested'
+  | 'Deposit Received'
+  | 'Scheduled'
+  | 'In Progress'
+  | 'Completed'
+  | 'Cancelled'
+  | 'Declined';
 
 export interface Job {
   id: string;

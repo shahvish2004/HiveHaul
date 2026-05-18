@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { Job } from '@/lib/types'
 
 interface JobTableProps {
@@ -15,15 +16,15 @@ function formatDate(dateString: string) {
 function getStatusColor(status: string) {
   const colors: Record<string, string> = {
     New: 'bg-blue-100 text-blue-800',
-    Quoted: 'bg-purple-100 text-purple-800',
-    Accepted: 'bg-cyan-100 text-cyan-800',
-    Assigned: 'bg-indigo-100 text-indigo-800',
+    'Under Review': 'bg-purple-100 text-purple-800',
+    Approved: 'bg-cyan-100 text-cyan-800',
+    'Deposit Requested': 'bg-indigo-100 text-indigo-800',
+    'Deposit Received': 'bg-orange-100 text-orange-800',
+    Scheduled: 'bg-amber-100 text-amber-800',
     'In Progress': 'bg-yellow-100 text-yellow-800',
-    Delivered: 'bg-orange-100 text-orange-800',
     Completed: 'bg-green-100 text-green-800',
-    Invoiced: 'bg-slate-100 text-slate-800',
-    Paid: 'bg-emerald-100 text-emerald-800',
     Cancelled: 'bg-red-100 text-red-800',
+    Declined: 'bg-rose-100 text-rose-800',
   }
   return colors[status] || 'bg-slate-100 text-slate-800'
 }
@@ -53,44 +54,43 @@ export default function JobTable({ jobs }: JobTableProps) {
         </thead>
         <tbody>
           {jobs.map((job) => (
-            <tr
-              key={job.id}
-              className="border-b border-slate-200 hover:bg-slate-50 transition-colors"
-            >
-              <td className="px-4 py-3 text-sm font-mono text-slate-600">
-                {job.job_number}
-              </td>
-              <td className="px-4 py-3">
-                <div>
-                  <p className="font-medium text-slate-800 text-sm">
-                    {job.client_name}
-                  </p>
-                  <p className="text-xs text-slate-500">{job.client_email}</p>
-                </div>
-              </td>
-              <td className="px-4 py-3">
-                <div>
-                  <p className="font-medium text-slate-800 text-sm">{job.service_type}</p>
-                  {job.pickup_address && (
-                    <p className="text-xs text-slate-500 truncate">
-                      {job.pickup_address}
+            <Link key={job.id} href={`/manager/jobs/${job.id}`}>
+              <tr className="border-b border-slate-200 hover:bg-amber-50 transition-colors cursor-pointer">
+                <td className="px-4 py-3 text-sm font-mono text-slate-600">
+                  {job.job_number}
+                </td>
+                <td className="px-4 py-3">
+                  <div>
+                    <p className="font-medium text-slate-800 text-sm">
+                      {job.client_name}
                     </p>
-                  )}
-                </div>
-              </td>
-              <td className="px-4 py-3">
-                <span
-                  className={`inline-block px-2 py-1 rounded text-xs font-semibold ${getStatusColor(
-                    job.status
-                  )}`}
-                >
-                  {job.status}
-                </span>
-              </td>
-              <td className="px-4 py-3 text-sm text-slate-600">
-                {formatDate(job.created_at)}
-              </td>
-            </tr>
+                    <p className="text-xs text-slate-500">{job.client_email}</p>
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <div>
+                    <p className="font-medium text-slate-800 text-sm">{job.service_type}</p>
+                    {job.pickup_address && (
+                      <p className="text-xs text-slate-500 truncate">
+                        {job.pickup_address}
+                      </p>
+                    )}
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`inline-block px-2 py-1 rounded text-xs font-semibold ${getStatusColor(
+                      job.status
+                    )}`}
+                  >
+                    {job.status}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-sm text-slate-600">
+                  {formatDate(job.created_at)}
+                </td>
+              </tr>
+            </Link>
           ))}
         </tbody>
       </table>

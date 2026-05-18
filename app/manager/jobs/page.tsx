@@ -18,21 +18,43 @@ interface Job {
   completed_at: string | null
 }
 
-const STATUS_OPTIONS = ['New', 'Assigned', 'In Progress', 'Completed', 'Cancelled']
+const STATUS_OPTIONS = [
+  'New',
+  'Under Review',
+  'Approved',
+  'Deposit Requested',
+  'Deposit Received',
+  'Scheduled',
+  'In Progress',
+  'Completed',
+  'Cancelled',
+  'Declined',
+]
+
 const STATUS_LABELS: Record<string, string> = {
   'New': 'New',
-  'Assigned': 'Assigned',
+  'Under Review': 'Under Review',
+  'Approved': 'Approved',
+  'Deposit Requested': 'Deposit Requested',
+  'Deposit Received': 'Deposit Received',
+  'Scheduled': 'Scheduled',
   'In Progress': 'In Progress',
   'Completed': 'Completed',
   'Cancelled': 'Cancelled',
+  'Declined': 'Declined',
 }
 
 const STATUS_COLORS: Record<string, string> = {
   'New': 'bg-blue-100 text-blue-800',
-  'Assigned': 'bg-purple-100 text-purple-800',
+  'Under Review': 'bg-purple-100 text-purple-800',
+  'Approved': 'bg-cyan-100 text-cyan-800',
+  'Deposit Requested': 'bg-indigo-100 text-indigo-800',
+  'Deposit Received': 'bg-orange-100 text-orange-800',
+  'Scheduled': 'bg-amber-100 text-amber-800',
   'In Progress': 'bg-yellow-100 text-yellow-800',
   'Completed': 'bg-green-100 text-green-800',
   'Cancelled': 'bg-red-100 text-red-800',
+  'Declined': 'bg-rose-100 text-rose-800',
 }
 
 interface ExtendedInfo {

@@ -13,15 +13,15 @@ export default function ManagerDashboard() {
   const statuses = [
     'All',
     'New',
-    'Quoted',
-    'Accepted',
-    'Assigned',
+    'Under Review',
+    'Approved',
+    'Deposit Requested',
+    'Deposit Received',
+    'Scheduled',
     'In Progress',
-    'Delivered',
     'Completed',
-    'Invoiced',
-    'Paid',
     'Cancelled',
+    'Declined',
   ]
 
   useEffect(() => {

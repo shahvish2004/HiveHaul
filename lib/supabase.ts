@@ -9,10 +9,21 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Phase 1: Jobs table only, client info inline
-// Approved statuses: New, Assigned, In Progress, Completed, Cancelled
+// Phase 1.5: Jobs table with booking workflow
+// Statuses: New → Under Review → Approved/Declined → Deposit flow → Scheduled → In Progress → Completed/Cancelled
 
-const VALID_STATUSES = ['New', 'Assigned', 'In Progress', 'Completed', 'Cancelled']
+const VALID_STATUSES = [
+  'New',
+  'Under Review',
+  'Approved',
+  'Deposit Requested',
+  'Deposit Received',
+  'Scheduled',
+  'In Progress',
+  'Completed',
+  'Cancelled',
+  'Declined',
+]
 
 function validateStatus(status: string): boolean {
   return VALID_STATUSES.includes(status)
@@ -68,6 +79,58 @@ export async function updateJobStatus(id: string, status: string) {
     .update({ status, updated_at: new Date().toISOString() })
     .eq('id', id)
     .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+export async function updateJobWithNotes(
+  id: string,
+  status: string,
+  notesUpdate: Record<string, any>
+) {
+  if (!validateStatus(status)) {
+    throw new Error(`Invalid status. Allowed: ${VALID_STATUSES.join(', ')}`)
+  }
+
+  const job = await getJobById(id)
+  let existingNotes = {}
+
+  if (job.notes) {
+    try {
+      const notesParts = job.notes.split('\n\nExtended Info: ')
+      if (notesParts.length > 1) {
+        existingNotes = JSON.parse(notesParts[1])
+      }
+    } catch (e) {
+      existingNotes = {}
+    }
+  }
+
+  const updatedNotes = { ...existingNotes, ...notesUpdate }
+  const combinedNotes = `Extended Info: ${JSON.stringify(updatedNotes)}`
+
+  const { data, error } = await supabase
+    .from('jobs')
+    .update({
+      status,
+      notes: combinedNotes,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+export async function getJobByNumber(jobNumber: string) {
+  const { data, error } = await supabase
+    .from('jobs')
+    .select('*')
+    .eq('job_number', jobNumber)
     .single()
 
   if (error) throw error
