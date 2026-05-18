@@ -211,11 +211,25 @@ export default function JobDetailPage() {
                 </div>
                 <div>
                   <p className="text-xs text-slate-600">Pickup Address</p>
-                  <p className="text-slate-800">{job.pickup_address}</p>
+                  <p className="text-slate-800">{job.pickup_formatted_address || job.pickup_address}</p>
+                  {job.pickup_city && (
+                    <p className="text-xs text-slate-600 mt-1">
+                      {[job.pickup_city, job.pickup_province, job.pickup_postal_code]
+                        .filter(Boolean)
+                        .join(', ')}
+                    </p>
+                  )}
                 </div>
                 <div>
-                  <p className="text-xs text-slate-600">Dropoff Address</p>
-                  <p className="text-slate-800">{job.dropoff_address}</p>
+                  <p className="text-xs text-slate-600">Unloading Point</p>
+                  <p className="text-slate-800">{job.dropoff_formatted_address || job.dropoff_address}</p>
+                  {job.dropoff_city && (
+                    <p className="text-xs text-slate-600 mt-1">
+                      {[job.dropoff_city, job.dropoff_province, job.dropoff_postal_code]
+                        .filter(Boolean)
+                        .join(', ')}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <p className="text-xs text-slate-600">Submitted</p>

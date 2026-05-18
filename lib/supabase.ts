@@ -37,6 +37,27 @@ export async function createJob(data: {
   dropoff_address: string
   service_type: string
   notes?: string
+  pickup_formatted_address?: string
+  pickup_street_number?: string
+  pickup_street_name?: string
+  pickup_city?: string
+  pickup_province?: string
+  pickup_postal_code?: string
+  pickup_country?: string
+  pickup_latitude?: number
+  pickup_longitude?: number
+  pickup_place_id?: string
+  dropoff_formatted_address?: string
+  dropoff_street_number?: string
+  dropoff_street_name?: string
+  dropoff_city?: string
+  dropoff_province?: string
+  dropoff_postal_code?: string
+  dropoff_country?: string
+  dropoff_latitude?: number
+  dropoff_longitude?: number
+  dropoff_place_id?: string
+  [key: string]: any
 }) {
   const { data: job, error } = await supabase
     .from('jobs')

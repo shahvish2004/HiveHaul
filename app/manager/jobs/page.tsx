@@ -11,6 +11,14 @@ interface Job {
   service_type: string
   pickup_address: string
   dropoff_address: string
+  pickup_formatted_address?: string
+  pickup_city?: string
+  pickup_province?: string
+  pickup_postal_code?: string
+  dropoff_formatted_address?: string
+  dropoff_city?: string
+  dropoff_province?: string
+  dropoff_postal_code?: string
   notes: string | null
   status: string
   created_at: string
@@ -325,15 +333,33 @@ export default function ManagerJobsPage() {
                     <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">
                       Pickup
                     </p>
-                    <p className="text-slate-800 text-sm">{job.pickup_address}</p>
+                    <p className="text-slate-800 text-sm">
+                      {job.pickup_formatted_address || job.pickup_address}
+                    </p>
+                    {job.pickup_city && (
+                      <p className="text-xs text-slate-600 mt-1">
+                        {[job.pickup_city, job.pickup_province, job.pickup_postal_code]
+                          .filter(Boolean)
+                          .join(', ')}
+                      </p>
+                    )}
                   </div>
 
                   {/* Dropoff Address */}
                   <div className="sm:col-span-2 lg:col-span-1">
                     <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">
-                      Dropoff
+                      Unloading Point
                     </p>
-                    <p className="text-slate-800 text-sm">{job.dropoff_address}</p>
+                    <p className="text-slate-800 text-sm">
+                      {job.dropoff_formatted_address || job.dropoff_address}
+                    </p>
+                    {job.dropoff_city && (
+                      <p className="text-xs text-slate-600 mt-1">
+                        {[job.dropoff_city, job.dropoff_province, job.dropoff_postal_code]
+                          .filter(Boolean)
+                          .join(', ')}
+                      </p>
+                    )}
                   </div>
                 </div>
 

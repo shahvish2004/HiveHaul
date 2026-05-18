@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import AddressAutocomplete, { StructuredAddress } from '@/components/AddressAutocomplete'
 
 interface FormData {
   client_name: string
@@ -11,6 +12,26 @@ interface FormData {
   service_type: string
   pickup_address: string
   dropoff_address: string
+  pickup_formatted_address: string
+  pickup_street_number: string
+  pickup_street_name: string
+  pickup_city: string
+  pickup_province: string
+  pickup_postal_code: string
+  pickup_country: string
+  pickup_latitude: number
+  pickup_longitude: number
+  pickup_place_id: string
+  dropoff_formatted_address: string
+  dropoff_street_number: string
+  dropoff_street_name: string
+  dropoff_city: string
+  dropoff_province: string
+  dropoff_postal_code: string
+  dropoff_country: string
+  dropoff_latitude: number
+  dropoff_longitude: number
+  dropoff_place_id: string
   pickup_date: string
   pickup_time: string
   item_description: string
@@ -100,6 +121,26 @@ export default function IntakePage() {
     service_type: '',
     pickup_address: '',
     dropoff_address: '',
+    pickup_formatted_address: '',
+    pickup_street_number: '',
+    pickup_street_name: '',
+    pickup_city: '',
+    pickup_province: '',
+    pickup_postal_code: '',
+    pickup_country: '',
+    pickup_latitude: 0,
+    pickup_longitude: 0,
+    pickup_place_id: '',
+    dropoff_formatted_address: '',
+    dropoff_street_number: '',
+    dropoff_street_name: '',
+    dropoff_city: '',
+    dropoff_province: '',
+    dropoff_postal_code: '',
+    dropoff_country: '',
+    dropoff_latitude: 0,
+    dropoff_longitude: 0,
+    dropoff_place_id: '',
     pickup_date: '',
     pickup_time: '',
     item_description: '',
@@ -194,6 +235,44 @@ export default function IntakePage() {
       updateFormData(`${location}_buzz_code`, '')
       updateFormData(`${location}_unit_suite`, '')
       updateFormData(`${location}_entry_instructions`, '')
+    }
+  }
+
+  const handlePickupAddressSelect = (address: StructuredAddress | null) => {
+    if (address) {
+      setFormData((prev) => ({
+        ...prev,
+        pickup_address: address.formatted_address,
+        pickup_formatted_address: address.formatted_address,
+        pickup_street_number: address.street_number,
+        pickup_street_name: address.street_name,
+        pickup_city: address.city,
+        pickup_province: address.province,
+        pickup_postal_code: address.postal_code,
+        pickup_country: address.country,
+        pickup_latitude: address.latitude,
+        pickup_longitude: address.longitude,
+        pickup_place_id: address.place_id,
+      }))
+    }
+  }
+
+  const handleDropoffAddressSelect = (address: StructuredAddress | null) => {
+    if (address) {
+      setFormData((prev) => ({
+        ...prev,
+        dropoff_address: address.formatted_address,
+        dropoff_formatted_address: address.formatted_address,
+        dropoff_street_number: address.street_number,
+        dropoff_street_name: address.street_name,
+        dropoff_city: address.city,
+        dropoff_province: address.province,
+        dropoff_postal_code: address.postal_code,
+        dropoff_country: address.country,
+        dropoff_latitude: address.latitude,
+        dropoff_longitude: address.longitude,
+        dropoff_place_id: address.place_id,
+      }))
     }
   }
 
@@ -337,34 +416,30 @@ export default function IntakePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="pickup_address" className="block text-sm font-medium text-slate-700 mb-2">
-                    Pickup Address <span className="text-red-500">*</span>
-                  </label>
-                  <input
+                  <AddressAutocomplete
                     id="pickup_address"
-                    type="text"
                     name="pickup_address"
+                    label="Pickup Address"
                     value={formData.pickup_address}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    onChange={handlePickupAddressSelect}
                     required
-                    placeholder="123 Main Street, City, State"
+                    placeholder="255 Maitland St, Kitchener, ON"
+                    helperText="Please select your address from suggestions when possible to reduce delivery errors."
+                    apiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY || ''}
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="dropoff_address" className="block text-sm font-medium text-slate-700 mb-2">
-                    Dropoff Address <span className="text-red-500">*</span>
-                  </label>
-                  <input
+                  <AddressAutocomplete
                     id="dropoff_address"
-                    type="text"
                     name="dropoff_address"
+                    label="Unloading Point"
                     value={formData.dropoff_address}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    onChange={handleDropoffAddressSelect}
                     required
-                    placeholder="456 Oak Avenue, City, State"
+                    placeholder="255 Maitland St, Kitchener, ON"
+                    helperText="Please select your address from suggestions when possible to reduce delivery errors."
+                    apiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY || ''}
                   />
                 </div>
 
