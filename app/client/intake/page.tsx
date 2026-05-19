@@ -330,10 +330,10 @@ export default function IntakePage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Client Information Section */}
+            {/* Customer Information Section */}
             <fieldset>
               <legend className="text-lg sm:text-xl font-semibold text-slate-800 mb-4">
-                Your Information
+                Customer Information
               </legend>
 
               <div className="space-y-4">
@@ -386,7 +386,7 @@ export default function IntakePage() {
               </div>
             </fieldset>
 
-            {/* Service Details Section */}
+            {/* Service Details Section - moved earlier */}
             <fieldset>
               <legend className="text-lg sm:text-xl font-semibold text-slate-800 mb-4">
                 Service Details
@@ -413,34 +413,6 @@ export default function IntakePage() {
                     <option value="Waste Disposal / Junk Removal">Waste Disposal / Junk Removal</option>
                     <option value="Other">Other</option>
                   </select>
-                </div>
-
-                <div>
-                  <AddressAutocomplete
-                    id="pickup_address"
-                    name="pickup_address"
-                    label="Pickup Address"
-                    value={formData.pickup_address}
-                    onChange={handlePickupAddressSelect}
-                    required
-                    placeholder="255 Maitland St, Kitchener, ON"
-                    helperText="Please select your address from suggestions when possible to reduce delivery errors."
-                    apiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY || ''}
-                  />
-                </div>
-
-                <div>
-                  <AddressAutocomplete
-                    id="dropoff_address"
-                    name="dropoff_address"
-                    label="Unloading Point"
-                    value={formData.dropoff_address}
-                    onChange={handleDropoffAddressSelect}
-                    required
-                    placeholder="255 Maitland St, Kitchener, ON"
-                    helperText="Please select your address from suggestions when possible to reduce delivery errors."
-                    apiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY || ''}
-                  />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -520,647 +492,6 @@ export default function IntakePage() {
                     />
                   </div>
                 </div>
-              </div>
-            </fieldset>
-
-            {/* Location Details Section */}
-            <fieldset>
-              <legend className="text-lg sm:text-xl font-semibold text-slate-800 mb-4">
-                Location & Access Details
-              </legend>
-
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="pickup_building_type" className="block text-sm font-medium text-slate-700 mb-2">
-                      Pickup Property Type <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="pickup_building_type"
-                      name="pickup_building_type"
-                      value={formData.pickup_building_type}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required
-                    >
-                      <option value="">Select type</option>
-                      <option value="house">House</option>
-                      <option value="condo/apartment">Condo/Apartment</option>
-                      <option value="retail/store">Retail/Store</option>
-                      <option value="commercial">Commercial</option>
-                      <option value="storage unit">Storage Unit</option>
-                      <option value="other">Other</option>
-                    </select>
-                    {formData.pickup_building_type === 'other' && (
-                      <input
-                        type="text"
-                        name="pickup_building_type_custom"
-                        value={formData.pickup_building_type_custom || ''}
-                        onChange={handleChange}
-                        placeholder="Please describe pickup location type"
-                        className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <label htmlFor="dropoff_building_type" className="block text-sm font-medium text-slate-700 mb-2">
-                      Drop-off Property Type <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="dropoff_building_type"
-                      name="dropoff_building_type"
-                      value={formData.dropoff_building_type}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required
-                    >
-                      <option value="">Select type</option>
-                      <option value="house">House</option>
-                      <option value="condo/apartment">Condo/Apartment</option>
-                      <option value="retail/store">Retail/Store</option>
-                      <option value="commercial">Commercial</option>
-                      <option value="storage unit">Storage Unit</option>
-                      <option value="other">Other</option>
-                    </select>
-                    {formData.dropoff_building_type === 'other' && (
-                      <input
-                        type="text"
-                        name="dropoff_building_type_custom"
-                        value={formData.dropoff_building_type_custom || ''}
-                        onChange={handleChange}
-                        placeholder="Please describe dropoff location type"
-                        className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      />
-                    )}
-                  </div>
-                </div>
-
-                {formData.pickup_building_type === 'house' && requiresFloorLevel(formData.pickup_access) && (
-                  <div>
-                    <label htmlFor="pickup_house_access_level" className="block text-sm font-medium text-slate-700 mb-2">
-                      Pickup House Level <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="pickup_house_access_level"
-                      name="pickup_house_access_level"
-                      value={formData.pickup_house_access_level || ''}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required={formData.pickup_building_type === 'house' && requiresFloorLevel(formData.pickup_access)}
-                    >
-                      <option value="">Select level</option>
-                      <option value="Curbside">Curbside</option>
-                      <option value="Main floor">Main floor</option>
-                      <option value="Basement">Basement</option>
-                      <option value="Upper floor">Upper floor</option>
-                      <option value="Multiple levels">Multiple levels</option>
-                      <option value="Not sure">Not sure</option>
-                    </select>
-                  </div>
-                )}
-
-                {formData.dropoff_building_type === 'house' && requiresFloorLevel(formData.dropoff_access) && (
-                  <div>
-                    <label htmlFor="dropoff_house_access_level" className="block text-sm font-medium text-slate-700 mb-2">
-                      Dropoff House Level <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="dropoff_house_access_level"
-                      name="dropoff_house_access_level"
-                      value={formData.dropoff_house_access_level || ''}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required={formData.dropoff_building_type === 'house' && requiresFloorLevel(formData.dropoff_access)}
-                    >
-                      <option value="">Select level</option>
-                      <option value="Curbside">Curbside</option>
-                      <option value="Main floor">Main floor</option>
-                      <option value="Basement">Basement</option>
-                      <option value="Upper floor">Upper floor</option>
-                      <option value="Multiple levels">Multiple levels</option>
-                      <option value="Not sure">Not sure</option>
-                    </select>
-                  </div>
-                )}
-
-                {['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access) && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4">
-                    <h3 className="font-semibold text-slate-800">Pickup Location Details</h3>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="pickup_floor" className="block text-sm font-medium text-slate-700 mb-2">
-                          Floor/Level <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          id="pickup_floor"
-                          name="pickup_floor"
-                          value={formData.pickup_floor}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access)}
-                        >
-                          <option value="">Select floor</option>
-                          <option value="Ground floor">Ground floor</option>
-                          <option value="Basement">Basement</option>
-                          <option value="2nd floor">2nd floor</option>
-                          <option value="3rd floor">3rd floor</option>
-                          <option value="4th+ floor">4th+ floor</option>
-                          <option value="Not sure">Not sure</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label htmlFor="pickup_elevator_available" className="block text-sm font-medium text-slate-700 mb-2">
-                          Elevator Available <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          id="pickup_elevator_available"
-                          name="pickup_elevator_available"
-                          value={formData.pickup_elevator_available}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access)}
-                        >
-                          <option value="">Select</option>
-                          <option value="Yes">Yes</option>
-                          <option value="No">No</option>
-                          <option value="Not sure">Not sure</option>
-                          <option value="Not applicable">Not applicable</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label htmlFor="pickup_stairs" className="block text-sm font-medium text-slate-700 mb-2">
-                          Stairs Required <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          id="pickup_stairs"
-                          name="pickup_stairs"
-                          value={formData.pickup_stairs}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access)}
-                        >
-                          <option value="">Select</option>
-                          <option value="No">No</option>
-                          <option value="Yes — 1 flight">Yes — 1 flight</option>
-                          <option value="Yes — 2 flights">Yes — 2 flights</option>
-                          <option value="Yes — 3+ flights">Yes — 3+ flights</option>
-                          <option value="Not sure">Not sure</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label htmlFor="pickup_unit_suite" className="block text-sm font-medium text-slate-700 mb-2">
-                          Unit/Suite/Locker Number
-                        </label>
-                        <input
-                          type="text"
-                          id="pickup_unit_suite"
-                          name="pickup_unit_suite"
-                          value={formData.pickup_unit_suite || ''}
-                          onChange={handleChange}
-                          placeholder="e.g., Apt 4B, Suite 201"
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                        />
-                      </div>
-                    </div>
-
-                    {(formData.pickup_stairs === 'Yes — 1 flight' || formData.pickup_stairs === 'Yes — 2 flights' || formData.pickup_stairs === 'Yes — 3+ flights') && (
-                      <div className="bg-amber-50 border border-amber-300 text-amber-700 p-3 rounded">
-                        ⚠ Stairs or higher floors may affect final pricing.
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {requiresBuildingAccessDetails(formData.pickup_access) && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4">
-                    <h3 className="font-semibold text-slate-800">Pickup Building Access Details</h3>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {shouldShowBuzzCode(formData.pickup_building_type, formData.pickup_access) && (
-                        <div className="sm:col-span-2">
-                          <label htmlFor="pickup_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
-                            {formData.pickup_building_type === 'storage unit' ? 'Access / Gate Code (optional)' : 'Buzz Code (optional)'}
-                          </label>
-                          <input
-                            type="text"
-                            id="pickup_buzz_code"
-                            name="pickup_buzz_code"
-                            value={formData.pickup_buzz_code || ''}
-                            onChange={handleChange}
-                            placeholder="e.g., 4321 or Unit 1208"
-                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          />
-                          <p className="text-xs text-slate-500 mt-1">Leave blank if not applicable or if you prefer to provide access details later.</p>
-                        </div>
-                      )}
-
-                      <div className="sm:col-span-2">
-                        <label htmlFor="pickup_entry_instructions" className="block text-sm font-medium text-slate-700 mb-2">
-                          Additional Entry Instructions
-                        </label>
-                        <textarea
-                          id="pickup_entry_instructions"
-                          name="pickup_entry_instructions"
-                          value={formData.pickup_entry_instructions || ''}
-                          onChange={handleChange}
-                          placeholder="Use south entrance, call on arrival, security desk on level 1, etc."
-                          rows={3}
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access) && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4">
-                    <h3 className="font-semibold text-slate-800">Dropoff Location Details</h3>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="dropoff_floor" className="block text-sm font-medium text-slate-700 mb-2">
-                          Floor/Level <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          id="dropoff_floor"
-                          name="dropoff_floor"
-                          value={formData.dropoff_floor}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access)}
-                        >
-                          <option value="">Select floor</option>
-                          <option value="Ground floor">Ground floor</option>
-                          <option value="Basement">Basement</option>
-                          <option value="2nd floor">2nd floor</option>
-                          <option value="3rd floor">3rd floor</option>
-                          <option value="4th+ floor">4th+ floor</option>
-                          <option value="Not sure">Not sure</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label htmlFor="dropoff_elevator_available" className="block text-sm font-medium text-slate-700 mb-2">
-                          Elevator Available <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          id="dropoff_elevator_available"
-                          name="dropoff_elevator_available"
-                          value={formData.dropoff_elevator_available}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access)}
-                        >
-                          <option value="">Select</option>
-                          <option value="Yes">Yes</option>
-                          <option value="No">No</option>
-                          <option value="Not sure">Not sure</option>
-                          <option value="Not applicable">Not applicable</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label htmlFor="dropoff_stairs" className="block text-sm font-medium text-slate-700 mb-2">
-                          Stairs Required <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          id="dropoff_stairs"
-                          name="dropoff_stairs"
-                          value={formData.dropoff_stairs}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access)}
-                        >
-                          <option value="">Select</option>
-                          <option value="No">No</option>
-                          <option value="Yes — 1 flight">Yes — 1 flight</option>
-                          <option value="Yes — 2 flights">Yes — 2 flights</option>
-                          <option value="Yes — 3+ flights">Yes — 3+ flights</option>
-                          <option value="Not sure">Not sure</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label htmlFor="dropoff_unit_suite" className="block text-sm font-medium text-slate-700 mb-2">
-                          Unit/Suite/Locker Number
-                        </label>
-                        <input
-                          type="text"
-                          id="dropoff_unit_suite"
-                          name="dropoff_unit_suite"
-                          value={formData.dropoff_unit_suite || ''}
-                          onChange={handleChange}
-                          placeholder="e.g., Apt 4B, Suite 201"
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                        />
-                      </div>
-                    </div>
-
-                    {(formData.dropoff_stairs === 'Yes — 1 flight' || formData.dropoff_stairs === 'Yes — 2 flights' || formData.dropoff_stairs === 'Yes — 3+ flights') && (
-                      <div className="bg-amber-50 border border-amber-300 text-amber-700 p-3 rounded">
-                        ⚠ Stairs or higher floors may affect final pricing.
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {requiresBuildingAccessDetails(formData.dropoff_access) && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4">
-                    <h3 className="font-semibold text-slate-800">Dropoff Building Access Details</h3>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {shouldShowBuzzCode(formData.dropoff_building_type, formData.dropoff_access) && (
-                        <div className="sm:col-span-2">
-                          <label htmlFor="dropoff_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
-                            {formData.dropoff_building_type === 'storage unit' ? 'Access / Gate Code (optional)' : 'Buzz Code (optional)'}
-                          </label>
-                          <input
-                            type="text"
-                            id="dropoff_buzz_code"
-                            name="dropoff_buzz_code"
-                            value={formData.dropoff_buzz_code || ''}
-                            onChange={handleChange}
-                            placeholder="e.g., 4321 or Unit 1208"
-                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                          />
-                          <p className="text-xs text-slate-500 mt-1">Leave blank if not applicable or if you prefer to provide access details later.</p>
-                        </div>
-                      )}
-
-                      <div className="sm:col-span-2">
-                        <label htmlFor="dropoff_entry_instructions" className="block text-sm font-medium text-slate-700 mb-2">
-                          Additional Entry Instructions
-                        </label>
-                        <textarea
-                          id="dropoff_entry_instructions"
-                          name="dropoff_entry_instructions"
-                          value={formData.dropoff_entry_instructions || ''}
-                          onChange={handleChange}
-                          placeholder="Use south entrance, call on arrival, security desk on level 1, etc."
-                          rows={3}
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="pickup_access" className="block text-sm font-medium text-slate-700 mb-2">
-                      Loading Point <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="pickup_access"
-                      name="pickup_access"
-                      value={formData.pickup_access}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required
-                    >
-                      {formData.pickup_building_type === 'house' ? (
-                        <>
-                          <option value="">Select loading point</option>
-                          <option value="curbside">Curbside</option>
-                          <option value="driveway/garage">Driveway / Garage</option>
-                          <option value="front door">Front door</option>
-                          <option value="side entrance">Side entrance</option>
-                          <option value="backyard/rear">Backyard / Rear access</option>
-                          <option value="other">Other</option>
-                        </>
-                      ) : formData.pickup_building_type === 'retail/store' ? (
-                        <>
-                          <option value="">Select loading point</option>
-                          <option value="front entrance">Front entrance</option>
-                          <option value="rear entrance">Rear entrance</option>
-                          <option value="loading dock">Loading dock</option>
-                          <option value="mall entrance">Mall entrance</option>
-                          <option value="curbside">Curbside</option>
-                          <option value="shipping/receiving area">Shipping/Receiving area</option>
-                          <option value="side entrance">Side entrance</option>
-                          <option value="other">Other</option>
-                        </>
-                      ) : formData.pickup_building_type === 'commercial' ? (
-                        <>
-                          <option value="">Select access point</option>
-                          <option value="front entrance">Front entrance</option>
-                          <option value="rear entrance">Rear entrance</option>
-                          <option value="loading dock">Loading dock</option>
-                          <option value="shipping/receiving area">Shipping/Receiving area</option>
-                          <option value="elevator">Elevator</option>
-                          <option value="side entrance">Side entrance</option>
-                          <option value="underground access">Underground access</option>
-                          <option value="curbside">Curbside</option>
-                          <option value="other">Other</option>
-                        </>
-                      ) : formData.pickup_building_type === 'storage unit' ? (
-                        <>
-                          <option value="">Select loading point</option>
-                          <option value="curbside">Curbside</option>
-                          <option value="parking lot">Parking Lot</option>
-                          <option value="main entrance">Main Entrance</option>
-                          <option value="other entrance">Other Entrance</option>
-                          <option value="other">Other</option>
-                        </>
-                      ) : (
-                        <>
-                          <option value="">Select access type</option>
-                          <option value="curbside">Curbside</option>
-                          <option value="driveway/garage">Driveway/Garage</option>
-                          <option value="elevator">Elevator</option>
-                          <option value="stairs">Stairs</option>
-                          <option value="other">Other</option>
-                        </>
-                      )}
-                    </select>
-                    {formData.pickup_access === 'other' && (
-                      <input
-                        type="text"
-                        name="pickup_access_custom"
-                        value={formData.pickup_access_custom || ''}
-                        onChange={handleChange}
-                        placeholder={`Please describe ${
-                          formData.pickup_building_type === 'house' ? 'loading point' :
-                          formData.pickup_building_type === 'retail/store' ? 'loading point' :
-                          formData.pickup_building_type === 'commercial' ? 'access point' :
-                          'access'
-                        }`}
-                        className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <label htmlFor="dropoff_access" className="block text-sm font-medium text-slate-700 mb-2">
-                      Unloading Point <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="dropoff_access"
-                      name="dropoff_access"
-                      value={formData.dropoff_access}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required
-                    >
-                      {formData.dropoff_building_type === 'house' ? (
-                        <>
-                          <option value="">Select unloading point</option>
-                          <option value="curbside">Curbside</option>
-                          <option value="driveway/garage">Driveway / Garage</option>
-                          <option value="front door">Front door</option>
-                          <option value="side entrance">Side entrance</option>
-                          <option value="backyard/rear">Backyard / Rear access</option>
-                          <option value="other">Other</option>
-                        </>
-                      ) : formData.dropoff_building_type === 'retail/store' ? (
-                        <>
-                          <option value="">Select unloading point</option>
-                          <option value="front entrance">Front entrance</option>
-                          <option value="rear entrance">Rear entrance</option>
-                          <option value="loading dock">Loading dock</option>
-                          <option value="mall entrance">Mall entrance</option>
-                          <option value="curbside">Curbside</option>
-                          <option value="shipping/receiving area">Shipping/Receiving area</option>
-                          <option value="side entrance">Side entrance</option>
-                          <option value="other">Other</option>
-                        </>
-                      ) : formData.dropoff_building_type === 'commercial' ? (
-                        <>
-                          <option value="">Select access point</option>
-                          <option value="front entrance">Front entrance</option>
-                          <option value="rear entrance">Rear entrance</option>
-                          <option value="loading dock">Loading dock</option>
-                          <option value="shipping/receiving area">Shipping/Receiving area</option>
-                          <option value="elevator">Elevator</option>
-                          <option value="side entrance">Side entrance</option>
-                          <option value="underground access">Underground access</option>
-                          <option value="curbside">Curbside</option>
-                          <option value="other">Other</option>
-                        </>
-                      ) : formData.dropoff_building_type === 'storage unit' ? (
-                        <>
-                          <option value="">Select unloading point</option>
-                          <option value="curbside">Curbside</option>
-                          <option value="parking lot">Parking Lot</option>
-                          <option value="main entrance">Main Entrance</option>
-                          <option value="other entrance">Other Entrance</option>
-                          <option value="other">Other</option>
-                        </>
-                      ) : (
-                        <>
-                          <option value="">Select access type</option>
-                          <option value="curbside">Curbside</option>
-                          <option value="driveway/garage">Driveway/Garage</option>
-                          <option value="elevator">Elevator</option>
-                          <option value="stairs">Stairs</option>
-                          <option value="other">Other</option>
-                        </>
-                      )}
-                    </select>
-                    {formData.dropoff_access === 'other' && (
-                      <input
-                        type="text"
-                        name="dropoff_access_custom"
-                        value={formData.dropoff_access_custom || ''}
-                        onChange={handleChange}
-                        placeholder={`Please describe ${
-                          formData.dropoff_building_type === 'house' ? 'unloading point' :
-                          formData.dropoff_building_type === 'retail/store' ? 'unloading point' :
-                          formData.dropoff_building_type === 'commercial' ? 'access point' :
-                          'access'
-                        }`}
-                        className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      />
-                    )}
-                  </div>
-                </div>
-
-                {/* Fee expectation notices */}
-                {formData.pickup_access && (
-                  <div className="space-y-3">
-                    {formData.pickup_access.toLowerCase() === 'curbside' && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                        <p className="text-sm text-green-700">Curbside pickup usually keeps your cost lower.</p>
-                      </div>
-                    )}
-                    {formData.pickup_access && formData.pickup_access.toLowerCase() !== 'curbside' && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                        <p className="text-sm text-blue-700">Extra handling time may affect the final quote depending on distance from vehicle, access, and item size.</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {(formData.pickup_stairs === 'yes' || formData.pickup_stairs === 'yes — multiple' || formData.pickup_floor === 'Basement' || formData.pickup_floor === 'Underground') && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                    <p className="text-sm text-amber-700">Stairs or non-ground-level access may require additional labour/time and may affect the final quote.</p>
-                  </div>
-                )}
-
-                {formData.dropoff_access && (
-                  <div className="space-y-3">
-                    {formData.dropoff_access.toLowerCase() === 'curbside' && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                        <p className="text-sm text-green-700">Curbside drop-off usually keeps your cost lower.</p>
-                      </div>
-                    )}
-                    {formData.dropoff_access && formData.dropoff_access.toLowerCase() !== 'curbside' && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                        <p className="text-sm text-blue-700">Extra handling time may affect the final quote depending on distance from vehicle, access, and item size.</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {(formData.dropoff_stairs === 'yes' || formData.dropoff_stairs === 'yes — multiple' || formData.dropoff_floor === 'Basement' || formData.dropoff_floor === 'Underground') && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                    <p className="text-sm text-amber-700">Stairs or non-ground-level access may require additional labour/time and may affect the final quote.</p>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="assistance_pickup" className="block text-sm font-medium text-slate-700 mb-2">
-                      Assistance Needed at Pickup <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="assistance_pickup"
-                      name="assistance_pickup"
-                      value={formData.assistance_pickup}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required
-                    >
-                      <option value="">Select assistance level</option>
-                      <option value="none">None</option>
-                      <option value="light">Light (pointing/guidance)</option>
-                      <option value="medium">Medium (partial lifting)</option>
-                      <option value="heavy">Heavy (full assistance)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label htmlFor="assistance_dropoff" className="block text-sm font-medium text-slate-700 mb-2">
-                      Assistance Needed at Dropoff <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="assistance_dropoff"
-                      name="assistance_dropoff"
-                      value={formData.assistance_dropoff}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                      required
-                    >
-                      <option value="">Select assistance level</option>
-                      <option value="none">None</option>
-                      <option value="light">Light (pointing/guidance)</option>
-                      <option value="medium">Medium (partial lifting)</option>
-                      <option value="heavy">Heavy (full assistance)</option>
-                    </select>
-                  </div>
-                </div>
 
                 <div>
                   <label htmlFor="notes" className="block text-sm font-medium text-slate-700 mb-2">
@@ -1176,6 +507,634 @@ export default function IntakePage() {
                     placeholder="Any additional details about your service request..."
                   />
                 </div>
+              </div>
+            </fieldset>
+
+            {/* Pickup Details Section */}
+            <fieldset>
+              <legend className="text-lg sm:text-xl font-semibold text-slate-800 mb-4">
+                Pickup Details
+              </legend>
+
+              <div className="space-y-4">
+                <div>
+                  <AddressAutocomplete
+                    id="pickup_address"
+                    name="pickup_address"
+                    label="Pickup Address"
+                    value={formData.pickup_address}
+                    onChange={handlePickupAddressSelect}
+                    required
+                    placeholder="255 Maitland St, Kitchener, ON"
+                    helperText="Please select your address from suggestions when possible to reduce delivery errors."
+                    apiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY || ''}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="pickup_building_type" className="block text-sm font-medium text-slate-700 mb-2">
+                    Pickup Property Type <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="pickup_building_type"
+                    name="pickup_building_type"
+                    value={formData.pickup_building_type}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    required
+                  >
+                    <option value="">Select type</option>
+                    <option value="house">House</option>
+                    <option value="condo/apartment">Condo/Apartment</option>
+                    <option value="retail/store">Retail/Store</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="storage unit">Storage Unit</option>
+                    <option value="other">Other</option>
+                  </select>
+                  {formData.pickup_building_type === 'other' && (
+                    <input
+                      type="text"
+                      name="pickup_building_type_custom"
+                      value={formData.pickup_building_type_custom || ''}
+                      onChange={handleChange}
+                      placeholder="Please describe pickup location type"
+                      className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    />
+                  )}
+                </div>
+
+                <div>
+                  <label htmlFor="pickup_access" className="block text-sm font-medium text-slate-700 mb-2">
+                    Loading Point <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="pickup_access"
+                    name="pickup_access"
+                    value={formData.pickup_access}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    required
+                  >
+                    {formData.pickup_building_type === 'house' ? (
+                      <>
+                        <option value="">Select loading point</option>
+                        <option value="curbside">Curbside</option>
+                        <option value="driveway/garage">Driveway / Garage</option>
+                        <option value="front door">Front door</option>
+                        <option value="side entrance">Side entrance</option>
+                        <option value="backyard/rear">Backyard / Rear access</option>
+                        <option value="other">Other</option>
+                      </>
+                    ) : formData.pickup_building_type === 'retail/store' ? (
+                      <>
+                        <option value="">Select loading point</option>
+                        <option value="front entrance">Front entrance</option>
+                        <option value="rear entrance">Rear entrance</option>
+                        <option value="loading dock">Loading dock</option>
+                        <option value="mall entrance">Mall entrance</option>
+                        <option value="curbside">Curbside</option>
+                        <option value="shipping/receiving area">Shipping/Receiving area</option>
+                        <option value="side entrance">Side entrance</option>
+                        <option value="other">Other</option>
+                      </>
+                    ) : formData.pickup_building_type === 'commercial' ? (
+                      <>
+                        <option value="">Select access point</option>
+                        <option value="front entrance">Front entrance</option>
+                        <option value="rear entrance">Rear entrance</option>
+                        <option value="loading dock">Loading dock</option>
+                        <option value="shipping/receiving area">Shipping/Receiving area</option>
+                        <option value="elevator">Elevator</option>
+                        <option value="side entrance">Side entrance</option>
+                        <option value="underground access">Underground access</option>
+                        <option value="curbside">Curbside</option>
+                        <option value="other">Other</option>
+                      </>
+                    ) : formData.pickup_building_type === 'storage unit' ? (
+                      <>
+                        <option value="">Select loading point</option>
+                        <option value="curbside">Curbside</option>
+                        <option value="parking lot">Parking Lot</option>
+                        <option value="main entrance">Main Entrance</option>
+                        <option value="other entrance">Other Entrance</option>
+                        <option value="other">Other</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="">Select access type</option>
+                        <option value="curbside">Curbside</option>
+                        <option value="driveway/garage">Driveway/Garage</option>
+                        <option value="elevator">Elevator</option>
+                        <option value="stairs">Stairs</option>
+                        <option value="other">Other</option>
+                      </>
+                    )}
+                  </select>
+                  {formData.pickup_access === 'other' && (
+                    <input
+                      type="text"
+                      name="pickup_access_custom"
+                      value={formData.pickup_access_custom || ''}
+                      onChange={handleChange}
+                      placeholder={`Please describe ${
+                        formData.pickup_building_type === 'house' ? 'loading point' :
+                        formData.pickup_building_type === 'retail/store' ? 'loading point' :
+                        formData.pickup_building_type === 'commercial' ? 'access point' :
+                        'access'
+                      }`}
+                      className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    />
+                  )}
+                </div>
+
+                {/* Curbside helper - show only for curbside */}
+                {formData.pickup_access.toLowerCase() === 'curbside' && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                    <p className="text-sm text-green-700">Curbside pickup usually keeps your cost lower.</p>
+                  </div>
+                )}
+
+                {/* Access detail fields - show only for non-curbside */}
+                {formData.pickup_access && formData.pickup_access.toLowerCase() !== 'curbside' && (
+                  <div className="space-y-4 border-t pt-4">
+                    <p className="text-sm text-slate-600 mb-4">
+                      Extra handling time may affect the final quote depending on distance from vehicle, access, and item size.
+                    </p>
+
+                    {formData.pickup_building_type === 'house' && requiresFloorLevel(formData.pickup_access) && (
+                      <div>
+                        <label htmlFor="pickup_house_access_level" className="block text-sm font-medium text-slate-700 mb-2">
+                          Pickup House Level <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          id="pickup_house_access_level"
+                          name="pickup_house_access_level"
+                          value={formData.pickup_house_access_level || ''}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                          required={formData.pickup_building_type === 'house' && requiresFloorLevel(formData.pickup_access)}
+                        >
+                          <option value="">Select level</option>
+                          <option value="Curbside">Curbside</option>
+                          <option value="Main floor">Main floor</option>
+                          <option value="Basement">Basement</option>
+                          <option value="Upper floor">Upper floor</option>
+                          <option value="Multiple levels">Multiple levels</option>
+                          <option value="Not sure">Not sure</option>
+                        </select>
+                      </div>
+                    )}
+
+                    {['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label htmlFor="pickup_floor" className="block text-sm font-medium text-slate-700 mb-2">
+                            Floor/Level <span className="text-red-500">*</span>
+                          </label>
+                          <select
+                            id="pickup_floor"
+                            name="pickup_floor"
+                            value={formData.pickup_floor}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                            required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access)}
+                          >
+                            <option value="">Select floor</option>
+                            <option value="Ground floor">Ground floor</option>
+                            <option value="Basement">Basement</option>
+                            <option value="2nd floor">2nd floor</option>
+                            <option value="3rd floor">3rd floor</option>
+                            <option value="4th+ floor">4th+ floor</option>
+                            <option value="Not sure">Not sure</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label htmlFor="pickup_elevator_available" className="block text-sm font-medium text-slate-700 mb-2">
+                            Elevator Available <span className="text-red-500">*</span>
+                          </label>
+                          <select
+                            id="pickup_elevator_available"
+                            name="pickup_elevator_available"
+                            value={formData.pickup_elevator_available}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                            required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access)}
+                          >
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                            <option value="Not sure">Not sure</option>
+                            <option value="Not applicable">Not applicable</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label htmlFor="pickup_stairs" className="block text-sm font-medium text-slate-700 mb-2">
+                            Stairs Required <span className="text-red-500">*</span>
+                          </label>
+                          <select
+                            id="pickup_stairs"
+                            name="pickup_stairs"
+                            value={formData.pickup_stairs}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                            required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.pickup_building_type) && requiresFloorLevel(formData.pickup_access)}
+                          >
+                            <option value="">Select</option>
+                            <option value="No">No</option>
+                            <option value="Yes — 1 flight">Yes — 1 flight</option>
+                            <option value="Yes — 2 flights">Yes — 2 flights</option>
+                            <option value="Yes — 3+ flights">Yes — 3+ flights</option>
+                            <option value="Not sure">Not sure</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label htmlFor="pickup_unit_suite" className="block text-sm font-medium text-slate-700 mb-2">
+                            Unit / Suite if applicable
+                          </label>
+                          <input
+                            type="text"
+                            id="pickup_unit_suite"
+                            name="pickup_unit_suite"
+                            value={formData.pickup_unit_suite || ''}
+                            onChange={handleChange}
+                            placeholder="e.g., Apt 4B, Suite 201"
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {(formData.pickup_stairs === 'Yes — 1 flight' || formData.pickup_stairs === 'Yes — 2 flights' || formData.pickup_stairs === 'Yes — 3+ flights') && (
+                      <div className="bg-amber-50 border border-amber-300 text-amber-700 p-3 rounded">
+                        ⚠ Stairs or non-ground-level access may require additional labour/time and may affect the final quote.
+                      </div>
+                    )}
+
+                    {requiresBuildingAccessDetails(formData.pickup_access) && (
+                      <div className="space-y-4">
+                        {shouldShowBuzzCode(formData.pickup_building_type, formData.pickup_access) && (
+                          <div>
+                            <label htmlFor="pickup_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
+                              {formData.pickup_building_type === 'storage unit' ? 'Access / Gate Code (optional)' : 'Buzz Code (optional)'}
+                            </label>
+                            <input
+                              type="text"
+                              id="pickup_buzz_code"
+                              name="pickup_buzz_code"
+                              value={formData.pickup_buzz_code || ''}
+                              onChange={handleChange}
+                              placeholder="e.g., 4321 or Unit 1208"
+                              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                            />
+                            <p className="text-xs text-slate-500 mt-1">Leave blank if not applicable or if you prefer to provide access details later.</p>
+                          </div>
+                        )}
+
+                        <div>
+                          <label htmlFor="pickup_entry_instructions" className="block text-sm font-medium text-slate-700 mb-2">
+                            Entry / Loading Instructions
+                          </label>
+                          <textarea
+                            id="pickup_entry_instructions"
+                            name="pickup_entry_instructions"
+                            value={formData.pickup_entry_instructions || ''}
+                            onChange={handleChange}
+                            placeholder="Use south entrance, call on arrival, security desk on level 1, etc."
+                            rows={3}
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div className="pt-4">
+                <label htmlFor="assistance_pickup" className="block text-sm font-medium text-slate-700 mb-2">
+                  Assistance Needed at Pickup <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="assistance_pickup"
+                  name="assistance_pickup"
+                  value={formData.assistance_pickup}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                  required
+                >
+                  <option value="">Select assistance level</option>
+                  <option value="none">None</option>
+                  <option value="light">Light (pointing/guidance)</option>
+                  <option value="medium">Medium (partial lifting)</option>
+                  <option value="heavy">Heavy (full assistance)</option>
+                </select>
+              </div>
+            </fieldset>
+
+            {/* Drop-off Details Section */}
+            <fieldset>
+              <legend className="text-lg sm:text-xl font-semibold text-slate-800 mb-4">
+                Drop-off Details
+              </legend>
+
+              <div className="space-y-4">
+                <div>
+                  <AddressAutocomplete
+                    id="dropoff_address"
+                    name="dropoff_address"
+                    label="Drop-off Address"
+                    value={formData.dropoff_address}
+                    onChange={handleDropoffAddressSelect}
+                    required
+                    placeholder="100 King Street, Toronto, ON"
+                    helperText="Please select your address from suggestions when possible to reduce delivery errors."
+                    apiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY || ''}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="dropoff_building_type" className="block text-sm font-medium text-slate-700 mb-2">
+                    Drop-off Property Type <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="dropoff_building_type"
+                    name="dropoff_building_type"
+                    value={formData.dropoff_building_type}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    required
+                  >
+                    <option value="">Select type</option>
+                    <option value="house">House</option>
+                    <option value="condo/apartment">Condo/Apartment</option>
+                    <option value="retail/store">Retail/Store</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="storage unit">Storage Unit</option>
+                    <option value="other">Other</option>
+                  </select>
+                  {formData.dropoff_building_type === 'other' && (
+                    <input
+                      type="text"
+                      name="dropoff_building_type_custom"
+                      value={formData.dropoff_building_type_custom || ''}
+                      onChange={handleChange}
+                      placeholder="Please describe drop-off location type"
+                      className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    />
+                  )}
+                </div>
+
+                <div>
+                  <label htmlFor="dropoff_access" className="block text-sm font-medium text-slate-700 mb-2">
+                    Unloading Point <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="dropoff_access"
+                    name="dropoff_access"
+                    value={formData.dropoff_access}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    required
+                  >
+                    {formData.dropoff_building_type === 'house' ? (
+                      <>
+                        <option value="">Select unloading point</option>
+                        <option value="curbside">Curbside</option>
+                        <option value="driveway/garage">Driveway / Garage</option>
+                        <option value="front door">Front door</option>
+                        <option value="side entrance">Side entrance</option>
+                        <option value="backyard/rear">Backyard / Rear access</option>
+                        <option value="other">Other</option>
+                      </>
+                    ) : formData.dropoff_building_type === 'retail/store' ? (
+                      <>
+                        <option value="">Select unloading point</option>
+                        <option value="front entrance">Front entrance</option>
+                        <option value="rear entrance">Rear entrance</option>
+                        <option value="loading dock">Loading dock</option>
+                        <option value="mall entrance">Mall entrance</option>
+                        <option value="curbside">Curbside</option>
+                        <option value="shipping/receiving area">Shipping/Receiving area</option>
+                        <option value="side entrance">Side entrance</option>
+                        <option value="other">Other</option>
+                      </>
+                    ) : formData.dropoff_building_type === 'commercial' ? (
+                      <>
+                        <option value="">Select access point</option>
+                        <option value="front entrance">Front entrance</option>
+                        <option value="rear entrance">Rear entrance</option>
+                        <option value="loading dock">Loading dock</option>
+                        <option value="shipping/receiving area">Shipping/Receiving area</option>
+                        <option value="elevator">Elevator</option>
+                        <option value="side entrance">Side entrance</option>
+                        <option value="underground access">Underground access</option>
+                        <option value="curbside">Curbside</option>
+                        <option value="other">Other</option>
+                      </>
+                    ) : formData.dropoff_building_type === 'storage unit' ? (
+                      <>
+                        <option value="">Select unloading point</option>
+                        <option value="curbside">Curbside</option>
+                        <option value="parking lot">Parking Lot</option>
+                        <option value="main entrance">Main Entrance</option>
+                        <option value="other entrance">Other Entrance</option>
+                        <option value="other">Other</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="">Select access type</option>
+                        <option value="curbside">Curbside</option>
+                        <option value="driveway/garage">Driveway/Garage</option>
+                        <option value="elevator">Elevator</option>
+                        <option value="stairs">Stairs</option>
+                        <option value="other">Other</option>
+                      </>
+                    )}
+                  </select>
+                  {formData.dropoff_access === 'other' && (
+                    <input
+                      type="text"
+                      name="dropoff_access_custom"
+                      value={formData.dropoff_access_custom || ''}
+                      onChange={handleChange}
+                      placeholder={`Please describe ${
+                        formData.dropoff_building_type === 'house' ? 'unloading point' :
+                        formData.dropoff_building_type === 'retail/store' ? 'unloading point' :
+                        formData.dropoff_building_type === 'commercial' ? 'access point' :
+                        'access'
+                      }`}
+                      className="w-full px-4 py-2 mt-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                    />
+                  )}
+                </div>
+
+                {/* Curbside helper - show only for curbside */}
+                {formData.dropoff_access.toLowerCase() === 'curbside' && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                    <p className="text-sm text-green-700">Curbside drop-off usually keeps your cost lower.</p>
+                  </div>
+                )}
+
+                {/* Access detail fields - show only for non-curbside */}
+                {formData.dropoff_access && formData.dropoff_access.toLowerCase() !== 'curbside' && (
+                  <div className="space-y-4 border-t pt-4">
+                    <p className="text-sm text-slate-600 mb-4">
+                      Extra handling time may affect the final quote depending on distance from vehicle, access, and item size.
+                    </p>
+
+                    {formData.dropoff_building_type === 'house' && requiresFloorLevel(formData.dropoff_access) && (
+                      <div>
+                        <label htmlFor="dropoff_house_access_level" className="block text-sm font-medium text-slate-700 mb-2">
+                          Drop-off House Level <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                          id="dropoff_house_access_level"
+                          name="dropoff_house_access_level"
+                          value={formData.dropoff_house_access_level || ''}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                          required={formData.dropoff_building_type === 'house' && requiresFloorLevel(formData.dropoff_access)}
+                        >
+                          <option value="">Select level</option>
+                          <option value="Curbside">Curbside</option>
+                          <option value="Main floor">Main floor</option>
+                          <option value="Basement">Basement</option>
+                          <option value="Upper floor">Upper floor</option>
+                          <option value="Multiple levels">Multiple levels</option>
+                          <option value="Not sure">Not sure</option>
+                        </select>
+                      </div>
+                    )}
+
+                    {['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label htmlFor="dropoff_floor" className="block text-sm font-medium text-slate-700 mb-2">
+                            Floor/Level <span className="text-red-500">*</span>
+                          </label>
+                          <select
+                            id="dropoff_floor"
+                            name="dropoff_floor"
+                            value={formData.dropoff_floor}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                            required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access)}
+                          >
+                            <option value="">Select floor</option>
+                            <option value="Ground floor">Ground floor</option>
+                            <option value="Basement">Basement</option>
+                            <option value="2nd floor">2nd floor</option>
+                            <option value="3rd floor">3rd floor</option>
+                            <option value="4th+ floor">4th+ floor</option>
+                            <option value="Not sure">Not sure</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label htmlFor="dropoff_elevator_available" className="block text-sm font-medium text-slate-700 mb-2">
+                            Elevator Available <span className="text-red-500">*</span>
+                          </label>
+                          <select
+                            id="dropoff_elevator_available"
+                            name="dropoff_elevator_available"
+                            value={formData.dropoff_elevator_available}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                            required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access)}
+                          >
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                            <option value="Not sure">Not sure</option>
+                            <option value="Not applicable">Not applicable</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label htmlFor="dropoff_stairs" className="block text-sm font-medium text-slate-700 mb-2">
+                            Stairs Required <span className="text-red-500">*</span>
+                          </label>
+                          <select
+                            id="dropoff_stairs"
+                            name="dropoff_stairs"
+                            value={formData.dropoff_stairs}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                            required={['condo/apartment', 'commercial', 'storage unit', 'other'].includes(formData.dropoff_building_type) && requiresFloorLevel(formData.dropoff_access)}
+                          >
+                            <option value="">Select</option>
+                            <option value="No">No</option>
+                            <option value="Yes — 1 flight">Yes — 1 flight</option>
+                            <option value="Yes — 2 flights">Yes — 2 flights</option>
+                            <option value="Yes — 3+ flights">Yes — 3+ flights</option>
+                            <option value="Not sure">Not sure</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label htmlFor="dropoff_unit_suite" className="block text-sm font-medium text-slate-700 mb-2">
+                            Unit / Suite if applicable
+                          </label>
+                          <input
+                            type="text"
+                            id="dropoff_unit_suite"
+                            name="dropoff_unit_suite"
+                            value={formData.dropoff_unit_suite || ''}
+                            onChange={handleChange}
+                            placeholder="e.g., Apt 4B, Suite 201"
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {(formData.dropoff_stairs === 'Yes — 1 flight' || formData.dropoff_stairs === 'Yes — 2 flights' || formData.dropoff_stairs === 'Yes — 3+ flights') && (
+                      <div className="bg-amber-50 border border-amber-300 text-amber-700 p-3 rounded">
+                        ⚠ Stairs or non-ground-level access may require additional labour/time and may affect the final quote.
+                      </div>
+                    )}
+
+                    {requiresBuildingAccessDetails(formData.dropoff_access) && (
+                      <div className="space-y-4">
+                        {shouldShowBuzzCode(formData.dropoff_building_type, formData.dropoff_access) && (
+                          <div>
+                            <label htmlFor="dropoff_buzz_code" className="block text-sm font-medium text-slate-700 mb-2">
+                              {formData.dropoff_building_type === 'storage unit' ? 'Access / Gate Code (optional)' : 'Buzz Code (optional)'}
+                            </label>
+                            <input
+                              type="text"
+                              id="dropoff_buzz_code"
+                              name="dropoff_buzz_code"
+                              value={formData.dropoff_buzz_code || ''}
+                              onChange={handleChange}
+                              placeholder="e.g., 4321 or Unit 1208"
+                              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                            />
+                            <p className="text-xs text-slate-500 mt-1">Leave blank if not applicable or if you prefer to provide access details later.</p>
+                          </div>
+                        )}
+
+                        <div>
+                          <label htmlFor="dropoff_entry_instructions" className="block text-sm font-medium text-slate-700 mb-2">
+                            Entry / Unloading Instructions
+                          </label>
+                          <textarea
+                            id="dropoff_entry_instructions"
+                            name="dropoff_entry_instructions"
+                            value={formData.dropoff_entry_instructions || ''}
+                            onChange={handleChange}
+                            placeholder="Use south entrance, call on arrival, security desk on level 1, etc."
+                            rows={3}
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </fieldset>
 
