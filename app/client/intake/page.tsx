@@ -185,11 +185,16 @@ export default function IntakePage() {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({})
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target as any
+
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => ({ ...prev, [name]: false }))
+    }
 
     if (name === 'pickup_access' || name === 'dropoff_access') {
       const location = name === 'pickup_access' ? 'pickup' : 'dropoff'
@@ -276,10 +281,35 @@ export default function IntakePage() {
     }
   }
 
+  const validateForm = (): boolean => {
+    const checks = [
+      { condition: !formData.assistance_pickup, fieldId: 'assistance_pickup', label: 'Assistance Needed at Pickup' },
+      { condition: !formData.assistance_dropoff, fieldId: 'assistance_dropoff', label: 'Unloading Assistance' },
+    ]
+
+    for (const { condition, fieldId, label } of checks) {
+      if (condition) {
+        setFieldErrors({ [fieldId]: true })
+        setError(`Please complete the required field: "${label}"`)
+        const el = document.getElementById(fieldId)
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        return false
+      }
+    }
+
+    return true
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setFieldErrors({})
     setLoading(true)
+
+    if (!validateForm()) {
+      setLoading(false)
+      return
+    }
 
     try {
       const response = await fetch('/api/jobs', {
@@ -822,7 +852,7 @@ export default function IntakePage() {
                   name="assistance_pickup"
                   value={formData.assistance_pickup}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base ${fieldErrors['assistance_pickup'] ? 'border-red-500 ring-2 ring-red-300' : 'border-slate-300'}`}
                   required
                 >
                   <option value="">Select assistance level</option>
@@ -831,6 +861,9 @@ export default function IntakePage() {
                   <option value="medium">Medium (partial lifting)</option>
                   <option value="heavy">Heavy (full assistance)</option>
                 </select>
+                {fieldErrors['assistance_pickup'] && (
+                  <p className="text-red-600 text-sm mt-1">Please select a pickup assistance level.</p>
+                )}
               </div>
             </fieldset>
 
@@ -1134,6 +1167,29 @@ export default function IntakePage() {
                       </div>
                     )}
                   </div>
+                )}
+              </div>
+
+              <div className="pt-4">
+                <label htmlFor="assistance_dropoff" className="block text-sm font-medium text-slate-700 mb-2">
+                  Unloading Assistance <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="assistance_dropoff"
+                  name="assistance_dropoff"
+                  value={formData.assistance_dropoff}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base ${fieldErrors['assistance_dropoff'] ? 'border-red-500 ring-2 ring-red-300' : 'border-slate-300'}`}
+                  required
+                >
+                  <option value="">Select assistance level</option>
+                  <option value="none">None</option>
+                  <option value="light">Light (pointing/guidance)</option>
+                  <option value="medium">Medium (partial lifting)</option>
+                  <option value="heavy">Heavy (full assistance)</option>
+                </select>
+                {fieldErrors['assistance_dropoff'] && (
+                  <p className="text-red-600 text-sm mt-1">Please select an unloading assistance level.</p>
                 )}
               </div>
             </fieldset>
