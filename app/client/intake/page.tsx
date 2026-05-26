@@ -61,6 +61,7 @@ interface FormData {
   dropoff_unit_suite?: string
   dropoff_buzz_code?: string
   dropoff_entry_instructions?: string
+  dropoff_distance: string
   notes: string
   terms_accepted: boolean
   confirm_item_details_accurate: boolean
@@ -170,6 +171,7 @@ export default function IntakePage() {
     dropoff_unit_suite: '',
     dropoff_buzz_code: '',
     dropoff_entry_instructions: '',
+    dropoff_distance: '',
     notes: '',
     terms_accepted: false,
     confirm_item_details_accurate: false,
@@ -229,6 +231,10 @@ export default function IntakePage() {
         updateFormData('dropoff_house_access_level', '')
       }
     }
+
+    if (location === 'dropoff') {
+      updateFormData('dropoff_distance', newAccess.toLowerCase() === 'curbside' ? 'Curbside' : '')
+    }
   }
 
   const handleBuildingTypeChange = (location: 'pickup' | 'dropoff', newBuildingType: string) => {
@@ -285,6 +291,7 @@ export default function IntakePage() {
     const checks = [
       { condition: !formData.assistance_pickup, fieldId: 'assistance_pickup', label: 'Assistance Needed at Pickup' },
       { condition: !formData.assistance_dropoff, fieldId: 'assistance_dropoff', label: 'Unloading Assistance' },
+      { condition: !formData.dropoff_distance, fieldId: 'dropoff_distance', label: 'Distance from vehicle to unloading point' },
     ]
 
     for (const { condition, fieldId, label } of checks) {
@@ -1008,6 +1015,33 @@ export default function IntakePage() {
                 {formData.dropoff_access.toLowerCase() === 'curbside' && (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                     <p className="text-sm text-green-700">Curbside drop-off usually keeps your cost lower.</p>
+                  </div>
+                )}
+
+                {/* Distance from vehicle — shown for all non-curbside; auto-set to "Curbside" when curbside */}
+                {formData.dropoff_access && formData.dropoff_access.toLowerCase() !== 'curbside' && (
+                  <div>
+                    <label htmlFor="dropoff_distance" className="block text-sm font-medium text-slate-700 mb-2">
+                      Distance from vehicle to unloading point <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="dropoff_distance"
+                      name="dropoff_distance"
+                      value={formData.dropoff_distance}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base ${fieldErrors['dropoff_distance'] ? 'border-red-500 ring-2 ring-red-300' : 'border-slate-300'}`}
+                      required
+                    >
+                      <option value="">Select distance</option>
+                      <option value="Less than 25 ft">Less than 25 ft</option>
+                      <option value="25–50 ft">25–50 ft</option>
+                      <option value="50–100 ft">50–100 ft</option>
+                      <option value="More than 100 ft">More than 100 ft</option>
+                      <option value="Not sure">Not sure</option>
+                    </select>
+                    {fieldErrors['dropoff_distance'] && (
+                      <p className="text-red-600 text-sm mt-1">Please select the distance to the unloading point.</p>
+                    )}
                   </div>
                 )}
 

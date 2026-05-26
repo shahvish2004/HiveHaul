@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
       dropoff_entry_instructions,
       assistance_pickup,
       assistance_dropoff,
+      dropoff_distance,
       pickup_floor,
       pickup_elevator_available,
       pickup_stairs,
@@ -80,7 +81,7 @@ export async function POST(request: NextRequest) {
       'pickup_address', 'dropoff_address', 'pickup_date', 'pickup_time',
       'item_description',
       'pickup_building_type', 'dropoff_building_type', 'pickup_access',
-      'dropoff_access', 'assistance_pickup', 'assistance_dropoff'
+      'dropoff_access', 'assistance_pickup', 'assistance_dropoff', 'dropoff_distance'
     ]
 
     for (const field of requiredFields) {
@@ -171,6 +172,7 @@ export async function POST(request: NextRequest) {
       dropoff_access_custom: dropoff_access === 'other' ? dropoff_access_custom : undefined,
       assistance_pickup,
       assistance_dropoff,
+      dropoff_distance,
       pickup_floor,
       pickup_elevator_available,
       pickup_stairs,
