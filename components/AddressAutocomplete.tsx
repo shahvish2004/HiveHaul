@@ -66,7 +66,7 @@ export default function AddressAutocomplete({
   // Google Places Autocomplete
   const fetchSuggestions = useCallback(
     async (query: string) => {
-      if (!query.trim() || !apiKey) {
+      if (!query.trim()) {
         setSuggestions([])
         return
       }
@@ -82,7 +82,7 @@ export default function AddressAutocomplete({
 
       try {
         const response = await fetch(
-          `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&key=${apiKey}&components=country:ca`,
+          `/api/places/autocomplete?input=${encodeURIComponent(query)}`,
           { signal: abortControllerRef.current.signal }
         )
 
@@ -119,7 +119,7 @@ export default function AddressAutocomplete({
         setLoading(false)
       }
     },
-    [apiKey]
+    []
   )
 
   // Get detailed place information
@@ -127,7 +127,7 @@ export default function AddressAutocomplete({
     async (placeId: string) => {
       try {
         const response = await fetch(
-          `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=formatted_address,geometry,address_components&key=${apiKey}`
+          `/api/places/details?place_id=${encodeURIComponent(placeId)}`
         )
 
         if (!response.ok) {
@@ -185,7 +185,7 @@ export default function AddressAutocomplete({
         setError('Failed to load address details')
       }
     },
-    [apiKey, onChange]
+    [onChange]
   )
 
   // Handle input change
