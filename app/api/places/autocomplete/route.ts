@@ -12,7 +12,12 @@ export async function GET(request: NextRequest) {
   }
 
   const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${apiKey}&components=country:ca`
-  const response = await fetch(url)
+  const response = await fetch(url, {
+    headers: { Referer: 'https://www.hivehaul.ca' },
+  })
   const data = await response.json()
+  if (data.error_message) {
+    console.error('Google Places autocomplete error:', data.status, data.error_message)
+  }
   return NextResponse.json(data)
 }

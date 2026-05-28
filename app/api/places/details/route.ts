@@ -12,7 +12,9 @@ export async function GET(request: NextRequest) {
   }
 
   const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(placeId)}&fields=formatted_address,geometry,address_components&key=${apiKey}`
-  const response = await fetch(url)
+  const response = await fetch(url, {
+    headers: { Referer: 'https://www.hivehaul.ca' },
+  })
   const data = await response.json()
   return NextResponse.json(data)
 }
