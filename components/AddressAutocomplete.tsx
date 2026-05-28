@@ -31,6 +31,7 @@ export interface StructuredAddress {
 interface AddressAutocompleteProps {
   value: string
   onChange: (address: StructuredAddress | null) => void
+  onTextChange?: (value: string) => void
   placeholder?: string
   label?: string
   required?: boolean
@@ -43,6 +44,7 @@ interface AddressAutocompleteProps {
 export default function AddressAutocomplete({
   value,
   onChange,
+  onTextChange,
   placeholder = '123 Main Street, City, State',
   label = 'Address',
   required = false,
@@ -191,6 +193,7 @@ export default function AddressAutocomplete({
     const newValue = e.target.value
     setInput(newValue)
     onChange(null) // Clear structured data while typing
+    onTextChange?.(newValue) // Keep raw address text in sync with parent
     setShowManualEntry(false)
 
     if (newValue.trim()) {

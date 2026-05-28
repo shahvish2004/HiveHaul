@@ -561,6 +561,7 @@ export default function IntakePage() {
                     label="Pickup Address"
                     value={formData.pickup_address}
                     onChange={handlePickupAddressSelect}
+                    onTextChange={(text) => setFormData((prev) => ({ ...prev, pickup_address: text }))}
                     required
                     placeholder="255 Maitland St, Kitchener, ON"
                     helperText="Please select your address from suggestions when possible to reduce delivery errors."
@@ -888,6 +889,7 @@ export default function IntakePage() {
                     label="Drop-off Address"
                     value={formData.dropoff_address}
                     onChange={handleDropoffAddressSelect}
+                    onTextChange={(text) => setFormData((prev) => ({ ...prev, dropoff_address: text }))}
                     required
                     placeholder="100 King Street, Toronto, ON"
                     helperText="Please select your address from suggestions when possible to reduce delivery errors."
