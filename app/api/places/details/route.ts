@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
         headers: {
           'X-Goog-Api-Key': apiKey,
           'X-Goog-FieldMask': 'formattedAddress,addressComponents,location',
+          Referer: 'https://www.hivehaul.ca',
         },
       }
     )
