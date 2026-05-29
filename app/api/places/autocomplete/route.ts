@@ -18,20 +18,43 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${apiKey}&components=country:ca`
-    const response = await fetch(url, {
-      headers: { Referer: 'https://www.hivehaul.ca' },
+    // Uses Places API (New) — legacy Places API must NOT be enabled; enable "Places API (New)" in GCP
+    const res = await fetch('https://places.googleapis.com/v1/places:autocomplete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': apiKey!,
+      },
+      body: JSON.stringify({
+        input,
+        includedRegionCodes: ['ca'],
+      }),
     })
-    const data = await response.json()
 
-    const predictionsCount = data.predictions?.length ?? 0
-    console.log(`[Places/autocomplete] status="${data.status}" predictions=${predictionsCount}${data.error_message ? ` error="${data.error_message}"` : ''}`)
+    const data = await res.json()
 
-    if (data.error_message) {
-      console.error(`[Places/autocomplete] Google API error: status=${data.status} message="${data.error_message}"`)
+    if (!res.ok) {
+      console.error(`[Places/autocomplete] API error: status=${res.status} body=${JSON.stringify(data)}`)
+      return NextResponse.json({ predictions: [], status: 'ERROR', error_message: data.error?.message || 'API error' })
     }
 
-    return NextResponse.json(data)
+    const suggestions = data.suggestions || []
+    console.log(`[Places/autocomplete] suggestions=${suggestions.length}`)
+
+    // Normalise new API response → shape the frontend already expects
+    const predictions = suggestions.map((s: any) => {
+      const p = s.placePrediction || {}
+      return {
+        place_id: p.placeId || '',
+        description: p.text?.text || '',
+        structured_formatting: {
+          main_text: p.structuredFormat?.mainText?.text || p.text?.text || '',
+          secondary_text: p.structuredFormat?.secondaryText?.text || '',
+        },
+      }
+    })
+
+    return NextResponse.json({ predictions, status: predictions.length ? 'OK' : 'ZERO_RESULTS' })
   } catch (err) {
     console.error('[Places/autocomplete] Fetch error:', err)
     return NextResponse.json({ error: 'Failed to fetch from Google' }, { status: 502 })
