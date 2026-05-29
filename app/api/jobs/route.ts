@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createJob, getJobs, updateJobStatus } from '@/lib/supabase'
+import { sendCustomerRequestReceived, sendManagerNewJobAlert } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
   try {
@@ -227,6 +228,25 @@ export async function POST(request: NextRequest) {
       service_type,
       notes: combined_notes,
     })
+
+    // Send confirmation emails — fire-and-forget, never blocks job creation
+    Promise.all([
+      sendCustomerRequestReceived({
+        job_number: job.job_number,
+        client_name: job.client_name,
+        client_email: job.client_email,
+        service_type: job.service_type,
+      }),
+      sendManagerNewJobAlert({
+        job_number: job.job_number,
+        client_name: job.client_name,
+        client_email: job.client_email,
+        client_phone: job.client_phone,
+        service_type: job.service_type,
+        pickup_address: job.pickup_formatted_address || job.pickup_address,
+        dropoff_address: job.dropoff_formatted_address || job.dropoff_address,
+      }),
+    ]).catch((err) => console.error('[Email] New job notifications failed:', err))
 
     return NextResponse.json(job, { status: 201 })
   } catch (error) {

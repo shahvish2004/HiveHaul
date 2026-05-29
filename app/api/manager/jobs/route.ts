@@ -1,5 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { updateJobWithNotes, getJobById } from '@/lib/supabase'
+import { sendCustomerStatusNotification } from '@/lib/email'
+
+function parseExtendedInfo(notes: string | null): Record<string, any> {
+  if (!notes) return {}
+  try {
+    const match = notes.match(/Extended Info: ({.*})/s)
+    if (match) return JSON.parse(match[1])
+  } catch {
+    // fall through
+  }
+  return {}
+}
 
 export async function PUT(request: NextRequest) {
   try {
@@ -77,7 +89,6 @@ export async function PUT(request: NextRequest) {
         break
 
       case 'add_notes':
-        // For internal notes, keep current status
         notesUpdate.internal_notes = body.notes || ''
         notesUpdate.internal_notes_timestamp = new Date().toISOString()
         newStatus = job.status
@@ -91,6 +102,17 @@ export async function PUT(request: NextRequest) {
     }
 
     const updatedJob = await updateJobWithNotes(jobId, newStatus, notesUpdate)
+
+    // Send customer notification — fire-and-forget, never blocks status update
+    if (newStatus !== job.status) {
+      const extInfo = { ...parseExtendedInfo(job.notes), ...notesUpdate }
+      sendCustomerStatusNotification(
+        { job_number: job.job_number, client_name: job.client_name, client_email: job.client_email },
+        newStatus,
+        extInfo
+      ).catch((err) => console.error('[Email] Status notification failed:', err))
+    }
+
     return NextResponse.json(updatedJob)
   } catch (error) {
     console.error('Error updating job:', error)

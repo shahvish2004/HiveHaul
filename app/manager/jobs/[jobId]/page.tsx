@@ -35,8 +35,8 @@ const DECLINE_REASONS = [
 const STATUS_ACTIONS: Record<string, string[]> = {
   New: ['review', 'cancel'],
   'Under Review': ['approve', 'decline', 'request_deposit', 'cancel', 'add_notes'],
-  Approved: ['request_deposit', 'cancel', 'add_notes'],
-  'Deposit Requested': ['request_deposit', 'cancel', 'add_notes'],
+  Approved: ['request_deposit', 'schedule', 'cancel', 'add_notes'],
+  'Deposit Requested': ['mark_deposit_received', 'cancel', 'add_notes'],
   'Deposit Received': ['schedule', 'cancel', 'add_notes'],
   Scheduled: ['start', 'cancel', 'add_notes'],
   'In Progress': ['complete', 'cancel', 'add_notes'],
@@ -278,14 +278,96 @@ export default function JobDetailPage() {
               return null
             })()}
 
-            {job.notes && (
-              <div className="card">
-                <h2 className="text-lg font-semibold text-slate-800 mb-4">Notes & History</h2>
-                <pre className="text-xs text-slate-600 whitespace-pre-wrap break-words bg-slate-50 p-3 rounded">
-                  {job.notes}
-                </pre>
-              </div>
-            )}
+            {(() => {
+              const ext = parseExtendedInfo(job.notes)
+              if (!ext) return null
+
+              const statusEvents: { ts: string; label: string; detail?: string }[] = []
+
+              if (ext.decline_timestamp)
+                statusEvents.push({ ts: ext.decline_timestamp, label: 'Declined', detail: ext.decline_reason })
+              if (ext.deposit_requested_timestamp)
+                statusEvents.push({
+                  ts: ext.deposit_requested_timestamp,
+                  label: 'Deposit Requested',
+                  detail: ext.deposit_amount ? `$${ext.deposit_amount} CAD` : undefined,
+                })
+              if (ext.deposit_received_timestamp)
+                statusEvents.push({ ts: ext.deposit_received_timestamp, label: 'Deposit Received' })
+              if (ext.scheduled_timestamp)
+                statusEvents.push({ ts: ext.scheduled_timestamp, label: 'Scheduled' })
+              if (ext.started_timestamp)
+                statusEvents.push({ ts: ext.started_timestamp, label: 'In Progress' })
+              if (ext.completed_timestamp)
+                statusEvents.push({ ts: ext.completed_timestamp, label: 'Completed' })
+              if (ext.cancelled_timestamp)
+                statusEvents.push({ ts: ext.cancelled_timestamp, label: 'Cancelled', detail: ext.cancellation_reason })
+
+              statusEvents.sort((a, b) => new Date(a.ts).getTime() - new Date(b.ts).getTime())
+
+              const hasHistory = statusEvents.length > 0 || ext.internal_notes || ext.deposit_instructions
+              if (!hasHistory) return null
+
+              return (
+                <div className="card">
+                  <h2 className="text-lg font-semibold text-slate-800 mb-4">Notes & History</h2>
+
+                  {statusEvents.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Status History</p>
+                      <div className="space-y-2">
+                        {statusEvents.map((ev, i) => (
+                          <div key={i} className="flex items-start gap-3 text-sm">
+                            <span className="mt-0.5 w-2 h-2 rounded-full bg-amber-500 flex-shrink-0" />
+                            <div>
+                              <span className="font-medium text-slate-700">{ev.label}</span>
+                              <span className="text-slate-400 mx-2">·</span>
+                              <span className="text-slate-500">
+                                {new Date(ev.ts).toLocaleDateString('en-CA', {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </span>
+                              {ev.detail && (
+                                <p className="text-slate-600 mt-0.5 ml-0">{ev.detail}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {ext.deposit_instructions && (
+                    <div className="mb-4 p-3 bg-purple-50 rounded-lg border border-purple-200">
+                      <p className="text-xs font-medium text-purple-700 uppercase tracking-wide mb-1">Deposit Instructions</p>
+                      <p className="text-sm text-purple-800 whitespace-pre-wrap">{ext.deposit_instructions}</p>
+                    </div>
+                  )}
+
+                  {ext.internal_notes && (
+                    <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                      <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Internal Notes</p>
+                      <p className="text-sm text-slate-700 whitespace-pre-wrap">{ext.internal_notes}</p>
+                      {ext.internal_notes_timestamp && (
+                        <p className="text-xs text-slate-400 mt-1">
+                          {new Date(ext.internal_notes_timestamp).toLocaleDateString('en-CA', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )
+            })()}
           </div>
 
           {/* Status and actions sidebar */}
@@ -334,6 +416,16 @@ export default function JobDetailPage() {
                     className="w-full px-3 py-2 bg-purple-500 text-white rounded text-sm font-medium hover:bg-purple-600 disabled:bg-slate-400"
                   >
                     Request Deposit
+                  </button>
+                )}
+
+                {availableActions.includes('mark_deposit_received') && (
+                  <button
+                    onClick={() => performAction('mark_deposit_received')}
+                    disabled={actionLoading}
+                    className="w-full px-3 py-2 bg-teal-500 text-white rounded text-sm font-medium hover:bg-teal-600 disabled:bg-slate-400"
+                  >
+                    Mark Deposit Received
                   </button>
                 )}
 
@@ -386,6 +478,12 @@ export default function JobDetailPage() {
                     Cancel
                   </button>
                 )}
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-slate-200">
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Status changes are internal. Customer email notifications are sent automatically if the email service is configured. Otherwise, contact the customer manually.
+                </p>
               </div>
             </div>
           </div>
