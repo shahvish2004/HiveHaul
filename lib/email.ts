@@ -2,10 +2,8 @@
 // Gracefully skips all sends if RESEND_API_KEY is not configured — never blocks workflow.
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY
-const FROM_EMAIL = process.env.EMAIL_FROM || 'HiveHaul <noreply@hivehaul.ca>'
-const MANAGER_EMAIL = process.env.MANAGER_EMAIL || 'hivehaulca@gmail.com'
-
-const EMAIL_ENABLED = Boolean(RESEND_API_KEY)
+const FROM_EMAIL = process.env.EMAIL_FROM || 'HiveHaul <notifications@hivehaul.ca>'
+const MANAGER_EMAIL = process.env.MANAGER_EMAIL || 'shah.vish2004@yahoo.com'
 
 interface EmailPayload {
   to: string
@@ -14,10 +12,14 @@ interface EmailPayload {
 }
 
 async function sendEmail(payload: EmailPayload): Promise<void> {
-  if (!EMAIL_ENABLED) {
-    console.warn(`[Email] Skipped (no RESEND_API_KEY): "${payload.subject}" → ${payload.to}`)
+  const hasKey = Boolean(RESEND_API_KEY)
+  console.log(`[Email] send: hasKey=${hasKey} from="${FROM_EMAIL}" to="${payload.to}" subject="${payload.subject}"`)
+
+  if (!hasKey) {
+    console.warn('[Email] Skipped — RESEND_API_KEY is not set or empty')
     return
   }
+
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -32,9 +34,12 @@ async function sendEmail(payload: EmailPayload): Promise<void> {
         html: payload.html,
       }),
     })
+
+    const responseBody = await res.text()
     if (!res.ok) {
-      const body = await res.text()
-      console.error(`[Email] Send failed (${res.status}): ${body}`)
+      console.error(`[Email] Send failed: status=${res.status} body=${responseBody}`)
+    } else {
+      console.log(`[Email] Sent OK: status=${res.status} body=${responseBody}`)
     }
   } catch (err) {
     console.error('[Email] Network error:', err)
@@ -60,6 +65,7 @@ export async function sendCustomerRequestReceived(job: {
   client_email: string
   service_type: string
 }): Promise<void> {
+  console.log(`[Email] sendCustomerRequestReceived: job=${job.job_number} to="${job.client_email}" hasKey=${Boolean(RESEND_API_KEY)}`)
   await sendEmail({
     to: job.client_email,
     subject: `Request Received – ${job.job_number}`,
@@ -86,6 +92,7 @@ export async function sendManagerNewJobAlert(job: {
   pickup_address: string
   dropoff_address: string
 }): Promise<void> {
+  console.log(`[Email] sendManagerNewJobAlert: job=${job.job_number} to="${MANAGER_EMAIL}" from="${FROM_EMAIL}" hasKey=${Boolean(RESEND_API_KEY)}`)
   await sendEmail({
     to: MANAGER_EMAIL,
     subject: `New Job Request – ${job.job_number}`,
@@ -157,8 +164,13 @@ export async function sendCustomerStatusNotification(
   newStatus: string,
   extendedInfo: Record<string, any> = {}
 ): Promise<void> {
+  console.log(`[Email] sendCustomerStatusNotification: job=${job.job_number} to="${job.client_email}" status="${newStatus}" hasKey=${Boolean(RESEND_API_KEY)}`)
+
   const templateFn = STATUS_TEMPLATES[newStatus]
-  if (!templateFn) return
+  if (!templateFn) {
+    console.log(`[Email] No template for status "${newStatus}" — skipping`)
+    return
+  }
 
   const { subject, body } = templateFn(job, extendedInfo)
   await sendEmail({

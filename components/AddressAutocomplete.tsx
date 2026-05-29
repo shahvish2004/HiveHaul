@@ -80,19 +80,31 @@ export default function AddressAutocomplete({
       setLoading(true)
       setError('')
 
+      // Diagnostic: check if Google Maps JS API is loaded (not used here — we use backend proxy)
+      const googleMapsLoaded = typeof window !== 'undefined' && Boolean((window as any).google?.maps)
+      const importLibraryExists = typeof (window as any).google?.maps?.importLibrary === 'function'
+      const autocompleteSuggestionExists = Boolean((window as any).google?.maps?.places?.AutocompleteSuggestion)
+      console.log(`[Places/client] query="${query}" googleMapsLoaded=${googleMapsLoaded} importLibraryExists=${importLibraryExists} AutocompleteSuggestion=${autocompleteSuggestionExists}`)
+
       try {
         const response = await fetch(
           `/api/places/autocomplete?input=${encodeURIComponent(query)}`,
           { signal: abortControllerRef.current.signal }
         )
 
+        console.log(`[Places/client] proxy response: status=${response.status} ok=${response.ok}`)
+
         if (!response.ok) {
+          console.error(`[Places/client] proxy error: status=${response.status}`)
           throw new Error('Failed to fetch suggestions')
         }
 
         const data = await response.json()
+        const predictionsCount = data.predictions?.length ?? 0
+        console.log(`[Places/client] googleStatus="${data.status}" predictions=${predictionsCount}${data.error_message ? ` error="${data.error_message}"` : ''}`)
 
         if (data.error_message) {
+          console.error(`[Places/client] Google error: ${data.status} — ${data.error_message}`)
           setError('Address service temporarily unavailable')
           setSuggestions([])
           return
@@ -113,6 +125,7 @@ export default function AddressAutocomplete({
         if (err instanceof Error && err.name === 'AbortError') {
           return // Ignore aborted requests
         }
+        console.error('[Places/client] fetch error:', err)
         setError('Unable to fetch address suggestions')
         setSuggestions([])
       } finally {
