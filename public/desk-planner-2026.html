@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TPM TRANSCEND — Desk Planner 2026 (July–December)</title>
+<style>
+  :root {
+    --navy:   #0c0c1e;
+    --mid:    #3a3a5c;
+    --muted:  #7a7a9a;
+    --line:   #d4d4e2;
+    --bg:     #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #ccc;
+    color: var(--navy);
+  }
+
+  /* ── Print bar ── */
+  #print-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    background: var(--navy); color: #fff;
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    padding: 10px 20px; font-size: 13px; letter-spacing: .08em;
+  }
+  #print-bar button {
+    background: #fff; color: var(--navy); border: none;
+    padding: 6px 20px; font-weight: 700; font-size: 12px;
+    letter-spacing: .1em; cursor: pointer; border-radius: 2px;
+  }
+
+  /* ── Page shell ── */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    background: var(--bg);
+    margin: 6mm auto;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ══════════════════════════════
+       LEFT PAGE
+  ══════════════════════════════ */
+  .left-page { padding: 9mm 9mm 7mm 11mm; }
+
+  /* header */
+  .lp-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1.2pt solid var(--navy);
+    padding-bottom: 2.5mm;
+    margin-bottom: 2mm;
+  }
+
+  .logo-wrap { line-height: 1; }
+  .logo-tpm  { font-size: 15pt; font-weight: 900; letter-spacing: .04em; color: var(--navy); }
+  .logo-sub  { font-size: 5.5pt; font-weight: 400; letter-spacing: .25em; color: var(--mid); margin-top: .5mm; }
+
+  .lp-week-block { text-align: center; }
+  .lp-week-label { font-size: 5pt; letter-spacing: .22em; color: var(--muted); }
+  .lp-week-dates { font-size: 10pt; font-weight: 800; letter-spacing: .04em; color: var(--navy); }
+  .lp-tagline    { font-size: 4.5pt; letter-spacing: .18em; color: var(--muted); margin-top: .8mm; }
+
+  .lp-header-spacer { width: 22mm; }
+
+  /* days */
+  .days-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .day-row {
+    display: flex;
+    flex: 1;
+    border-bottom: .3pt solid var(--line);
+    min-height: 0;
+  }
+
+  .day-row.weekend { flex: .68; }
+
+  .day-tag {
+    width: 15mm;
+    min-width: 15mm;
+    border-right: 1pt solid var(--navy);
+    padding: 2mm 2mm 0 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .day-row.weekend .day-tag { justify-content: space-around; padding: 2mm 2mm; }
+
+  .day-name  { font-size: 7.5pt; font-weight: 900; letter-spacing: .08em; }
+  .day-date  { font-size: 5.5pt; font-weight: 400; color: var(--mid); margin-top: .8mm; }
+
+  .day-body {
+    flex: 1;
+    padding: 1.5mm 0 1mm 3mm;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .appt-label {
+    font-size: 4.5pt; letter-spacing: .2em; color: var(--muted);
+    margin-bottom: 1.2mm;
+  }
+
+  .ruled-lines { flex: 1; display: flex; flex-direction: column; justify-content: space-around; }
+  .ruled-line  { border-bottom: .25pt solid var(--line); }
+
+  /* weekly notes */
+  .wn-section {
+    border-top: 1pt solid var(--navy);
+    padding-top: 1.5mm;
+    margin-top: 1.5mm;
+    height: 22mm;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .wn-section .appt-label { margin-bottom: 1.5mm; }
+
+  /* footer */
+  .lp-footer {
+    height: 8mm;
+    flex-shrink: 0;
+    border-top: 1pt solid var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5mm;
+  }
+  .footer-kw  { font-size: 5pt; font-weight: 800; letter-spacing: .2em; color: var(--navy); }
+  .footer-sep { color: var(--muted); font-size: 5pt; margin: 0 1.5mm; }
+  .footer-qt  { font-size: 4.5pt; font-style: italic; color: var(--muted); }
+
+  /* ══════════════════════════════
+       RIGHT PAGE
+  ══════════════════════════════ */
+  .right-page { padding: 8mm 9mm 7mm 9mm; }
+
+  /* month tabs + week no */
+  .rp-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1.2pt solid var(--navy);
+    padding-bottom: 2mm;
+    margin-bottom: 2mm;
+  }
+
+  .month-tabs { display: flex; gap: 1mm; }
+  .mtab {
+    font-size: 5pt; font-weight: 700; letter-spacing: .12em;
+    color: var(--muted); padding: .8mm 1.5mm; border-radius: 1px;
+  }
+  .mtab.active { background: var(--navy); color: #fff; }
+
+  .week-no-wrap { display: flex; align-items: center; gap: 2mm; }
+  .week-no-lbl  { font-size: 5pt; font-weight: 700; letter-spacing: .18em; color: var(--navy); }
+  .week-no-line { width: 14mm; border-bottom: .7pt solid var(--navy); }
+
+  /* two column layout */
+  .rp-body {
+    flex: 1;
+    display: flex;
+    gap: 5mm;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .rp-col { display: flex; flex-direction: column; gap: 0; overflow: hidden; }
+  .rp-col-l { flex: 1.15; }
+  .rp-col-r { flex: 1; }
+
+  /* sections */
+  .rp-sec {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3.5mm;
+  }
+
+  .rp-sec-title {
+    font-size: 5pt; font-weight: 900; letter-spacing: .22em; color: var(--navy);
+    border-bottom: .7pt solid var(--navy);
+    padding-bottom: .8mm; margin-bottom: 1.5mm;
+  }
+
+  .rp-sub {
+    font-size: 4.5pt; font-weight: 700; letter-spacing: .15em; color: var(--mid);
+    margin: 1.2mm 0 .8mm;
+  }
+
+  /* checkbox items */
+  .cb-row {
+    display: flex; align-items: center; gap: 1.5mm;
+    margin-bottom: 1mm;
+  }
+  .cb { width: 2.8mm; height: 2.8mm; min-width: 2.8mm; border: .5pt solid var(--navy); flex-shrink: 0; }
+  .cb-line { flex: 1; border-bottom: .25pt solid var(--line); height: 3.8mm; }
+
+  /* notes lines */
+  .nl { border-bottom: .25pt solid var(--line); height: 4.5mm; margin-bottom: 0; }
+
+  /* appointment rows */
+  .appt-row {
+    display: flex; gap: 1.5mm; align-items: flex-end;
+    margin-bottom: 1.8mm;
+  }
+  .af { border-bottom: .6pt solid var(--navy); height: 3.8mm; }
+  .af-date { width: 13mm; }
+  .af-time { width: 9mm; }
+  .af-desc { flex: 1; }
+
+  /* footer right */
+  .rp-footer {
+    height: 8mm; flex-shrink: 0;
+    border-top: 1pt solid var(--navy);
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: auto;
+  }
+
+  /* ── Print rules ── */
+  @media print {
+    @page { size: A4 portrait; margin: 0; }
+
+    body { background: white; }
+
+    #print-bar { display: none; }
+
+    .page {
+      margin: 0;
+      page-break-after: always;
+      break-after: page;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .day-row, .rp-sec, .cb-row, .nl, .appt-row { orphans: 1; widows: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div id="print-bar">
+  <span>TPM TRANSCEND &mdash; DESK PLANNER 2026 &nbsp;|&nbsp; JULY &ndash; DECEMBER</span>
+  <button onclick="window.print()">PRINT ALL PAGES</button>
+</div>
+
+<div id="planner"></div>
+
+<script>
+(function () {
+  const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const PLAN_MONTHS = ['JUL','AUG','SEP','OCT','NOV','DEC'];
+  const DAYS = ['MON','TUE','WED','THU','FRI'];
+  const QUOTES = [
+    '"Plan with purpose. Execute with discipline."',
+    '"Small daily improvements lead to stunning results."',
+    '"Consistency beats intensity every time."',
+    '"Focus is the new superpower."',
+    '"Growth begins at the edge of comfort."',
+    '"What you do today shapes who you become."',
+    '"One week, one mission. Make it count."',
+    '"Clarity precedes mastery."',
+    '"Progress, not perfection."',
+    '"The disciplined life is the free life."',
+    '"Show up. Do the work. Repeat."',
+    '"Every great week starts with a clear plan."',
+    '"Win the morning, win the day."',
+    '"Think long. Act now."',
+    '"Your habits are your future."',
+    '"Build something worth building."',
+    '"Execution separates dreamers from achievers."',
+    '"Stay the course. The results are coming."',
+    '"Do less, better."',
+    '"Silence the noise. Amplify the signal."',
+    '"Great things are done by a series of small things."',
+    '"Commit fully. Adjust wisely."',
+    '"Purpose fuels persistence."',
+    '"The best time to plan was yesterday. Now is second best."',
+    '"Chase progress, not perfection."',
+    '"Be relentless in the pursuit of your goals."',
+    '"Vision without action is a daydream."',
+  ];
+
+  function fmt(d) { return MONTHS[d.getMonth()] + ' ' + d.getDate(); }
+
+  function lines(n, cls) {
+    let h = '';
+    for (let i = 0; i < n; i++) h += `<div class="${cls}"></div>`;
+    return h;
+  }
+
+  function cbRows(n) {
+    let h = '';
+    for (let i = 0; i < n; i++)
+      h += `<div class="cb-row"><div class="cb"></div><div class="cb-line"></div></div>`;
+    return h;
+  }
+
+  function apptRows(n) {
+    let h = '';
+    for (let i = 0; i < n; i++)
+      h += `<div class="appt-row"><div class="af af-date"></div><div class="af af-time"></div><div class="af af-desc"></div></div>`;
+    return h;
+  }
+
+  function monthTabs(monthIdx) {
+    return PLAN_MONTHS.map(m =>
+      `<span class="mtab${MONTHS[monthIdx] === m ? ' active' : ''}">${m}</span>`
+    ).join('');
+  }
+
+  function leftPage(week, quoteIdx) {
+    const { start, end, days: wd } = week;
+    const quote = QUOTES[quoteIdx % QUOTES.length];
+
+    let dayRows = '';
+    for (let i = 0; i < 5; i++) {
+      dayRows += `
+        <div class="day-row">
+          <div class="day-tag">
+            <div class="day-name">${DAYS[i]}</div>
+            <div class="day-date">${fmt(wd[i])}</div>
+          </div>
+          <div class="day-body">
+            <div class="appt-label">APPOINTMENTS / REMINDERS</div>
+            <div class="ruled-lines">${lines(5, 'ruled-line')}</div>
+          </div>
+        </div>`;
+    }
+    // SAT + SUN combined
+    dayRows += `
+      <div class="day-row weekend">
+        <div class="day-tag">
+          <div>
+            <div class="day-name">SAT</div>
+            <div class="day-date">${fmt(wd[5])}</div>
+          </div>
+          <div>
+            <div class="day-name">SUN</div>
+            <div class="day-date">${fmt(wd[6])}</div>
+          </div>
+        </div>
+        <div class="day-body">
+          <div class="appt-label">APPOINTMENTS / REMINDERS</div>
+          <div class="ruled-lines">${lines(4, 'ruled-line')}</div>
+        </div>
+      </div>`;
+
+    return `
+      <div class="page left-page">
+        <div class="lp-header">
+          <div class="logo-wrap">
+            <div class="logo-tpm">TPM</div>
+            <div class="logo-sub">TRANSCEND</div>
+          </div>
+          <div class="lp-week-block">
+            <div class="lp-week-label">WEEK OF:</div>
+            <div class="lp-week-dates">${fmt(start)} &ndash; ${fmt(end)}, 2026</div>
+            <div class="lp-tagline">PLAN YOUR PURPOSE WITH FIERCE MIND</div>
+          </div>
+          <div class="lp-header-spacer"></div>
+        </div>
+
+        <div class="days-area">${dayRows}</div>
+
+        <div class="wn-section">
+          <div class="appt-label" style="font-size:5pt;font-weight:700;letter-spacing:.2em;color:var(--navy);">
+            WEEKLY NOTES / THOUGHTS / IDEAS
+          </div>
+          <div class="ruled-lines" style="flex:1;">${lines(4, 'ruled-line')}</div>
+        </div>
+
+        <div class="lp-footer">
+          <div style="display:flex;align-items:center;">
+            <span class="footer-kw">FOCUS</span><span class="footer-sep">·</span>
+            <span class="footer-kw">DISCIPLINE</span><span class="footer-sep">·</span>
+            <span class="footer-kw">CONSISTENCY</span><span class="footer-sep">·</span>
+            <span class="footer-kw">GROWTH</span>
+          </div>
+          <div class="footer-qt">${quote}</div>
+        </div>
+      </div>`;
+  }
+
+  function rightPage(week) {
+    const dominantMonth = week.days[3].getMonth(); // use Thursday to pick month
+    const wn = week.weekNum;
+
+    return `
+      <div class="page right-page">
+        <div class="rp-topbar">
+          <div class="month-tabs">${monthTabs(dominantMonth)}</div>
+          <div class="week-no-wrap">
+            <span class="week-no-lbl">WEEK NO.</span>
+            <span style="font-size:8pt;font-weight:800;color:var(--navy);margin-left:1mm;">${wn}</span>
+            <div class="week-no-line"></div>
+          </div>
+        </div>
+
+        <div class="rp-body">
+
+          <!-- Left column -->
+          <div class="rp-col rp-col-l">
+
+            <div class="rp-sec" style="flex:2.2;">
+              <div class="rp-sec-title">BUSINESS TO-DO</div>
+              ${cbRows(13)}
+            </div>
+
+            <div class="rp-sec" style="flex:1;">
+              <div class="rp-sec-title">TIPS</div>
+              ${lines(6, 'nl')}
+            </div>
+
+            <div class="rp-sec" style="flex:1.4;">
+              <div class="rp-sec-title">NOTES</div>
+              ${lines(8, 'nl')}
+            </div>
+
+          </div>
+
+          <!-- Right column -->
+          <div class="rp-col rp-col-r">
+
+            <div class="rp-sec" style="flex:1.8;">
+              <div class="rp-sec-title">FOLLOW-UPS</div>
+              <div class="rp-sub">CALL</div>${cbRows(3)}
+              <div class="rp-sub">EMAIL</div>${cbRows(3)}
+              <div class="rp-sub">OTHER / COLLABORATE</div>${cbRows(3)}
+            </div>
+
+            <div class="rp-sec" style="flex:1.5;">
+              <div class="rp-sec-title">UPCOMING APPOINTMENTS</div>
+              ${apptRows(6)}
+            </div>
+
+            <div class="rp-sec" style="flex:1.2;">
+              <div class="rp-sec-title">DON'T FORGET / REMINDERS</div>
+              ${cbRows(7)}
+            </div>
+
+          </div>
+        </div>
+
+        <div class="rp-footer">
+          <div style="display:flex;align-items:center;">
+            <span class="footer-kw">FOCUS</span><span class="footer-sep">·</span>
+            <span class="footer-kw">DISCIPLINE</span><span class="footer-sep">·</span>
+            <span class="footer-kw">CONSISTENCY</span><span class="footer-sep">·</span>
+            <span class="footer-kw">GROWTH</span>
+          </div>
+          <div class="footer-qt">© 2026 TPM TRANSCEND — ALL RIGHTS RESERVED</div>
+        </div>
+      </div>`;
+  }
+
+  /* ── Generate weeks June 29 – Dec 28, 2026 ── */
+  function buildWeeks() {
+    const weeks = [];
+    let monday = new Date(2026, 5, 29); // Jun 29 (month is 0-indexed)
+    let weekNum = 27;
+
+    const lastMonday = new Date(2026, 11, 28); // Dec 28
+
+    while (monday <= lastMonday) {
+      const wd = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(monday);
+        d.setDate(d.getDate() + i);
+        wd.push(d);
+      }
+      const end = new Date(monday);
+      end.setDate(end.getDate() + 6);
+
+      weeks.push({ weekNum, start: new Date(monday), end, days: wd });
+      monday.setDate(monday.getDate() + 7);
+      weekNum++;
+    }
+    return weeks;
+  }
+
+  const weeks = buildWeeks();
+  const container = document.getElementById('planner');
+  let html = '';
+
+  weeks.forEach((week, idx) => {
+    html += leftPage(week, idx);
+    html += rightPage(week);
+  });
+
+  container.innerHTML = html;
+
+  console.log(`Generated ${weeks.length} weeks (${weeks.length * 2} pages).`);
+})();
+</script>
+</body>
+</html>
