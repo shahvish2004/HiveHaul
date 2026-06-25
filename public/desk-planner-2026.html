@@ -39,9 +39,10 @@
     cursor: pointer; border-radius: 2px;
   }
 
+  /* ── A5 page shell ── */
   .page {
-    width: 210mm;
-    height: 297mm;
+    width: 148mm;
+    height: 210mm;
     background: var(--white);
     margin: 5mm auto;
     overflow: hidden;
@@ -51,538 +52,328 @@
   }
 
   /* ══════════════════════════════════════════
-     COVER PAGE
+     COVER PAGE  (A5, navy)
   ══════════════════════════════════════════ */
   .cover-page {
     background: var(--navy);
     color: var(--white);
     padding: 0;
-    position: relative;
-    overflow: hidden;
   }
 
   .cover-top {
     background: var(--navy);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 14mm 12mm 10mm;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 10mm 9mm 7mm;
     flex: 1.4;
     position: relative;
   }
-
-  /* decorative diagonal accent top-right */
   .cover-top::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 40mm; height: 40mm;
-    background: var(--navy2);
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 28mm; height: 28mm; background: var(--navy2);
     clip-path: polygon(100% 0, 0 0, 100% 100%);
   }
-  .cover-top::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 25mm; height: 25mm;
-    background: rgba(245,197,24,.08);
-    clip-path: polygon(0 100%, 0 0, 100% 100%);
-  }
 
-  /* TPM geometric mark — SVG inline */
-  .tpm-mark { margin-bottom: 6mm; }
+  .tpm-mark { margin-bottom: 4mm; }
 
   .cover-brand-name {
-    font-size: 26pt;
-    font-weight: 900;
-    letter-spacing: .06em;
-    color: var(--white);
-    line-height: 1;
-    text-align: center;
+    font-size: 20pt; font-weight: 900; letter-spacing: .06em;
+    color: var(--white); line-height: 1; text-align: center;
   }
-
   .cover-brand-sub {
-    font-size: 9.5pt;
-    font-weight: 600;
-    letter-spacing: .25em;
-    color: var(--gold);
-    text-align: center;
-    margin-top: 1.5mm;
+    font-size: 7pt; font-weight: 600; letter-spacing: .22em;
+    color: var(--gold); text-align: center; margin-top: 1.5mm;
   }
-
   .cover-divider {
-    width: 40mm;
-    height: .5pt;
-    background: rgba(255,255,255,.3);
-    margin: 5mm auto;
+    width: 30mm; height: .5pt; background: rgba(255,255,255,.3); margin: 4mm auto;
   }
-
   .cover-tagline {
-    font-size: 6.5pt;
-    letter-spacing: .2em;
-    color: var(--muted);
-    text-align: center;
+    font-size: 5pt; letter-spacing: .18em; color: var(--muted); text-align: center;
   }
 
-  /* Middle banner */
   .cover-banner {
     background: var(--white);
-    padding: 8mm 12mm;
-    text-align: center;
+    padding: 6mm 9mm; text-align: center;
     flex: 0 0 auto;
-    border-top: 3pt solid var(--gold);
-    border-bottom: 3pt solid var(--gold);
+    border-top: 2.5pt solid var(--gold);
+    border-bottom: 2.5pt solid var(--gold);
   }
-
   .cover-planner-label {
-    font-size: 7pt;
-    font-weight: 700;
-    letter-spacing: .35em;
-    color: var(--mid);
-    margin-bottom: 2mm;
+    font-size: 5.5pt; font-weight: 700; letter-spacing: .3em; color: var(--mid); margin-bottom: 1.5mm;
   }
-
   .cover-planner-title {
-    font-size: 24pt;
-    font-weight: 900;
-    letter-spacing: .04em;
-    color: var(--navy);
-    line-height: 1;
+    font-size: 18pt; font-weight: 900; letter-spacing: .04em; color: var(--navy); line-height: 1;
+  }
+  .cover-planner-year  { font-size: 15pt; font-weight: 300; letter-spacing: .12em; color: var(--navy); }
+  .cover-planner-sub   {
+    font-size: 5.5pt; font-weight: 400; letter-spacing: .15em;
+    color: var(--mid); margin-top: 2mm; font-style: italic;
   }
 
-  .cover-planner-year {
-    font-size: 20pt;
-    font-weight: 300;
-    letter-spacing: .15em;
-    color: var(--navy);
-  }
-
-  .cover-planner-sub {
-    font-size: 7pt;
-    font-weight: 400;
-    letter-spacing: .18em;
-    color: var(--mid);
-    margin-top: 2.5mm;
-    font-style: italic;
-  }
-
-  /* Dot row (spiral binding visual) */
   .spiral-dots {
-    display: flex;
-    justify-content: center;
-    gap: 3mm;
-    padding: 4mm 0;
-    background: var(--navy2);
+    display: flex; justify-content: center; gap: 2.5mm;
+    padding: 3mm 0; background: var(--navy2);
   }
   .spiral-dot {
-    width: 4mm; height: 4mm;
-    border-radius: 50%;
-    background: rgba(255,255,255,.25);
-    border: .5pt solid rgba(255,255,255,.15);
+    width: 3.5mm; height: 3.5mm; border-radius: 50%;
+    background: rgba(255,255,255,.22); border: .5pt solid rgba(255,255,255,.12);
   }
 
-  /* Bottom icons */
   .cover-bottom {
-    background: var(--navy2);
-    padding: 6mm 12mm 7mm;
-    flex: 0 0 auto;
+    background: var(--navy2); padding: 4mm 9mm 5mm; flex: 0 0 auto;
   }
-
   .cover-icons-row {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    gap: 2mm;
-    margin-bottom: 5mm;
+    display: flex; justify-content: space-around; align-items: flex-start;
+    gap: 1.5mm; margin-bottom: 4mm;
   }
-
   .cover-icon-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2mm;
-    flex: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 1.5mm; flex: 1;
   }
-
   .cover-icon-circle {
-    width: 11mm; height: 11mm;
-    border-radius: 50%;
-    background: rgba(255,255,255,.1);
-    border: .7pt solid rgba(245,197,24,.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--gold);
-    font-size: 14pt;
+    width: 9mm; height: 9mm; border-radius: 50%;
+    background: rgba(255,255,255,.1); border: .6pt solid rgba(245,197,24,.4);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 12pt;
   }
-
-  .cover-icon-label {
-    font-size: 4.5pt;
-    font-weight: 700;
-    letter-spacing: .12em;
-    color: var(--white);
-    text-align: center;
-    line-height: 1.4;
-  }
-
-  .cover-icon-sub {
-    font-size: 3.8pt;
-    color: var(--muted);
-    letter-spacing: .08em;
-    text-align: center;
-  }
-
+  .cover-icon-label  { font-size: 3.8pt; font-weight: 700; letter-spacing: .1em; color: var(--white); text-align: center; line-height: 1.4; }
+  .cover-icon-sub    { font-size: 3.2pt; color: var(--muted); letter-spacing: .06em; text-align: center; }
   .cover-footer-line {
-    text-align: center;
-    font-size: 6pt;
-    letter-spacing: .25em;
-    color: rgba(255,255,255,.5);
-    font-style: italic;
-    padding-top: 2mm;
-    border-top: .3pt solid rgba(255,255,255,.15);
+    text-align: center; font-size: 5pt; letter-spacing: .2em;
+    color: rgba(255,255,255,.45); font-style: italic;
+    padding-top: 2mm; border-top: .3pt solid rgba(255,255,255,.12);
   }
 
   /* ══════════════════════════════════════════
-     INSIDE COVER / PRINT INSTRUCTIONS
+     INSIDE COVER  (A5)
   ══════════════════════════════════════════ */
-  .inside-cover {
-    background: var(--offwhite);
-    padding: 11mm 11mm 8mm;
-  }
+  .inside-cover { padding: 8mm 8mm 6mm; background: var(--offwhite); }
 
   .ic-header {
-    border-bottom: 1.5pt solid var(--navy);
-    padding-bottom: 3mm;
-    margin-bottom: 4mm;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+    display: flex; align-items: center; gap: 4mm;
+    border-bottom: 1.2pt solid var(--navy);
+    padding-bottom: 2.5mm; margin-bottom: 3mm;
   }
+  .ic-logo-img   { height: 10mm; width: auto; }
+  .ic-header-text { flex: 1; }
+  .ic-header-title { font-size: 7pt; font-weight: 900; letter-spacing: .15em; color: var(--navy); }
+  .ic-header-sub   { font-size: 4pt; letter-spacing: .12em; color: var(--mid); margin-top: .6mm; }
 
-  .ic-logo-img { height: 14mm; width: auto; }
-
-  .ic-header-text { text-align: right; }
-  .ic-header-title {
-    font-size: 8pt; font-weight: 900; letter-spacing: .2em; color: var(--navy);
-  }
-  .ic-header-sub {
-    font-size: 5.5pt; letter-spacing: .15em; color: var(--mid); margin-top: 1mm;
-  }
-
-  .ic-planner-for {
-    margin-bottom: 5mm;
-  }
-  .ic-label {
-    font-size: 5pt; font-weight: 700; letter-spacing: .25em; color: var(--mid);
-    margin-bottom: 1.5mm;
-  }
-  .ic-handwriting-line {
-    border-bottom: 1pt solid var(--navy);
-    height: 8mm;
-    position: relative;
-  }
+  .ic-planner-for { margin-bottom: 3.5mm; }
+  .ic-label { font-size: 4pt; font-weight: 700; letter-spacing: .22em; color: var(--mid); margin-bottom: 1.2mm; }
+  .ic-handwriting-line { border-bottom: 1pt solid var(--navy); height: 7mm; position: relative; }
   .ic-handwriting-hint {
-    position: absolute;
-    bottom: 2mm; left: 2mm;
-    font-size: 9pt;
-    font-style: italic;
-    color: var(--gold2);
-    font-family: Georgia, 'Times New Roman', serif;
-    letter-spacing: .04em;
+    position: absolute; bottom: 1.5mm; left: 2mm;
+    font-size: 8pt; font-style: italic; color: var(--gold2);
+    font-family: Georgia, serif; letter-spacing: .04em;
   }
 
-  .ic-two-col {
-    display: flex;
-    gap: 6mm;
-    flex: 1;
-  }
-
-  .ic-col { flex: 1; display: flex; flex-direction: column; gap: 4mm; }
+  .ic-two-col { display: flex; gap: 4mm; flex: 1; overflow: hidden; }
+  .ic-col     { flex: 1; display: flex; flex-direction: column; gap: 3mm; overflow: hidden; }
 
   .ic-section-title {
-    font-size: 5.5pt; font-weight: 900; letter-spacing: .22em; color: var(--navy);
-    border-bottom: .7pt solid var(--navy);
-    padding-bottom: 1mm; margin-bottom: 2mm;
+    font-size: 4.5pt; font-weight: 900; letter-spacing: .2em; color: var(--navy);
+    border-bottom: .6pt solid var(--navy); padding-bottom: .8mm; margin-bottom: 1.5mm;
   }
 
-  .ic-bullet {
-    display: flex; gap: 2mm; align-items: flex-start;
-    margin-bottom: 2mm;
-  }
-  .ic-bullet-dot {
-    width: 2mm; height: 2mm; min-width: 2mm; border-radius: 50%;
-    background: var(--gold);
-    margin-top: 1.5mm; flex-shrink: 0;
-  }
-  .ic-bullet-text { font-size: 6pt; line-height: 1.5; color: var(--text); }
+  .ic-bullet { display: flex; gap: 1.5mm; align-items: flex-start; margin-bottom: 1.8mm; }
+  .ic-bullet-dot { width: 1.8mm; height: 1.8mm; min-width: 1.8mm; border-radius: 50%; background: var(--gold); margin-top: 1.2mm; flex-shrink: 0; }
+  .ic-bullet-text { font-size: 5pt; line-height: 1.5; color: var(--text); }
 
-  .ic-priority-row {
-    display: flex; align-items: center; gap: 2mm; margin-bottom: 1.8mm;
-  }
-  .ic-priority-num {
-    font-size: 6pt; font-weight: 800; color: var(--navy);
-    width: 3.5mm; text-align: right; flex-shrink: 0;
-  }
-  .ic-priority-line { flex: 1; border-bottom: .3pt solid var(--line); height: 4.5mm; }
+  .ic-priority-row { display: flex; align-items: center; gap: 1.5mm; margin-bottom: 1.5mm; }
+  .ic-priority-num { font-size: 5pt; font-weight: 800; color: var(--navy); width: 3mm; text-align: right; flex-shrink: 0; }
+  .ic-priority-line { flex: 1; border-bottom: .3pt solid var(--line); height: 4mm; }
 
-  .ic-contact-row {
-    display: flex; align-items: center; gap: 1.5mm; margin-bottom: 1.5mm;
-  }
-  .ic-contact-icon { color: var(--mid); font-size: 7pt; width: 4mm; text-align: center; flex-shrink: 0; }
-  .ic-contact-line { flex: 1; border-bottom: .3pt solid var(--line); height: 4mm; }
+  .ic-contact-row { display: flex; align-items: center; gap: 1.5mm; margin-bottom: 1.5mm; }
+  .ic-contact-icon { color: var(--mid); font-size: 6pt; width: 3.5mm; text-align: center; flex-shrink: 0; }
+  .ic-contact-line { flex: 1; border-bottom: .3pt solid var(--line); height: 3.8mm; }
 
-  .ic-notes-lines { display: flex; flex-direction: column; gap: 0; }
-  .ic-nl { border-bottom: .3pt solid var(--line); height: 4.5mm; }
+  .ic-nl { border-bottom: .3pt solid var(--line); height: 4mm; }
 
   .ic-footer {
-    border-top: 1pt solid var(--navy);
-    padding-top: 2mm;
-    margin-top: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 8mm;
-    flex-shrink: 0;
+    border-top: 1pt solid var(--navy); padding-top: 1.5mm; margin-top: auto;
+    display: flex; justify-content: space-between; align-items: center;
+    height: 7mm; flex-shrink: 0;
   }
-  .ic-footer-kw { font-size: 5pt; font-weight: 800; letter-spacing: .18em; color: var(--navy); }
-  .ic-footer-sep { color: var(--mid); font-size: 5pt; margin: 0 1.5mm; }
-  .ic-footer-qt { font-size: 4.5pt; font-style: italic; color: var(--mid); }
+  .ic-footer-kw  { font-size: 4pt; font-weight: 800; letter-spacing: .16em; color: var(--navy); }
+  .ic-footer-sep { color: var(--mid); font-size: 4pt; margin: 0 1mm; }
+  .ic-footer-qt  { font-size: 3.8pt; font-style: italic; color: var(--mid); }
 
   /* ══════════════════════════════════════════
-     PRINT INSTRUCTIONS PAGE
+     PRINT SHOP SPECIFICATION PAGE  (A5)
   ══════════════════════════════════════════ */
-  .print-instr-page {
-    background: var(--white);
-    padding: 12mm 14mm;
-    display: flex;
-    flex-direction: column;
-    gap: 5mm;
+  .print-spec-page { padding: 8mm 8mm 6mm; display: flex; flex-direction: column; gap: 0; }
+
+  .ps-header {
+    display: flex; align-items: center; gap: 4mm;
+    border-bottom: 1.5pt solid var(--navy); padding-bottom: 2.5mm; margin-bottom: 3.5mm;
   }
+  .ps-logo-img { height: 10mm; width: auto; }
+  .ps-header-text { flex: 1; }
+  .ps-title  { font-size: 8pt; font-weight: 900; letter-spacing: .12em; color: var(--navy); }
+  .ps-sub    { font-size: 4pt; letter-spacing: .15em; color: var(--mid); margin-top: .5mm; }
 
-  .pi-header {
-    display: flex; align-items: center; gap: 5mm;
-    border-bottom: 1.5pt solid var(--navy);
-    padding-bottom: 4mm;
-  }
-
-  .pi-logo-img { height: 16mm; width: auto; }
-
-  .pi-header-text { }
-  .pi-title { font-size: 13pt; font-weight: 900; letter-spacing: .08em; color: var(--navy); }
-  .pi-sub   { font-size: 5.5pt; letter-spacing: .2em; color: var(--mid); margin-top: 1mm; }
-
-  .pi-section-title {
-    font-size: 6pt; font-weight: 900; letter-spacing: .22em; color: var(--navy);
-    border-left: 2pt solid var(--gold);
-    padding-left: 3mm; margin-bottom: 3mm;
-  }
-
-  .pi-step {
-    display: flex; gap: 3mm; align-items: flex-start;
-    margin-bottom: 3mm;
-  }
-  .pi-step-num {
-    width: 6mm; height: 6mm; min-width: 6mm; border-radius: 50%;
-    background: var(--navy); color: #fff;
-    font-size: 7pt; font-weight: 800;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .pi-step-body { flex: 1; }
-  .pi-step-title { font-size: 7pt; font-weight: 800; color: var(--navy); letter-spacing: .06em; }
-  .pi-step-text  { font-size: 6pt; color: var(--mid); line-height: 1.6; margin-top: .5mm; }
-
-  .pi-tip-box {
+  .ps-order-box {
     background: var(--navy); color: var(--white);
-    border-radius: 2px;
-    padding: 4mm 5mm;
-    margin-top: 2mm;
+    padding: 3.5mm 4mm; border-radius: 2px; margin-bottom: 3.5mm;
   }
-  .pi-tip-title {
-    font-size: 5.5pt; font-weight: 900; letter-spacing: .2em; color: var(--gold);
+  .ps-order-title {
+    font-size: 5pt; font-weight: 900; letter-spacing: .2em; color: var(--gold);
     margin-bottom: 2mm;
   }
-  .pi-tip-row {
-    display: flex; gap: 2mm; align-items: baseline;
-    margin-bottom: 1.5mm;
+  .ps-order-row {
+    display: flex; gap: 2mm; margin-bottom: 1.2mm; align-items: flex-start;
   }
-  .pi-tip-bullet { color: var(--gold); font-size: 8pt; flex-shrink: 0; line-height: 1; }
-  .pi-tip-text { font-size: 6pt; line-height: 1.5; color: rgba(255,255,255,.85); }
+  .ps-order-lbl  { font-size: 4.5pt; font-weight: 700; letter-spacing: .1em; color: var(--muted); min-width: 24mm; }
+  .ps-order-val  { font-size: 4.5pt; color: rgba(255,255,255,.9); font-weight: 600; flex: 1; line-height: 1.5; }
+  .ps-order-val.fill {
+    border-bottom: .4pt solid rgba(255,255,255,.3); min-width: 20mm; color: rgba(255,255,255,.4);
+    font-style: italic;
+  }
 
-  .pi-layout-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4mm;
-    margin-top: 1mm;
-  }
-  .pi-layout-item {
-    border: .5pt solid var(--line);
-    border-radius: 2px;
-    padding: 3mm;
-    background: var(--offwhite);
-  }
-  .pi-layout-item-title {
-    font-size: 5.5pt; font-weight: 800; letter-spacing: .15em; color: var(--navy);
-    border-bottom: .5pt solid var(--line); padding-bottom: 1mm; margin-bottom: 1.5mm;
-  }
-  .pi-layout-item-text { font-size: 5.5pt; color: var(--mid); line-height: 1.6; }
+  .ps-two-col { display: flex; gap: 3mm; margin-bottom: 3mm; }
+  .ps-col { flex: 1; }
 
-  .pi-footer {
-    margin-top: auto;
-    border-top: 1pt solid var(--navy);
-    padding-top: 2mm;
+  .ps-spec-title {
+    font-size: 4.5pt; font-weight: 900; letter-spacing: .2em; color: var(--navy);
+    border-left: 2pt solid var(--gold); padding-left: 2.5mm;
+    margin-bottom: 2mm;
+  }
+
+  .ps-spec-row { display: flex; gap: 1.5mm; margin-bottom: 1.5mm; align-items: flex-start; }
+  .ps-spec-icon { color: var(--gold2); font-size: 6pt; flex-shrink: 0; margin-top: .2mm; }
+  .ps-spec-body { flex: 1; }
+  .ps-spec-item-title { font-size: 4.5pt; font-weight: 800; color: var(--navy); letter-spacing: .06em; }
+  .ps-spec-item-val   { font-size: 4pt; color: var(--mid); line-height: 1.5; margin-top: .2mm; }
+
+  .ps-note-box {
+    background: var(--offwhite); border: .5pt solid var(--line); border-radius: 2px;
+    padding: 2.5mm 3mm; margin-bottom: 3mm;
+  }
+  .ps-note-title { font-size: 4pt; font-weight: 900; letter-spacing: .18em; color: var(--mid); margin-bottom: 1.5mm; }
+  .ps-note-text  { font-size: 4pt; color: var(--mid); line-height: 1.6; }
+
+  .ps-sign-row {
+    display: flex; gap: 4mm; align-items: flex-end; margin-top: auto;
+  }
+  .ps-sign-field {
+    flex: 1; display: flex; flex-direction: column; gap: 1mm;
+  }
+  .ps-sign-label { font-size: 4pt; letter-spacing: .15em; color: var(--mid); }
+  .ps-sign-line  { border-bottom: .7pt solid var(--navy); height: 6mm; }
+
+  .ps-footer {
+    border-top: 1pt solid var(--navy); padding-top: 1.5mm; margin-top: 2mm;
     display: flex; justify-content: space-between; align-items: center;
-    height: 8mm; flex-shrink: 0;
+    height: 6mm; flex-shrink: 0;
   }
-  .pi-footer-brand { font-size: 5pt; font-weight: 800; letter-spacing: .15em; color: var(--navy); }
-  .pi-footer-copy  { font-size: 4.5pt; color: var(--mid); }
+  .ps-footer-brand { font-size: 4pt; font-weight: 800; letter-spacing: .12em; color: var(--navy); }
+  .ps-footer-copy  { font-size: 3.8pt; color: var(--mid); }
 
   /* ══════════════════════════════════════════
-     LEFT PAGE (weekly schedule)
+     LEFT PAGE — WEEKLY SCHEDULE  (A5)
   ══════════════════════════════════════════ */
-  .left-page { padding: 7mm 8mm 6mm 10mm; }
+  .left-page { padding: 5mm 6mm 4mm 7mm; }
 
   .lp-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1.2pt solid var(--navy);
-    padding-bottom: 2mm;
-    margin-bottom: 2mm;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1pt solid var(--navy);
+    padding-bottom: 1.5mm; margin-bottom: 1.5mm;
   }
-
-  .lp-logo-img { height: 11mm; width: auto; }
-
+  .lp-logo-img   { height: 8.5mm; width: auto; }
   .lp-week-block { text-align: center; }
-  .lp-week-label { font-size: 4.5pt; letter-spacing: .22em; color: var(--mid); }
-  .lp-week-dates { font-size: 10pt; font-weight: 800; letter-spacing: .04em; color: var(--navy); }
-  .lp-tagline    { font-size: 4pt; letter-spacing: .15em; color: var(--mid); margin-top: .5mm; }
+  .lp-week-label { font-size: 3.8pt; letter-spacing: .2em; color: var(--mid); }
+  .lp-week-dates { font-size: 8.5pt; font-weight: 800; letter-spacing: .04em; color: var(--navy); }
+  .lp-tagline    { font-size: 3.5pt; letter-spacing: .12em; color: var(--mid); margin-top: .4mm; }
+  .lp-reg-mark   { font-size: 4pt; vertical-align: super; }
+  .lp-spacer     { width: 18mm; }
 
-  .lp-reg-mark { font-size: 5pt; vertical-align: super; }
+  .days-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
-  .days-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .day-row {
-    display: flex;
-    flex: 1;
-    border-bottom: .3pt solid var(--line);
-    min-height: 0;
-  }
-  .day-row.weekend { flex: .65; }
+  .day-row { display: flex; flex: 1; border-bottom: .3pt solid var(--line); min-height: 0; }
+  .day-row.weekend { flex: .6; }
 
   .day-tag {
-    width: 14mm; min-width: 14mm;
-    border-right: 1pt solid var(--navy);
-    padding: 2mm 2mm 0 0;
+    width: 11mm; min-width: 11mm;
+    border-right: .8pt solid var(--navy);
+    padding: 1.5mm 1.5mm 0 0;
     display: flex; flex-direction: column;
   }
-  .day-row.weekend .day-tag {
-    justify-content: space-around;
-    padding: 2mm;
-  }
+  .day-row.weekend .day-tag { justify-content: space-around; padding: 1.5mm; }
 
-  .day-name  { font-size: 7pt; font-weight: 900; letter-spacing: .08em; }
-  .day-date  { font-size: 5pt; font-weight: 400; color: var(--mid); margin-top: .6mm; }
+  .day-name  { font-size: 6pt; font-weight: 900; letter-spacing: .08em; }
+  .day-date  { font-size: 4.5pt; color: var(--mid); margin-top: .5mm; }
 
-  .day-body {
-    flex: 1; padding: 1.5mm 0 1mm 3mm;
-    display: flex; flex-direction: column;
-  }
+  .day-body { flex: 1; padding: 1mm 0 .8mm 2mm; display: flex; flex-direction: column; }
 
-  .appt-label {
-    font-size: 4pt; letter-spacing: .2em; color: var(--muted);
-    margin-bottom: 1mm;
-  }
+  .appt-label { font-size: 3.5pt; letter-spacing: .18em; color: var(--muted); margin-bottom: .8mm; }
 
   .ruled-lines { flex: 1; display: flex; flex-direction: column; justify-content: space-around; }
   .ruled-line  { border-bottom: .25pt solid var(--line); }
 
   .wn-section {
-    border-top: 1pt solid var(--navy);
-    padding-top: 1.5mm;
-    margin-top: 1mm;
-    height: 20mm;
-    flex-shrink: 0;
-    display: flex; flex-direction: column;
+    border-top: .8pt solid var(--navy); padding-top: 1mm;
+    margin-top: 1mm; height: 14mm; flex-shrink: 0; display: flex; flex-direction: column;
   }
 
   .lp-footer {
-    height: 7mm; flex-shrink: 0;
-    border-top: 1pt solid var(--navy);
-    display: flex; align-items: center; justify-content: space-between;
-    margin-top: 1mm;
+    height: 6mm; flex-shrink: 0; border-top: .8pt solid var(--navy);
+    display: flex; align-items: center; justify-content: space-between; margin-top: 1mm;
   }
-
-  .footer-kw  { font-size: 4.5pt; font-weight: 800; letter-spacing: .18em; color: var(--navy); }
-  .footer-sep { color: var(--muted); font-size: 5pt; margin: 0 1mm; }
-  .footer-qt  { font-size: 4pt; font-style: italic; color: var(--muted); }
+  .footer-kw  { font-size: 3.8pt; font-weight: 800; letter-spacing: .16em; color: var(--navy); }
+  .footer-sep { color: var(--muted); font-size: 4pt; margin: 0 .8mm; }
+  .footer-qt  { font-size: 3.5pt; font-style: italic; color: var(--muted); }
 
   /* ══════════════════════════════════════════
-     RIGHT PAGE
+     RIGHT PAGE — PLANNING  (A5)
   ══════════════════════════════════════════ */
-  .right-page { padding: 7mm 8mm 6mm 8mm; }
+  .right-page { padding: 5mm 6mm 4mm 6mm; }
 
   .rp-topbar {
     display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1.2pt solid var(--navy);
-    padding-bottom: 2mm; margin-bottom: 2mm;
+    border-bottom: 1pt solid var(--navy); padding-bottom: 1.5mm; margin-bottom: 1.5mm;
   }
-
-  .month-tabs { display: flex; gap: .8mm; }
+  .month-tabs { display: flex; gap: .6mm; }
   .mtab {
-    font-size: 4.5pt; font-weight: 700; letter-spacing: .1em;
-    color: var(--mid); padding: .7mm 1.5mm; border-radius: 1px;
+    font-size: 3.8pt; font-weight: 700; letter-spacing: .1em;
+    color: var(--mid); padding: .6mm 1.2mm; border-radius: 1px;
   }
   .mtab.active { background: var(--navy); color: var(--white); }
+  .week-no-wrap { display: flex; align-items: center; gap: 1.5mm; }
+  .week-no-lbl  { font-size: 3.8pt; font-weight: 700; letter-spacing: .15em; color: var(--navy); }
+  .week-no-val  { font-size: 7pt; font-weight: 800; color: var(--navy); }
 
-  .week-no-wrap { display: flex; align-items: center; gap: 2mm; }
-  .week-no-lbl  { font-size: 4.5pt; font-weight: 700; letter-spacing: .18em; color: var(--navy); }
-  .week-no-val  { font-size: 8pt; font-weight: 800; color: var(--navy); }
-
-  .rp-body { flex: 1; display: flex; gap: 4mm; overflow: hidden; min-height: 0; }
+  .rp-body { flex: 1; display: flex; gap: 3.5mm; overflow: hidden; min-height: 0; }
   .rp-col  { display: flex; flex-direction: column; overflow: hidden; }
-  .rp-col-l { flex: 1.15; }
+  .rp-col-l { flex: 1.1; }
   .rp-col-r { flex: 1; }
 
-  .rp-sec { display: flex; flex-direction: column; margin-bottom: 3mm; }
+  .rp-sec { display: flex; flex-direction: column; margin-bottom: 2.5mm; }
   .rp-sec-title {
-    font-size: 4.5pt; font-weight: 900; letter-spacing: .22em; color: var(--navy);
-    border-bottom: .7pt solid var(--navy);
-    padding-bottom: .8mm; margin-bottom: 1.5mm;
+    font-size: 3.8pt; font-weight: 900; letter-spacing: .2em; color: var(--navy);
+    border-bottom: .6pt solid var(--navy); padding-bottom: .6mm; margin-bottom: 1.2mm;
   }
-  .rp-sub {
-    font-size: 4pt; font-weight: 700; letter-spacing: .15em; color: var(--mid);
-    margin: 1mm 0 .6mm;
-  }
+  .rp-sub { font-size: 3.5pt; font-weight: 700; letter-spacing: .14em; color: var(--mid); margin: .8mm 0 .5mm; }
 
-  .cb-row { display: flex; align-items: center; gap: 1.5mm; margin-bottom: .9mm; }
-  .cb { width: 2.6mm; height: 2.6mm; min-width: 2.6mm; border: .5pt solid var(--navy); flex-shrink: 0; }
-  .cb-line { flex: 1; border-bottom: .25pt solid var(--line); height: 3.6mm; }
+  .cb-row  { display: flex; align-items: center; gap: 1.2mm; margin-bottom: .8mm; }
+  .cb      { width: 2.3mm; height: 2.3mm; min-width: 2.3mm; border: .4pt solid var(--navy); flex-shrink: 0; }
+  .cb-line { flex: 1; border-bottom: .25pt solid var(--line); height: 3.3mm; }
 
-  .nl { border-bottom: .25pt solid var(--line); height: 4.2mm; }
+  .nl { border-bottom: .25pt solid var(--line); height: 3.8mm; }
 
-  .appt-row { display: flex; gap: 1.5mm; align-items: flex-end; margin-bottom: 1.6mm; }
-  .af { border-bottom: .6pt solid var(--navy); height: 3.6mm; }
-  .af-date { width: 13mm; }
-  .af-time { width: 9mm; }
+  .appt-row { display: flex; gap: 1.2mm; align-items: flex-end; margin-bottom: 1.4mm; }
+  .af { border-bottom: .5pt solid var(--navy); height: 3.3mm; }
+  .af-date { width: 10mm; }
+  .af-time { width: 7.5mm; }
   .af-desc { flex: 1; }
 
   .rp-footer {
-    height: 7mm; flex-shrink: 0;
-    border-top: 1pt solid var(--navy);
-    display: flex; align-items: center; justify-content: space-between;
-    margin-top: auto;
+    height: 6mm; flex-shrink: 0; border-top: .8pt solid var(--navy);
+    display: flex; align-items: center; justify-content: space-between; margin-top: auto;
   }
 
-  /* ══════════════════════════════════════════
-     PRINT RULES
-  ══════════════════════════════════════════ */
+  /* ── Print rules ── */
   @media print {
-    @page { size: A4 portrait; margin: 0; }
+    @page { size: A5 portrait; margin: 0; }
     body  { background: white; }
     #print-bar { display: none; }
     .page {
@@ -598,17 +389,15 @@
 <body>
 
 <div id="print-bar">
-  <span>TRANSCEND® PROPERTY MAINTENANCE — DESK PLANNER 2026 — JULY TO DECEMBER</span>
-  <button onclick="window.print()">PRINT ALL PAGES</button>
+  <span>TRANSCEND® PROPERTY MAINTENANCE — A5 DESK PLANNER 2026</span>
+  <button onclick="window.print()">PRINT / SAVE PDF</button>
 </div>
 
 <div id="planner"></div>
 
 <script>
 (function () {
-  // ── Logos (loaded from same folder, resolved by Playwright via file://) ──
   const LOGO_BLACK = 'transcend-logo-black.png';
-  const LOGO_COLOR = 'transcend-logo-color.png';
 
   const MONTHS      = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   const PLAN_MONTHS = ['JUL','AUG','SEP','OCT','NOV','DEC'];
@@ -663,35 +452,30 @@
       h += `<div class="appt-row"><div class="af af-date"></div><div class="af af-time"></div><div class="af af-desc"></div></div>`;
     return h;
   }
-  function monthTabs(monthIdx) {
+  function monthTabs(idx) {
     return PLAN_MONTHS.map(m =>
-      `<span class="mtab${MONTHS[monthIdx] === m ? ' active' : ''}">${m}</span>`
+      `<span class="mtab${MONTHS[idx] === m ? ' active' : ''}">${m}</span>`
     ).join('');
   }
 
-  /* ── Cover Page ── */
+  /* ── Cover ── */
   function coverPage() {
-    const dots = Array(18).fill('<div class="spiral-dot"></div>').join('');
+    const dots = Array(14).fill('<div class="spiral-dot"></div>').join('');
     return `
       <div class="page cover-page">
         <div class="cover-top">
-          <!-- TPM geometric mark as SVG -->
           <div class="tpm-mark">
-            <svg width="52" height="42" viewBox="0 0 52 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- T shape -->
+            <svg width="42" height="34" viewBox="0 0 52 42" fill="none">
               <rect x="0"  y="0"  width="16" height="5" fill="#f5c518"/>
               <rect x="5.5" y="5" width="5"  height="28" fill="#f5c518"/>
-              <!-- P shape -->
               <rect x="19" y="0" width="5"  height="33" fill="#4a9fd4"/>
               <path d="M24 0 h7 a8 8 0 0 1 0 16 h-7 z" fill="#4a9fd4"/>
-              <!-- M shape -->
-              <rect x="35" y="0"  width="5"  height="33" fill="#5bbf8a"/>
-              <rect x="44" y="0"  width="5"  height="33" fill="#5bbf8a"/>
+              <rect x="35" y="0" width="5"  height="33" fill="#5bbf8a"/>
+              <rect x="44" y="0" width="5"  height="33" fill="#5bbf8a"/>
               <polygon points="35,0 40,0 44,14 44,0 49,0 44,20 40,20" fill="#5bbf8a"/>
             </svg>
           </div>
-
-          <div class="cover-brand-name">TRANSCEND<sup style="font-size:12pt;vertical-align:super;">®</sup></div>
+          <div class="cover-brand-name">TRANSCEND<sup style="font-size:10pt;vertical-align:super;">®</sup></div>
           <div class="cover-brand-sub">PROPERTY MAINTENANCE</div>
           <div class="cover-divider"></div>
           <div class="cover-tagline">BUILDING TRUST &nbsp;|&nbsp; DELIVERING QUALITY &nbsp;|&nbsp; EVERY TIME</div>
@@ -712,64 +496,49 @@
           <div class="cover-icons-row">
             <div class="cover-icon-item">
               <div class="cover-icon-circle">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                </svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
               </div>
               <div class="cover-icon-label">TRANSCEND<br>PROPERTY</div>
               <div class="cover-icon-sub">MAINTENANCE</div>
             </div>
             <div class="cover-icon-item">
               <div class="cover-icon-circle">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-                </svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
               </div>
               <div class="cover-icon-label">TPM<br>SERVICES</div>
               <div class="cover-icon-sub">PROFESSIONAL</div>
             </div>
             <div class="cover-icon-item">
               <div class="cover-icon-circle">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-.5 1.5l1.96 2.5H17V9.5h2.5zM6 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm11 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
-                </svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-.5 1.5l1.96 2.5H17V9.5h2.5zM6 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm11 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>
               </div>
               <div class="cover-icon-label">HIVEHAUL</div>
               <div class="cover-icon-sub">HAULING &amp; TRANSPORT</div>
             </div>
             <div class="cover-icon-item">
               <div class="cover-icon-circle">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
               </div>
               <div class="cover-icon-label">PERSONAL<br>GROWTH</div>
               <div class="cover-icon-sub">&amp; WELLBEING</div>
             </div>
           </div>
-          <div class="cover-footer-line">Stay Focused. Keep Building. &nbsp;— &nbsp;always there for you</div>
+          <div class="cover-footer-line">Stay Focused. Keep Building. &mdash; always there for you</div>
         </div>
       </div>`;
   }
 
   /* ── Inside Cover ── */
   function insideCover() {
-    const priorityRows = Array.from({length: 6}, (_, i) => `
+    const priorities = Array.from({length: 6}, (_, i) => `
       <div class="ic-priority-row">
         <div class="ic-priority-num">${i+1}</div>
         <div class="ic-priority-line"></div>
       </div>`).join('');
 
-    const contactRows = [
-      { icon: '📞', label: 'Phone' },
-      { icon: '✉', label: 'Email' },
-      { icon: '🌐', label: 'Website' },
-      { icon: '📍', label: 'Address' },
-      { icon: '📱', label: 'Mobile' },
-      { icon: '💼', label: 'Business' },
-    ].map(r => `
+    const contacts = ['📞','✉','🌐','📍','📱','💼'].map(icon => `
       <div class="ic-contact-row">
-        <div class="ic-contact-icon">${r.icon}</div>
+        <div class="ic-contact-icon">${icon}</div>
         <div class="ic-contact-line"></div>
       </div>`).join('');
 
@@ -779,14 +548,14 @@
           <img class="ic-logo-img" src="${LOGO_BLACK}" alt="Transcend Property Maintenance">
           <div class="ic-header-text">
             <div class="ic-header-title">DESK PLANNER 2026</div>
-            <div class="ic-header-sub">JULY &ndash; DECEMBER &nbsp;|&nbsp; TRANSCEND® PROPERTY MAINTENANCE</div>
+            <div class="ic-header-sub">JULY – DECEMBER &nbsp;|&nbsp; TRANSCEND® PROPERTY MAINTENANCE</div>
           </div>
         </div>
 
         <div class="ic-planner-for">
-          <div class="ic-label">THIS PLANNER IS FOR:</div>
+          <div class="ic-label">THIS PLANNER BELONGS TO:</div>
           <div class="ic-handwriting-line">
-            <div class="ic-handwriting-hint">Big Plans. Daily Actions. Real Results.</div>
+            <div class="ic-handwriting-hint">Your name here...</div>
           </div>
         </div>
 
@@ -794,33 +563,29 @@
           <div class="ic-col">
             <div>
               <div class="ic-section-title">HOW I USE THIS PLANNER</div>
-              <div class="ic-bullet"><div class="ic-bullet-dot"></div><div class="ic-bullet-text">Plan each week with purpose — review Sunday evening or Monday morning</div></div>
-              <div class="ic-bullet"><div class="ic-bullet-dot"></div><div class="ic-bullet-text">Track business, personal and important appointments</div></div>
-              <div class="ic-bullet"><div class="ic-bullet-dot"></div><div class="ic-bullet-text">Stay on top of follow-ups and commitments</div></div>
+              <div class="ic-bullet"><div class="ic-bullet-dot"></div><div class="ic-bullet-text">Plan each week — review Sunday evening or Monday morning</div></div>
+              <div class="ic-bullet"><div class="ic-bullet-dot"></div><div class="ic-bullet-text">Book appointments and track follow-ups daily</div></div>
+              <div class="ic-bullet"><div class="ic-bullet-dot"></div><div class="ic-bullet-text">Keep reminders visible so nothing gets missed</div></div>
               <div class="ic-bullet"><div class="ic-bullet-dot"></div><div class="ic-bullet-text">Review, reflect and improve every week</div></div>
-              <div class="ic-bullet"><div class="ic-bullet-dot"></div><div class="ic-bullet-text">Use the notes section to capture ideas and thoughts</div></div>
             </div>
-
             <div>
               <div class="ic-section-title">MY TOP PRIORITIES — 2026</div>
-              ${priorityRows}
+              ${priorities}
             </div>
-
             <div style="flex:1;">
               <div class="ic-section-title">NOTES</div>
-              ${Array(10).fill('<div class="ic-nl"></div>').join('')}
+              ${Array(8).fill('<div class="ic-nl"></div>').join('')}
             </div>
           </div>
 
           <div class="ic-col">
             <div>
               <div class="ic-section-title">IMPORTANT CONTACTS</div>
-              ${contactRows}
+              ${contacts}
             </div>
-
             <div style="flex:1;">
-              <div class="ic-section-title">KEY DATES — SECOND HALF 2026</div>
-              ${Array(12).fill('<div class="ic-nl"></div>').join('')}
+              <div class="ic-section-title">KEY DATES — H2 2026</div>
+              ${Array(10).fill('<div class="ic-nl"></div>').join('')}
             </div>
           </div>
         </div>
@@ -832,107 +597,163 @@
             <span class="ic-footer-kw">CONSISTENCY</span><span class="ic-footer-sep">|</span>
             <span class="ic-footer-kw">GROWTH</span>
           </div>
-          <div class="ic-footer-qt">"Discipline Today. Freedom Tomorrow." &mdash; Transcend® Property Maintenance</div>
+          <div class="ic-footer-qt">"Discipline Today. Freedom Tomorrow."</div>
         </div>
       </div>`;
   }
 
-  /* ── Print Instructions Page ── */
-  function printInstructionsPage() {
+  /* ── Print Shop Specification ── */
+  function printShopPage() {
     return `
-      <div class="page print-instr-page">
-        <div class="pi-header">
-          <img class="pi-logo-img" src="${LOGO_BLACK}" alt="Transcend Property Maintenance">
-          <div class="pi-header-text">
-            <div class="pi-title">HOW TO PRINT THIS PLANNER</div>
-            <div class="pi-sub">TRANSCEND® PROPERTY MAINTENANCE — DESK PLANNER 2026</div>
+      <div class="page print-spec-page">
+        <div class="ps-header">
+          <img class="ps-logo-img" src="${LOGO_BLACK}" alt="Transcend Property Maintenance">
+          <div class="ps-header-text">
+            <div class="ps-title">PRINT JOB SPECIFICATION</div>
+            <div class="ps-sub">HAND THIS PAGE TO YOUR PRINT SHOP — TRANSCEND® PROPERTY MAINTENANCE</div>
           </div>
         </div>
 
-        <div>
-          <div class="pi-section-title">PRINT SETTINGS — STEP BY STEP</div>
+        <!-- Print order summary box -->
+        <div class="ps-order-box">
+          <div class="ps-order-title">PRINT ORDER DETAILS</div>
 
-          <div class="pi-step">
-            <div class="pi-step-num">1</div>
-            <div class="pi-step-body">
-              <div class="pi-step-title">OPEN THE PDF FILE</div>
-              <div class="pi-step-text">Open <strong>desk-planner-2026.pdf</strong> in Adobe Acrobat Reader, Preview (Mac), or your system's default PDF viewer. For best results, use Adobe Acrobat Reader (free download at adobe.com).</div>
+          <div class="ps-order-row">
+            <div class="ps-order-lbl">JOB TITLE:</div>
+            <div class="ps-order-val">Transcend® PM — Weekly Desk Planner 2026 (July–December)</div>
+          </div>
+          <div class="ps-order-row">
+            <div class="ps-order-lbl">FILE NAME:</div>
+            <div class="ps-order-val">desk-planner-2026.pdf</div>
+          </div>
+          <div class="ps-order-row">
+            <div class="ps-order-lbl">TOTAL PAGES:</div>
+            <div class="ps-order-val">57 pages &nbsp;(cover + inside cover + spec sheet + 27 weekly spreads × 2)</div>
+          </div>
+          <div class="ps-order-row">
+            <div class="ps-order-lbl">PRINT SIZE:</div>
+            <div class="ps-order-val">A5 — 148 mm × 210 mm — PORTRAIT</div>
+          </div>
+          <div class="ps-order-row">
+            <div class="ps-order-lbl">QUANTITY:</div>
+            <div class="ps-order-val fill">_________ copies</div>
+          </div>
+          <div class="ps-order-row">
+            <div class="ps-order-lbl">REQUIRED BY:</div>
+            <div class="ps-order-val fill">_______________________</div>
+          </div>
+        </div>
+
+        <div class="ps-two-col">
+          <!-- Left spec column -->
+          <div class="ps-col">
+            <div class="ps-spec-title">PAPER &amp; PRINT</div>
+
+            <div class="ps-spec-row">
+              <div class="ps-spec-icon">▶</div>
+              <div class="ps-spec-body">
+                <div class="ps-spec-item-title">COVER — PAGE 1</div>
+                <div class="ps-spec-item-val">300 gsm card, gloss or matte laminate (single-sided). Full colour — navy background must print correctly.</div>
+              </div>
+            </div>
+
+            <div class="ps-spec-row">
+              <div class="ps-spec-icon">▶</div>
+              <div class="ps-spec-body">
+                <div class="ps-spec-item-title">INTERIOR PAGES — 2 to 57</div>
+                <div class="ps-spec-item-val">90–100 gsm white uncoated or bond. Single-sided. Full colour preferred; black &amp; white acceptable for pages 4–57.</div>
+              </div>
+            </div>
+
+            <div class="ps-spec-row">
+              <div class="ps-spec-icon">▶</div>
+              <div class="ps-spec-body">
+                <div class="ps-spec-item-title">SCALING</div>
+                <div class="ps-spec-item-val">Print at <strong>ACTUAL SIZE — 100%</strong>. Do NOT scale to fit. No margins.</div>
+              </div>
+            </div>
+
+            <div class="ps-spec-row">
+              <div class="ps-spec-icon">▶</div>
+              <div class="ps-spec-body">
+                <div class="ps-spec-item-title">COLOUR MODE</div>
+                <div class="ps-spec-item-val">Full colour (CMYK). Enable "Print Background Graphics / Colours".</div>
+              </div>
             </div>
           </div>
 
-          <div class="pi-step">
-            <div class="pi-step-num">2</div>
-            <div class="pi-step-body">
-              <div class="pi-step-title">OPEN PRINT DIALOG</div>
-              <div class="pi-step-text">Press <strong>Ctrl+P</strong> (Windows) or <strong>Cmd+P</strong> (Mac) to open the Print dialog.</div>
-            </div>
-          </div>
+          <!-- Right spec column -->
+          <div class="ps-col">
+            <div class="ps-spec-title">BINDING &amp; FINISH</div>
 
-          <div class="pi-step">
-            <div class="pi-step-num">3</div>
-            <div class="pi-step-body">
-              <div class="pi-step-title">SELECT YOUR PRINTER &amp; PAPER</div>
-              <div class="pi-step-text">Choose your printer. Set paper size to <strong>A4</strong>. Load your printer with A4 paper (210 × 297 mm).</div>
+            <div class="ps-spec-row">
+              <div class="ps-spec-icon">★</div>
+              <div class="ps-spec-body">
+                <div class="ps-spec-item-title">BINDING TYPE</div>
+                <div class="ps-spec-item-val"><strong>Spiral / comb bind on the LEFT edge</strong> — so planner opens flat and stays flat when carried or used on a desk.</div>
+              </div>
             </div>
-          </div>
 
-          <div class="pi-step">
-            <div class="pi-step-num">4</div>
-            <div class="pi-step-body">
-              <div class="pi-step-title">SET SCALE TO 100% — NO SCALING</div>
-              <div class="pi-step-text">In the print dialog, set <strong>Page Scaling = None</strong> or <strong>Actual Size = 100%</strong>. Do NOT select "Fit to Page" — this will shrink the content.</div>
+            <div class="ps-spec-row">
+              <div class="ps-spec-icon">★</div>
+              <div class="ps-spec-body">
+                <div class="ps-spec-item-title">BACK COVER</div>
+                <div class="ps-spec-item-val">300 gsm card, plain white or match cover colour. Gloss or matte laminate.</div>
+              </div>
             </div>
-          </div>
 
-          <div class="pi-step">
-            <div class="pi-step-num">5</div>
-            <div class="pi-step-body">
-              <div class="pi-step-title">SET MARGINS TO NONE / ZERO</div>
-              <div class="pi-step-text">Set margins to <strong>None</strong> or <strong>0mm</strong> on all sides. Enable <strong>"Print Background Graphics"</strong> or <strong>"Print Background Colors"</strong> if your viewer asks — this ensures the navy cover prints correctly.</div>
+            <div class="ps-spec-row">
+              <div class="ps-spec-icon">★</div>
+              <div class="ps-spec-body">
+                <div class="ps-spec-item-title">EDGE TRIM</div>
+                <div class="ps-spec-item-val">Trim all pages to A5 (148 × 210 mm) after printing if needed.</div>
+              </div>
             </div>
-          </div>
 
-          <div class="pi-step">
-            <div class="pi-step-num">6</div>
-            <div class="pi-step-body">
-              <div class="pi-step-title">SINGLE-SIDED OR DOUBLE-SIDED</div>
-              <div class="pi-step-text">For a <strong>bound desk planner</strong>: Print single-sided, then arrange pages in order and bind on the left side.<br>For a <strong>booklet</strong>: Print double-sided (flip on long edge), fold in half and staple.</div>
+            <div class="ps-spec-row">
+              <div class="ps-spec-icon">★</div>
+              <div class="ps-spec-body">
+                <div class="ps-spec-item-title">ORIENTATION</div>
+                <div class="ps-spec-item-val">Portrait (tall). All 57 pages portrait — do not rotate.</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="pi-tip-box">
-          <div class="pi-tip-title">PRO TIPS FOR BEST RESULTS</div>
-          <div class="pi-tip-row"><div class="pi-tip-bullet">★</div><div class="pi-tip-text">Use <strong>80–100 gsm paper</strong> for everyday use; upgrade to <strong>120 gsm</strong> for a premium feel</div></div>
-          <div class="pi-tip-row"><div class="pi-tip-bullet">★</div><div class="pi-tip-text">The cover page uses a <strong>dark navy background</strong> — use a colour laser printer or high-quality inkjet for best results</div></div>
-          <div class="pi-tip-row"><div class="pi-tip-bullet">★</div><div class="pi-tip-text">For <strong>grey-scale / black &amp; white</strong> printing, the weekly pages print cleanly in monochrome</div></div>
-          <div class="pi-tip-row"><div class="pi-tip-bullet">★</div><div class="pi-tip-text">Bind with a <strong>spiral/comb binder</strong> or place in an A4 ring binder for a professional desk planner feel</div></div>
-          <div class="pi-tip-row"><div class="pi-tip-bullet">★</div><div class="pi-tip-text">This PDF contains <strong>54 pages</strong> (cover + instructions + 27 weekly spreads × 2 pages each)</div></div>
-        </div>
-
-        <div class="pi-layout-grid">
-          <div class="pi-layout-item">
-            <div class="pi-layout-item-title">LEFT PAGE — WEEKLY SCHEDULE</div>
-            <div class="pi-layout-item-text">Mon–Fri daily rows with appointment &amp; reminder lines. Sat/Sun combined. Weekly notes section at the bottom.</div>
-          </div>
-          <div class="pi-layout-item">
-            <div class="pi-layout-item-title">RIGHT PAGE — PLANNING &amp; NOTES</div>
-            <div class="pi-layout-item-text">Business To-Do list, Follow-Ups (Call/Email/Other), Upcoming Appointments, Don't Forget reminders, Tips &amp; Notes.</div>
+        <div class="ps-note-box">
+          <div class="ps-note-title">IMPORTANT NOTE FOR PRINT SHOP</div>
+          <div class="ps-note-text">
+            Page 1 (cover) has a full-bleed dark navy background — please ensure background colours are enabled and the print extends to the edge with no white border.
+            Pages 2–57 are clean white with navy text and ruled lines — standard document printing.
+            The spiral binding must allow the planner to open completely flat (180°) as it will be used daily to record appointments on the go.
           </div>
         </div>
 
-        <div class="pi-footer">
-          <div class="pi-footer-brand">TRANSCEND® PROPERTY MAINTENANCE &nbsp;|&nbsp; DESK PLANNER 2026</div>
-          <div class="pi-footer-copy">© 2026 Transcend Property Maintenance. All rights reserved.</div>
+        <div class="ps-sign-row">
+          <div class="ps-sign-field">
+            <div class="ps-sign-label">CUSTOMER NAME</div>
+            <div class="ps-sign-line"></div>
+          </div>
+          <div class="ps-sign-field">
+            <div class="ps-sign-label">PHONE / EMAIL</div>
+            <div class="ps-sign-line"></div>
+          </div>
+          <div class="ps-sign-field">
+            <div class="ps-sign-label">AUTHORISED BY</div>
+            <div class="ps-sign-line"></div>
+          </div>
+        </div>
+
+        <div class="ps-footer">
+          <div class="ps-footer-brand">TRANSCEND® PROPERTY MAINTENANCE &nbsp;|&nbsp; DESK PLANNER 2026</div>
+          <div class="ps-footer-copy">© 2026 Transcend Property Maintenance. All rights reserved.</div>
         </div>
       </div>`;
   }
 
   /* ── Left weekly page ── */
-  function leftPage(week, quoteIdx) {
+  function leftPage(week, qi) {
     const { start, end, days: wd } = week;
-    const q = QUOTES[quoteIdx % QUOTES.length];
-
     let dayRows = '';
     for (let i = 0; i < 5; i++) {
       dayRows += `
@@ -943,7 +764,7 @@
           </div>
           <div class="day-body">
             <div class="appt-label">APPOINTMENTS / REMINDERS</div>
-            <div class="ruled-lines">${lines(5, 'ruled-line')}</div>
+            <div class="ruled-lines">${lines(4, 'ruled-line')}</div>
           </div>
         </div>`;
     }
@@ -955,7 +776,7 @@
         </div>
         <div class="day-body">
           <div class="appt-label">APPOINTMENTS / REMINDERS</div>
-          <div class="ruled-lines">${lines(4, 'ruled-line')}</div>
+          <div class="ruled-lines">${lines(3, 'ruled-line')}</div>
         </div>
       </div>`;
 
@@ -966,18 +787,18 @@
           <div class="lp-week-block">
             <div class="lp-week-label">WEEK OF:</div>
             <div class="lp-week-dates">${fmt(start)} &ndash; ${fmt(end)}, 2026</div>
-            <div class="lp-tagline">TRANSCEND<sup class="lp-reg-mark">®</sup> PROPERTY MAINTENANCE &nbsp;|&nbsp; ALWAYS THERE FOR YOU</div>
+            <div class="lp-tagline">TRANSCEND<sup class="lp-reg-mark">®</sup> PROPERTY MAINTENANCE</div>
           </div>
-          <div style="width:24mm;"></div>
+          <div class="lp-spacer"></div>
         </div>
 
         <div class="days-area">${dayRows}</div>
 
         <div class="wn-section">
-          <div class="appt-label" style="font-size:4.5pt;font-weight:700;letter-spacing:.2em;color:var(--navy);">
+          <div class="appt-label" style="font-size:3.8pt;font-weight:700;letter-spacing:.18em;color:var(--navy);">
             WEEKLY NOTES / THOUGHTS / IDEAS
           </div>
-          <div class="ruled-lines" style="flex:1;">${lines(4, 'ruled-line')}</div>
+          <div class="ruled-lines" style="flex:1;">${lines(3, 'ruled-line')}</div>
         </div>
 
         <div class="lp-footer">
@@ -987,7 +808,7 @@
             <span class="footer-kw">CONSISTENCY</span><span class="footer-sep">|</span>
             <span class="footer-kw">GROWTH</span>
           </div>
-          <div class="footer-qt">${q}</div>
+          <div class="footer-qt">${QUOTES[qi % QUOTES.length]}</div>
         </div>
       </div>`;
   }
@@ -995,13 +816,12 @@
   /* ── Right weekly page ── */
   function rightPage(week) {
     const dominantMonth = week.days[3].getMonth();
-
     return `
       <div class="page right-page">
         <div class="rp-topbar">
           <div class="month-tabs">${monthTabs(dominantMonth)}</div>
           <div class="week-no-wrap">
-            <span class="week-no-lbl">WEEK NO.</span>
+            <span class="week-no-lbl">WK</span>
             <span class="week-no-val">${week.weekNum}</span>
           </div>
         </div>
@@ -1010,32 +830,32 @@
           <div class="rp-col rp-col-l">
             <div class="rp-sec" style="flex:2.2;">
               <div class="rp-sec-title">BUSINESS TO-DO</div>
-              ${cbRows(13)}
+              ${cbRows(12)}
             </div>
             <div class="rp-sec" style="flex:.9;">
               <div class="rp-sec-title">TIPS</div>
-              ${lines(5, 'nl')}
+              ${lines(4, 'nl')}
             </div>
-            <div class="rp-sec" style="flex:1.3;">
+            <div class="rp-sec" style="flex:1.2;">
               <div class="rp-sec-title">NOTES</div>
-              ${lines(7, 'nl')}
+              ${lines(6, 'nl')}
             </div>
           </div>
 
           <div class="rp-col rp-col-r">
-            <div class="rp-sec" style="flex:1.8;">
+            <div class="rp-sec" style="flex:1.7;">
               <div class="rp-sec-title">FOLLOW-UPS</div>
               <div class="rp-sub">CALL</div>${cbRows(3)}
               <div class="rp-sub">EMAIL</div>${cbRows(3)}
-              <div class="rp-sub">OTHER / COLLABORATE</div>${cbRows(3)}
+              <div class="rp-sub">OTHER</div>${cbRows(2)}
             </div>
             <div class="rp-sec" style="flex:1.5;">
-              <div class="rp-sec-title">UPCOMING APPOINTMENTS</div>
-              ${apptRows(6)}
+              <div class="rp-sec-title">APPOINTMENTS</div>
+              ${apptRows(5)}
             </div>
-            <div class="rp-sec" style="flex:1.2;">
-              <div class="rp-sec-title">DON'T FORGET / REMINDERS</div>
-              ${cbRows(7)}
+            <div class="rp-sec" style="flex:1.1;">
+              <div class="rp-sec-title">DON'T FORGET</div>
+              ${cbRows(6)}
             </div>
           </div>
         </div>
@@ -1047,17 +867,17 @@
             <span class="footer-kw">CONSISTENCY</span><span class="footer-sep">|</span>
             <span class="footer-kw">GROWTH</span>
           </div>
-          <div class="footer-qt">© 2026 Transcend® Property Maintenance — Always There For You</div>
+          <div class="footer-qt">© 2026 Transcend® Property Maintenance</div>
         </div>
       </div>`;
   }
 
-  /* ── Build week list ── */
+  /* ── Build weeks ── */
   function buildWeeks() {
     const weeks = [];
-    let monday = new Date(2026, 5, 29); // Jun 29
+    let monday = new Date(2026, 5, 29);
+    const last  = new Date(2026, 11, 28);
     let weekNum = 27;
-    const last = new Date(2026, 11, 28); // Dec 28
     while (monday <= last) {
       const wd = [];
       for (let i = 0; i < 7; i++) {
@@ -1078,15 +898,11 @@
 
   html += coverPage();
   html += insideCover();
-  html += printInstructionsPage();
-
-  weeks.forEach((week, idx) => {
-    html += leftPage(week, idx);
-    html += rightPage(week);
-  });
+  html += printShopPage();
+  weeks.forEach((w, i) => { html += leftPage(w, i); html += rightPage(w); });
 
   container.innerHTML = html;
-  console.log('Generated: cover + inside cover + print instructions + ' + weeks.length + ' weeks = ' + (3 + weeks.length * 2) + ' pages total.');
+  console.log('Rendered: ' + (3 + weeks.length * 2) + ' pages (A5).');
 })();
 </script>
 </body>
