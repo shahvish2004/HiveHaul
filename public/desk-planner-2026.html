@@ -74,15 +74,8 @@
     clip-path: polygon(100% 0, 0 0, 100% 100%);
   }
 
-  .tpm-mark { margin-bottom: 4mm; }
-
-  .cover-brand-name {
-    font-size: 20pt; font-weight: 900; letter-spacing: .06em;
-    color: var(--white); line-height: 1; text-align: center;
-  }
-  .cover-brand-sub {
-    font-size: 7pt; font-weight: 600; letter-spacing: .22em;
-    color: var(--gold); text-align: center; margin-top: 1.5mm;
+  .cover-logo-img {
+    width: 76mm; max-width: 90%; margin-bottom: 3mm;
   }
   .cover-divider {
     width: 30mm; height: .5pt; background: rgba(255,255,255,.3); margin: 4mm auto;
@@ -464,19 +457,7 @@
     return `
       <div class="page cover-page">
         <div class="cover-top">
-          <div class="tpm-mark">
-            <svg width="42" height="34" viewBox="0 0 52 42" fill="none">
-              <rect x="0"  y="0"  width="16" height="5" fill="#f5c518"/>
-              <rect x="5.5" y="5" width="5"  height="28" fill="#f5c518"/>
-              <rect x="19" y="0" width="5"  height="33" fill="#4a9fd4"/>
-              <path d="M24 0 h7 a8 8 0 0 1 0 16 h-7 z" fill="#4a9fd4"/>
-              <rect x="35" y="0" width="5"  height="33" fill="#5bbf8a"/>
-              <rect x="44" y="0" width="5"  height="33" fill="#5bbf8a"/>
-              <polygon points="35,0 40,0 44,14 44,0 49,0 44,20 40,20" fill="#5bbf8a"/>
-            </svg>
-          </div>
-          <div class="cover-brand-name">TRANSCEND<sup style="font-size:10pt;vertical-align:super;">®</sup></div>
-          <div class="cover-brand-sub">PROPERTY MAINTENANCE</div>
+          <img class="cover-logo-img" src="transcend-logo-color.png" alt="Transcend® Property Maintenance">
           <div class="cover-divider"></div>
           <div class="cover-tagline">BUILDING TRUST &nbsp;|&nbsp; DELIVERING QUALITY &nbsp;|&nbsp; EVERY TIME</div>
         </div>
